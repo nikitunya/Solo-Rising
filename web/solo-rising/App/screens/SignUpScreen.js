@@ -1,8 +1,9 @@
 import React from 'react'
+import { Text } from 'react-native'
 
 function SignUpScreen() {
   return (
-    <div>SignUpScreen</div>
+    <Text>SignUpScreen</Text>
   )
 }
 
