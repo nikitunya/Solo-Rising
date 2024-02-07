@@ -32,7 +32,7 @@ function WelcomeScreen() {
                     <TouchableOpacity onPress={()=> navigation.navigate('Login')}>
                         <Text className="font-semibold" style={{color: themeColors.mainGreen}}>
                             &nbsp; Log In
-                            </Text>
+                        </Text>
                     </TouchableOpacity>
                 </View>
             </View>

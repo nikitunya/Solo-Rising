@@ -30,7 +30,7 @@ function LoginScreen() {
           <TouchableOpacity className="flex items-end">
             <Text className="mb-5" style={{color: themeColors.textColor}}>Forgot Password?</Text>
           </TouchableOpacity>
-          <TouchableOpacity className="py-3 rounded-xl" style={{backgroundColor: themeColors.mainGreen}}>
+          <TouchableOpacity onPress={()=> navigation.navigate('Home')} className="py-3 rounded-xl" style={{backgroundColor: themeColors.mainGreen}}>
             <Text className="text-xl font-bold text-center" style={{color: themeColors.textColor}}>
               Login
             </Text>
