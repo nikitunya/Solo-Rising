@@ -1,4 +1,4 @@
-export const themeColors = {
+export const colors = {
     background: '#000',
     mainGreen: '#64cc4f',
     textColor: '#222222',
