@@ -71,47 +71,25 @@ export default function SignUpSecondScreen() {
         </SafeAreaView>
         <View className="flex-1 bg-white px-8 pt-8 rounded-t-3xl">
           <View className="form space-y-2">
-            <View className="flex-row justify-between ml-4 mr-4">
+            <View className="flex-row justify-between ml-1 mr-1">
               <TouchableOpacity
                 onPress={() => setGender("female")}
-                style={{
-                  backgroundColor: gender === "female" ? "pink" : "transparent",
-                  borderWidth: 1,
-                  borderColor: "pink",
-                  borderRadius: 10,
-                  padding: 10,
-                  flex: 1,
-                  marginRight: 5,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
+                className={`justify-center items-center flex-1 flex-row mr-2 p-3 rounded-xl border-2 border-pink-300 ${gender === "female" ? "bg-pink-300" : "bg-transparent"}`}
               >
                 <AntDesign name="woman" size={24} color="black" />
                 <Text
-                  style={{ textAlign: "center", color: "black", marginLeft: 5 }}
+                  className="text-center text-black ml-2"
                 >
                   Female
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => setGender("male")}
-                style={{
-                  backgroundColor: gender === "male" ? "blue" : "transparent",
-                  borderWidth: 1,
-                  borderColor: "blue",
-                  borderRadius: 10,
-                  padding: 10,
-                  flex: 1,
-                  marginLeft: 5,
-                  flexDirection: "row",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
+                className={`justify-center items-center flex-1 flex-row mr-2 p-3 rounded-xl border-2 border-blue-300 ${gender === "male" ? "bg-blue-300" : "bg-transparent"}`}
               >
                 <AntDesign name="man" size={24} color="black" />
                 <Text
-                  style={{ textAlign: "center", color: "black", marginLeft: 5 }}
+                  className="text-center text-black ml-2"
                 >
                   Male
                 </Text>
