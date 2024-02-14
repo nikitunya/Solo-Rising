@@ -1,9 +1,9 @@
 import React from 'react'
-import { Text } from 'react-native'
+import TabNavigation from '../navigation/tabNavigation'
 
 function HomeScreen() {
   return (
-    <Text>Home Screen</Text>
+    <TabNavigation />
   )
 }
 
