@@ -9,8 +9,7 @@ function ExcercisesScreen() {
         <View className="flex-row items-center justify-between bg-gray-100 rounded-full py-2 px-4">
           <TextInput
             className="flex-1 text-gray-700"
-            value="john snow"
-            placeholder="Enter Name"
+            placeholder="Freesearch"
           />
           <AntDesign name="search1" size={24} color={colors.textColor} />
         </View>
