@@ -3,10 +3,7 @@ import ProfileScreen from "../screens/tabs/ProfileScreen";
 import FriendsScreen from "../screens/tabs/FriendsScreen";
 import TrainingScreen from "../screens/tabs/TrainingScreen";
 import ForumScreen from "../screens/tabs/ForumScreen";
-import { StyleSheet, View } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
 
@@ -19,7 +16,7 @@ const tabNavigation = () => {
         tabBarInactiveTintColor: "#fff",
         tabBarActiveTintColor: "#64cc4f",
         tabBarStyle: {
-          backgroundColor: "222222",
+          backgroundColor: "black",
           borderRadius: 15,
         },
       }}
