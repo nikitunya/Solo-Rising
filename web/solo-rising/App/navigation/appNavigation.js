@@ -6,18 +6,21 @@ import WelcomeScreen from '../screens/WelcomeScreen';
 import LoginScreen from '../screens/LoginScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import SignUpSecondScreen from '../screens/SignUpSecondScreen';
+import ExcerciseViewScreen from '../screens/view/ExcerciseViewScreen';
 
 const Stack = createNativeStackNavigator();
 
 function appNavigation() {
   return (
     <NavigationContainer>
-        <Stack.Navigator initialRouteName='Welcome'>
+        {/* <Stack.Navigator initialRouteName='Welcome'> */}
+        <Stack.Navigator initialRouteName='fitness'>
             <Stack.Screen name="Home" options={{headerShown: false}} component={HomeScreen} />
             <Stack.Screen name="Welcome" options={{headerShown: false}} component={WelcomeScreen} />
             <Stack.Screen name="Login" options={{headerShown: false}} component={LoginScreen} />
             <Stack.Screen name="SignUp" options={{headerShown: false}} component={SignUpScreen} />
             <Stack.Screen name="SignUpSecond" options={{headerShown: false}} component={SignUpSecondScreen} />
+            <Stack.Screen name="ExcerciseView" options={{headerShown: false}} component={ExcerciseViewScreen} />
         </Stack.Navigator>
     </NavigationContainer>
   )

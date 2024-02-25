@@ -1,8 +1,9 @@
-import React from "react";
-import { TextInput, View } from "react-native";
+import React, { useState } from "react";
+import { FlatList, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { colors } from "../../utils/colors/index.js";
 import SelectDropdown from "react-native-select-dropdown";
+import { useNavigation } from "@react-navigation/native";
 
 function ExcercisesScreen() {
   const muscles = [
@@ -23,7 +24,75 @@ function ExcercisesScreen() {
     "streching",
     "plyometrics",
   ];
-  // const difficulty = ["begginer", "intermediate", "expert"];
+  const [excercise, setExcercise] = useState([{}]);
+  const exerciseData = [
+    {
+      "equipment": "Dumbbell",
+      "exercise_type": "Strength",
+      "experience": "Beginner",
+      "force_type": "Push (Bilateral)",
+      "mechanics": "Compound",
+      "name": "Dumbbell Bench Press",
+      "primary_muscles": "Chest",
+      "secondary_muscles": "['Shoulders', 'Triceps']"
+    },
+    {
+      "equipment": "Dumbbell",
+      "exercise_type": "Strength",
+      "experience": "Intermediate",
+      "force_type": "Push",
+      "mechanics": "Compound",
+      "name": "Dumbbell Pullover",
+      "primary_muscles": "Chest",
+      "secondary_muscles": "['Lats', 'Shoulders', 'Triceps']"
+    },
+    {
+      "equipment": "Dumbbell",
+      "exercise_type": "Strength",
+      "experience": "Beginner",
+      "force_type": "Push (Bilateral)",
+      "mechanics": "Compound",
+      "name": "Incline Dumbbell Bench Press",
+      "primary_muscles": "Chest",
+      "secondary_muscles": "['Shoulders', 'Triceps']"
+    },
+    {
+      "equipment": "Dumbbell",
+      "exercise_type": "Strength",
+      "experience": "Beginner",
+      "force_type": "Push (Bilateral)",
+      "mechanics": "Isolation",
+      "name": "Dumbbell Flys",
+      "primary_muscles": "Chest",
+      "secondary_muscles": "['Shoulders', 'Triceps']"
+    },
+    {
+      "equipment": "Barbell",
+      "exercise_type": "Strength",
+      "experience": "Beginner",
+      "force_type": "Push (Bilateral)",
+      "mechanics": "Compound",
+      "name": "Incline Bench Press",
+      "primary_muscles": "Chest",
+      "secondary_muscles": "['Shoulders', 'Triceps']"
+    },
+  ];
+
+  const [exercise, setExercise] = useState(exerciseData);
+  const navigation = useNavigation();
+
+  const handleExercisePress = (selectedExercise) => {
+    // Navigate to ExerciseEdit screen with the selected exercise
+    navigation.navigate('ExcerciseView', { exercise: selectedExercise });
+  };
+
+  const renderItem = ({ item }) => (
+    <TouchableOpacity onPress={() => handleExercisePress(item)}>
+      <View className="flex-1 justify-center items-center bg-zinc-800 py-3 rounded-3xl my-2">
+        <Text className="text-white">{item.name}</Text>
+      </View>
+    </TouchableOpacity>
+  );
 
   return (
     <View className="flex-1 bg-black px-4 pt-3">
@@ -52,6 +121,11 @@ function ExcercisesScreen() {
       <View
         className="py-2"
         style={{ borderBottomWidth: 1, borderBottomColor: colors.textColor }}
+      />
+      <FlatList
+        data={exercise}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.name}
       />
     </View>
   );
