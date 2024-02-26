@@ -1,10 +1,13 @@
-import React from 'react'
-import TabNavigation from '../navigation/tabNavigation'
+import React from "react";
+import TabNavigation from "../navigation/tabNavigation";
+import { View } from "react-native";
 
 function HomeScreen() {
   return (
-    <TabNavigation />
-  )
+    <View className="flex-1 bg-black">
+      <TabNavigation />
+    </View>
+  );
 }
 
-export default HomeScreen
+export default HomeScreen;

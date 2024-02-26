@@ -16,7 +16,8 @@ const tabNavigation = () => {
         tabBarInactiveTintColor: "#fff",
         tabBarActiveTintColor: "#64cc4f",
         tabBarStyle: {
-          backgroundColor: "black",
+          backgroundColor: "#27272A",
+          borderTopWidth: 0,
           borderRadius: 15,
         },
       }}

@@ -7,6 +7,7 @@ import LoginScreen from '../screens/LoginScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import SignUpSecondScreen from '../screens/SignUpSecondScreen';
 import ExcerciseViewScreen from '../screens/view/ExcerciseViewScreen';
+import WorkoutCreateScreen from '../screens/create/WorkoutCreateScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,6 +22,7 @@ function appNavigation() {
             <Stack.Screen name="SignUp" options={{headerShown: false}} component={SignUpScreen} />
             <Stack.Screen name="SignUpSecond" options={{headerShown: false}} component={SignUpSecondScreen} />
             <Stack.Screen name="ExcerciseView" options={{headerShown: false}} component={ExcerciseViewScreen} />
+            <Stack.Screen name="WorkoutCreate" options={{headerShown: false}} component={WorkoutCreateScreen} />
         </Stack.Navigator>
     </NavigationContainer>
   )
