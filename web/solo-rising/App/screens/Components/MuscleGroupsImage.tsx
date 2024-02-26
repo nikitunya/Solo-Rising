@@ -1,36 +1,52 @@
-import {useEffect, useState} from "react";
-import axios from "axios";
+import { useEffect, useMemo, useState } from "react";
 import { Image } from "react-native";
+import { getAllMuscleGroups, getImagePrimaryAndSecondaryMuscles, getImagePrimaryMuscles } from './muscleGroupApi'
 
 interface MuscleGroupImageProps {
-    muscleGroups: Array<string>
+  primaryMuscleGroups: string;
+  secondaryMuscleGroups: string;
+}
+
+function convertMuscleGroups(muscleGroups: string): string[] {
+  return muscleGroups.replace(/[\[\]']/g, '').split(',').map(item => item.trim().toLowerCase());
 }
 
 export default function MuscleGroupImage(props: MuscleGroupImageProps) {
-    const [image, setImage] = useState("");
+  const [image, setImage] = useState<string | null>(null);
 
-    const fetchImage = async() => {
-        axios.get(`https://muscle-group-image-generator.p.rapidapi.com/getImage?muscleGroups=${props.muscleGroups.join(",")}`, {
-            headers: {
-                'X-RapidAPI-Key': 'e26bdbf131msha5c54e8eb398c29p145b98jsn32e1c9d486dd',
-                'X-RapidAPI-Host': 'muscle-group-image-generator.p.rapidapi.com',
-            },
-            responseType: "arraybuffer"
-        }).then((response) => {
-            const imageFile = new Blob([response.data]);
-            const imageUrl = URL.createObjectURL(imageFile);
-            setImage(imageUrl)
-        });
+  useEffect(() => {
+    const fetchData = async () => {
+      const allMuscleGroups = await getAllMuscleGroups();
+
+      let primaryMuscleGroups: string[] = convertMuscleGroups(props.primaryMuscleGroups);
+      let secondaryMuscleGroups: string[] = convertMuscleGroups(props.secondaryMuscleGroups);
+
+      primaryMuscleGroups = primaryMuscleGroups.filter(group => allMuscleGroups.includes(group));
+      secondaryMuscleGroups = secondaryMuscleGroups.filter(group => allMuscleGroups.includes(group));
+      
+      let imageUrl: string;
+      if (!primaryMuscleGroups.length) {
+        imageUrl = await getImagePrimaryMuscles(secondaryMuscleGroups);
+      } else if (!secondaryMuscleGroups.length) {
+        imageUrl = await getImagePrimaryMuscles(primaryMuscleGroups);
+      } else {
+        imageUrl = await getImagePrimaryAndSecondaryMuscles(primaryMuscleGroups, secondaryMuscleGroups);
+      }
+      setImage(imageUrl);
     }
+    fetchData();
+    
+    return () => {
+      if (image) {
+        URL.revokeObjectURL(image);
+      }
+    };
+  }, [])
 
-    useEffect(() => {
-        fetchImage()
-        console.log(image)
-    }, [])
 
-    return image ? <Image source={{ uri: image }} style={{ width: 100, height: 100 }} /> : null;
-    // return <img src={image} alt={`Image of ${props.muscleGroups.join(",")}`} />
+  const imageComponent = useMemo(() => {
+    return image ? <Image source={{ uri: image }} style={{ width: 300, height: 300 }} /> : null;
+  }, [image]);
+
+  return imageComponent;
 }
-
-    // return image ? <Image source={{ uri: image }} style={{ width: 100, height: 100 }} /> : null;
-// }

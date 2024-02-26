@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { FlatList, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { colors } from "../../utils/colors/index.js";
 import SelectDropdown from "react-native-select-dropdown";
@@ -24,57 +30,56 @@ function ExcercisesScreen() {
     "streching",
     "plyometrics",
   ];
-  const [excercise, setExcercise] = useState([{}]);
   const exerciseData = [
     {
-      "equipment": "Dumbbell",
-      "exercise_type": "Strength",
-      "experience": "Beginner",
-      "force_type": "Push (Bilateral)",
-      "mechanics": "Compound",
-      "name": "Dumbbell Bench Press",
-      "primary_muscles": "Chest",
-      "secondary_muscles": "['Shoulders', 'Triceps']"
+      equipment: "Dumbbell",
+      exercise_type: "Strength",
+      experience: "Beginner",
+      force_type: "Push (Bilateral)",
+      mechanics: "Compound",
+      name: "Dumbbell Bench Press",
+      primary_muscles: "Chest",
+      secondary_muscles: "['Shoulders', 'Triceps']",
     },
     {
-      "equipment": "Dumbbell",
-      "exercise_type": "Strength",
-      "experience": "Intermediate",
-      "force_type": "Push",
-      "mechanics": "Compound",
-      "name": "Dumbbell Pullover",
-      "primary_muscles": "Chest",
-      "secondary_muscles": "['Lats', 'Shoulders', 'Triceps']"
+      equipment: "Dumbbell",
+      exercise_type: "Strength",
+      experience: "Intermediate",
+      force_type: "Push",
+      mechanics: "Compound",
+      name: "Dumbbell Pullover",
+      primary_muscles: "Chest",
+      secondary_muscles: "['Lats', 'Shoulders', 'Triceps']",
     },
     {
-      "equipment": "Dumbbell",
-      "exercise_type": "Strength",
-      "experience": "Beginner",
-      "force_type": "Push (Bilateral)",
-      "mechanics": "Compound",
-      "name": "Incline Dumbbell Bench Press",
-      "primary_muscles": "Chest",
-      "secondary_muscles": "['Shoulders', 'Triceps']"
+      equipment: "Dumbbell",
+      exercise_type: "Strength",
+      experience: "Beginner",
+      force_type: "Push (Bilateral)",
+      mechanics: "Compound",
+      name: "Incline Dumbbell Bench Press",
+      primary_muscles: "Chest",
+      secondary_muscles: "['Shoulders', 'Triceps']",
     },
     {
-      "equipment": "Dumbbell",
-      "exercise_type": "Strength",
-      "experience": "Beginner",
-      "force_type": "Push (Bilateral)",
-      "mechanics": "Isolation",
-      "name": "Dumbbell Flys",
-      "primary_muscles": "Chest",
-      "secondary_muscles": "['Shoulders', 'Triceps']"
+      equipment: "Bodyweight",
+      exercise_type: "Strength",
+      experience: "Beginner",
+      force_type: "Pull (Bilateral)",
+      mechanics: "Compound",
+      name: "Pull Up",
+      primary_muscles: "Lats",
+      secondary_muscles: "['Abs', 'Biceps', 'Shoulders', 'Upper Back']",
     },
     {
-      "equipment": "Barbell",
-      "exercise_type": "Strength",
-      "experience": "Beginner",
-      "force_type": "Push (Bilateral)",
-      "mechanics": "Compound",
-      "name": "Incline Bench Press",
-      "primary_muscles": "Chest",
-      "secondary_muscles": "['Shoulders', 'Triceps']"
+      equipment: "Dumbbell",
+      exercise_type: "Strength",
+      experience: "Beginner",
+      force_type: "Pull",
+      mechanics: "Isolation",
+      name: "One Arm Standing Dumbbell Curl",
+      primary_muscles: "Biceps",
+      secondary_muscles: "[]",
     },
   ];
 
@@ -82,8 +87,7 @@ function ExcercisesScreen() {
   const navigation = useNavigation();
 
   const handleExercisePress = (selectedExercise) => {
-    // Navigate to ExerciseEdit screen with the selected exercise
-    navigation.navigate('ExcerciseView', { exercise: selectedExercise });
+    navigation.navigate("ExcerciseView", { exercise: selectedExercise });
   };
 
   const renderItem = ({ item }) => (

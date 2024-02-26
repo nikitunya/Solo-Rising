@@ -1,47 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import DismissKeyboard from "../../components/DismissKeyboard";
 import { AntDesign } from "@expo/vector-icons";
-import axios from "axios";
 import MuscleGroupImage from "../Components/MuscleGroupsImage";
 
 function ExcerciseViewScreen({ route }) {
   const { exercise } = route.params;
   const navigation = useNavigation();
-  const [image, setImage] = useState("");
-
-  const fetchImage = async () => {
-    const options = {
-      method: "GET",
-      url: "https://muscle-group-image-generator.p.rapidapi.com/getMulticolorImage",
-      params: {
-        primaryColor: "240,100,80",
-        secondaryColor: "200,100,80",
-        primaryMuscleGroups: "chest",
-        secondaryMuscleGroups: "triceps,shoulders",
-        transparentBackground: "0",
-      },
-      headers: {
-        "X-RapidAPI-Key": "e26bdbf131msha5c54e8eb398c29p145b98jsn32e1c9d486dd",
-        "X-RapidAPI-Host": "muscle-group-image-generator.p.rapidapi.com",
-      },
-      responseType: "arraybuffer",
-    };
-
-    try {
-      const response = await axios.request(options);
-      const imageFile = new Blob([response.data]);
-      const imageUrl = URL.createObjectURL(imageFile);
-      setImage(imageUrl);
-    } catch (error) {
-      console.error("Error fetching image:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchImage();
-  }, []); // Run only once when component mounts
 
   return (
     <DismissKeyboard>
@@ -71,12 +37,13 @@ function ExcerciseViewScreen({ route }) {
           <View className="justify-center items-center bg-zinc-800 py-4 rounded-3xl my-3 mx-3">
             <Text className="text-white text-lg">Personal Record:</Text>
             <Text className="text-white text-xl">100 kg</Text>
-            <Text className="text-white">{exercise.secondary_muscles}</Text>
           </View>
         </TouchableOpacity>
         <View className="justify-center items-center bg-zinc-800 py-4 rounded-3xl my-3 mx-3">
-          <MuscleGroupImage muscleGroups={["biceps", "triceps", "hamstring"]} />
-          {/* <MuscleGroupImage primaryMuscles={['chest']} secondaryMuscles={['triceps', 'shoulders']} /> */}
+          <MuscleGroupImage
+            primaryMuscleGroups={String(exercise.primary_muscles)}
+            secondaryMuscleGroups={String(exercise.secondary_muscles)}
+          />
         </View>
       </View>
     </DismissKeyboard>
