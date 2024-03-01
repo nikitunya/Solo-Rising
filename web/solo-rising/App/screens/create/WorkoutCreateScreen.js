@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import DismissKeyboard from "../../components/DismissKeyboard";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign } from "@expo/vector-icons";
@@ -21,7 +21,14 @@ function WorkoutCreateScreen() {
             </TouchableOpacity>
           </View>
         </SafeAreaView>
-      </View>
+          <View className="mx-5">
+            <TextInput
+              className="p-4 bg-zinc-700 text-green-600 rounded-2xl text-xl font-bold text-center"
+              placeholder="email"
+              value="Workout Name"
+            />
+          </View>
+        </View>
     </DismissKeyboard>
   );
 }

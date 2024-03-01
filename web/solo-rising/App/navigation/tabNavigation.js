@@ -1,8 +1,8 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import ProfileScreen from "../screens/tabs/ProfileScreen";
-import FriendsScreen from "../screens/tabs/FriendsScreen";
-import TrainingScreen from "../screens/tabs/TrainingScreen";
-import ForumScreen from "../screens/tabs/ForumScreen";
+import ProfileScreen from "../screens/bottomTabs/ProfileScreen";
+import FriendsScreen from "../screens/bottomTabs/FriendsScreen";
+import TrainingScreen from "../screens/bottomTabs/TrainingScreen";
+import ForumScreen from "../screens/bottomTabs/ForumScreen";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
 const Tab = createBottomTabNavigator();
