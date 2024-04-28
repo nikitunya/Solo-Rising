@@ -6,13 +6,13 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { auth } from "../../../services/firebase.config";
 
 function ProfileScreen() {
   return (
     <SafeAreaView className="flex">
       <View className="flex-row justify-center">
-        {/* <Image source={require("../../utils/images/muscles/front.png")} /> */}
-        {/* <Image source={require("../../utils/images/muscles/back.png")} /> */}
+        <Text>{ auth.currentUser?.email}</Text>
       </View>
     </SafeAreaView>
   );

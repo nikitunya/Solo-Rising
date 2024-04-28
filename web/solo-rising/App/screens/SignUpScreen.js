@@ -11,6 +11,8 @@ import { useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign } from "@expo/vector-icons";
 import DismissKeyboard from "../components/DismissKeyboard";
+import { signUp } from "../../services/auth";
+import { saveUserData } from "../../services/firebaseDatabase";
 
 function SignUpScreen() {
   const navigation = useNavigation();
@@ -18,10 +20,20 @@ function SignUpScreen() {
   const [username, setUsername] = useState("nikitunya");
   const [email, setEmail] = useState("test@gmail.com");
   const [password, setPassword] = useState("123456");
-  // const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   const handleSignup = async () => {
-    setLoading(false);
+    setLoading(true);
+    try {
+      const user = await signUp(email, password)
+      if (user) {
+        const id = user.uid;
+        await saveUserData(id, fullName, username);
+      }
+    } catch (error) {
+      setLoading(false);
+      console.log(error);
+    }
   }
 
 
@@ -32,7 +44,7 @@ function SignUpScreen() {
     >
       <DismissKeyboard>
         <View className="flex-1 justify-between bg-black">
-          <SafeAreaView className="p-2">
+          <SafeAreaView className="flex">
             <View className="flex-row justify-start">
               <TouchableOpacity
                 onPress={() => navigation.goBack()}

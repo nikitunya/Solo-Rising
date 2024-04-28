@@ -1,7 +1,7 @@
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
+import { initializeApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+
 const firebaseConfig = {
   apiKey: "AIzaSyDUeloQDu3m91iS1dmqwBxSGYcwHysyZK0",
   authDomain: "solo-rising.firebaseapp.com",
@@ -16,4 +16,4 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-export { db, app, auth }
+export { db, app, auth };
