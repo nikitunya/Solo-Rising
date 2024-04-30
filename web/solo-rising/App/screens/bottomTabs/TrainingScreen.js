@@ -22,7 +22,7 @@ function TrainingScreen() {
   ]);
   
   return (
-    <View className="flex-1 bg-black">
+    <View className="flex-1 bg-neutral-900">
       <View className="bg-zinc-800 h-24 rounded-bl-3xl rounded-br-3xl flex-row justify-center px-4 ">
         <Text className="text-2xl absolute bottom-6 font-bold text-green-600">Trained today: 1.35 minutes</Text>
         {/* <View className="absolute bottom-6 right-5">
@@ -36,7 +36,7 @@ function TrainingScreen() {
           onIndexChange={setIndex}
           initialLayout={{ width: layout.width }}
           className="rounded-3xl"
-          renderTabBar={props => <TabBar {...props} style={{backgroundColor: "#27272A"}} indicatorStyle={{backgroundColor: colors.mainGreen}}/>}
+          renderTabBar={props => <TabBar {...props} style={{backgroundColor: "#27272A"}} indicatorStyle={{backgroundColor: "#1D4ED8"}}/>}
         />
       </View>
     </View>
