@@ -25,8 +25,8 @@ export async function getImagePrimaryAndSecondaryMuscles(
   try {
     const response = await api.get("/getMulticolorImage", {
       params: {
-        primaryColor: "22,163,74",
-        secondaryColor: "72,213,124",
+        primaryColor: "29,78,216",
+        secondaryColor: "96, 165, 250",
         primaryMuscleGroups: primaryMuscleGroups.join(","),
         secondaryMuscleGroups: secondaryMuscleGroups.join(","),
         transparentBackground: "1",
@@ -44,7 +44,7 @@ export async function getImagePrimaryMuscles(muscleGroups: string[]) {
   try {
     const response = await api.get("/getImage", {
       params: {
-        color: "22,163,74",
+        color: "29,78,216",
         muscleGroups: muscleGroups.join(","),
         transparentBackground: "1",
       },
