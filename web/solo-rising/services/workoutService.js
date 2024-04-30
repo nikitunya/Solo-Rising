@@ -1,4 +1,11 @@
-import { addDoc, collection, doc, getDocs, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { db } from "./firebase.config";
 
 export const createWorkout = async (userId, title, exerciseList) => {
@@ -33,5 +40,16 @@ export const getWorkouts = async (userId) => {
   } catch (error) {
     console.log(error);
     return [];
+  }
+};
+
+export const updateWorkout = async (userId, workoutId, updatedData) => {
+  try {
+    const workoutRef = doc(db, "users", userId, "workouts", workoutId);
+    await updateDoc(workoutRef, updatedData);
+    console.log("Updated succesfully");
+  } catch (error) {
+    console.error("Error updating workout: ", error);
+    throw error;
   }
 };

@@ -1,15 +1,20 @@
 import { AntDesign } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
+import React, { useEffect, useRef, useState } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
-import OptionsMenu from "react-native-option-menu";
 import { auth } from "../../../services/firebase.config";
 import { getWorkouts } from "../../../services/workoutService";
+import ActionSheet from "react-native-actionsheet";
+
+const OPTIONS = ["Edit", "Delete", "Cancel"];
+const CANCEL_BUTTON_INDEX = 2;
+const DESTRUCTIVE_BUTTON_INDEX = 1;
 
 function WorkoutsScreen() {
   const navigation = useNavigation();
-  const options = require("../../utils/images/more.png");
+  const isFocused = useIsFocused();
   const [workouts, setWorkouts] = useState([]);
+  const [selectedWorkout, setSelectedWorkout] = useState(null);
 
   useEffect(() => {
     const fetchWorkouts = async () => {
@@ -22,48 +27,49 @@ function WorkoutsScreen() {
       }
     };
 
-    fetchWorkouts();
-  }, []);
+    if (isFocused) {
+      fetchWorkouts();
+    }
+  }, [isFocused]);
 
-  const editWorkout = (selectedWorkout) => {
-    console.log(999);
-    console.log(selectedWorkout);
-    // navigation.navigate("ExcerciseView", { exercise: selectedWorkout });
+  useEffect(() => {
+    if (selectedWorkout !== null) {
+      console.log(selectedWorkout);
+      this.ActionSheet.show();
+    }
+  }, [selectedWorkout]);
+
+  const showActionSheet = (workout) => {
+    setSelectedWorkout(workout);
   };
 
-  const handleAction = () => {
-    console.log(999)
-    // switch (action) {
-    //   case "Edit":
-    //     console.log(86787687)
-    //     // editWorkout(item);
-    //     break;
-    //   case "Share":
-    //     shareWorkout(item);
-    //     break;
-    //   case "Delete":
-    //     deleteWorkout(item);
-    //     break;
-    //   default:
-    //     break;
-    // }
+  const handleAction = (index) => {
+    switch (index) {
+      case 0:
+        navigation.navigate("WorkoutEdit", selectedWorkout);
+        break;
+      case 1:
+        console.log("Succesfully Deleted");
+        break;
+      default:
+        break;
+    }
   };
 
   const renderItem = ({ item }) => (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={() => showActionSheet(item)}>
       <View className="flex flex-row justify-between items-center bg-zinc-800 py-3 rounded-3xl my-2 mx-6">
         <Text className="text-white ml-4">{item.title}</Text>
-        <TouchableOpacity onPress={() => handleKebabMenuPress(item)}>
+        <TouchableOpacity>
           <View className="mr-4">
-            <OptionsMenu
-              button={
-                options
-                // <Entypo name="dots-three-vertical" size={18} color="white" />
-              }
-              buttonStyle={{ width: 30, height: 30, resizeMode: "contain" }}
-              destructiveIndex={2}
-              options={["Edit", "Share", "Delete", "Cancel"]}
-              onSelect={handleAction()}
+            <ActionSheet
+              ref={(o) => (this.ActionSheet = o)}
+              options={OPTIONS}
+              cancelButtonIndex={CANCEL_BUTTON_INDEX}
+              destructiveButtonIndex={DESTRUCTIVE_BUTTON_INDEX}
+              onPress={(index) => {
+                handleAction(index, item);
+              }}
             />
           </View>
         </TouchableOpacity>

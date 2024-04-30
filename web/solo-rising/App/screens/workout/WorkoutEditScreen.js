@@ -11,14 +11,17 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import ExerciseListModal from "../exercise/ExerciseListModal";
-import { createWorkout } from "../../../services/workoutService";
+import { updateWorkout } from "../../../services/workoutService";
 import { auth } from "../../../services/firebase.config";
 
-function WorkoutCreateScreen() {
+function WorkoutEditScreen({ route }) {
+  const workout = route.params;
+  console.log(workout);
   const navigation = useNavigation();
-  const [title, setTitle] = useState("");
+
+  const [title, setTitle] = useState(workout.title);
   const [modal, setModal] = useState(false);
-  const [exerciseList, setExerciseList] = useState([]);
+  const [exerciseList, setExerciseList] = useState(workout.exerciseList);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => handleExercisePress(item)}>
@@ -32,9 +35,12 @@ function WorkoutCreateScreen() {
     setExerciseList([...exerciseList, exercise]);
   };
 
-  const handleCreateWorkout = async () => {
+  const handleUpdateWorkout = async () => {
     try {
-      await createWorkout(auth.currentUser?.uid, title, exerciseList);
+      await updateWorkout(auth.currentUser?.uid, workout.id, {
+        title,
+        exerciseList,
+      });
       navigation.navigate("Training");
     } catch (error) {
       setLoading(false);
@@ -97,12 +103,12 @@ function WorkoutCreateScreen() {
           ></ExerciseListModal>
         </View>
         <TouchableOpacity
-          onPress={handleCreateWorkout}
+          onPress={handleUpdateWorkout}
           className="absolute bottom-4 left-0 right-0 m-6"
         >
           <View className="flex justify-center items-center bg-blue-700 py-1 rounded-3xl my-4">
             <Text className="flex text-white text-base font-bold p-1">
-              CREATE
+              UPDATE
             </Text>
           </View>
         </TouchableOpacity>
@@ -111,4 +117,4 @@ function WorkoutCreateScreen() {
   );
 }
 
-export default WorkoutCreateScreen;
+export default WorkoutEditScreen;
