@@ -3,7 +3,7 @@ import { useIsFocused, useNavigation } from "@react-navigation/native";
 import React, { useEffect, useRef, useState } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { auth } from "../../../services/firebase.config";
-import { getWorkouts } from "../../../services/workoutService";
+import { deleteWorkout, getWorkouts } from "../../../services/workoutService";
 import ActionSheet from "react-native-actionsheet";
 
 const OPTIONS = ["Edit", "Delete", "Cancel"];
@@ -19,8 +19,7 @@ function WorkoutsScreen() {
   useEffect(() => {
     const fetchWorkouts = async () => {
       try {
-        const userId = auth.currentUser?.uid;
-        const userWorkouts = await getWorkouts(userId);
+        const userWorkouts = await getWorkouts();
         setWorkouts(userWorkouts);
       } catch (error) {
         console.error("Error fetching workouts:", error);
@@ -34,7 +33,6 @@ function WorkoutsScreen() {
 
   useEffect(() => {
     if (selectedWorkout !== null) {
-      console.log(selectedWorkout);
       this.ActionSheet.show();
     }
   }, [selectedWorkout]);
@@ -43,12 +41,14 @@ function WorkoutsScreen() {
     setSelectedWorkout(workout);
   };
 
-  const handleAction = (index) => {
+  const handleAction = (index, workout) => {
     switch (index) {
       case 0:
         navigation.navigate("WorkoutEdit", selectedWorkout);
         break;
       case 1:
+        let updatedWorkouts = deleteWorkout(workout.id);
+        setWorkouts(updatedWorkouts);
         console.log("Succesfully Deleted");
         break;
       default:
@@ -85,7 +85,7 @@ function WorkoutsScreen() {
           navigation.navigate("WorkoutCreate");
         }}
       >
-        <View className="flex justify-center items-center bg-green-600 py-1 rounded-3xl my-4 mx-6">
+        <View className="flex justify-center items-center bg-blue-700 py-1 rounded-3xl my-4 mx-6">
           <AntDesign name="plus" size={30} color="white" />
         </View>
       </TouchableOpacity>

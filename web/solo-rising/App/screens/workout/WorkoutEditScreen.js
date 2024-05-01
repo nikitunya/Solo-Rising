@@ -13,20 +13,27 @@ import { useNavigation } from "@react-navigation/native";
 import ExerciseListModal from "../exercise/ExerciseListModal";
 import { updateWorkout } from "../../../services/workoutService";
 import { auth } from "../../../services/firebase.config";
+import AddExerciseModal from "../exercise/AddExerciseModal";
 
 function WorkoutEditScreen({ route }) {
   const workout = route.params;
-  console.log(workout);
+
   const navigation = useNavigation();
 
   const [title, setTitle] = useState(workout.title);
   const [modal, setModal] = useState(false);
   const [exerciseList, setExerciseList] = useState(workout.exerciseList);
+  const [selectedExercise, setSelectedExercise] = useState(null);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => handleExercisePress(item)}>
-      <View className="justify-center items-center bg-neutral-800 py-3 rounded-lg my-2">
-        <Text className="text-white">{item.name}</Text>
+      <View className="flex-row justify-between items-center bg-neutral-800 py-3 rounded-lg my-2 px-4">
+        <Text className="text-white font-bold text-center flex-1">
+          {item.name}
+        </Text>
+        <TouchableOpacity onPress={() => handleDeleteExercise(item)}>
+          <AntDesign name="close" size={30} color="red" />
+        </TouchableOpacity>
       </View>
     </TouchableOpacity>
   );
@@ -35,9 +42,19 @@ function WorkoutEditScreen({ route }) {
     setExerciseList([...exerciseList, exercise]);
   };
 
+  const handleExercisePress = (exercise) => {
+    setSelectedExercise(exercise);
+  };
+
+  const handleDeleteExercise = (exercise) => {
+    setExerciseList(prevExerciseList =>
+      prevExerciseList.filter(x => x !== exercise)
+    );
+  }
+
   const handleUpdateWorkout = async () => {
     try {
-      await updateWorkout(auth.currentUser?.uid, workout.id, {
+      await updateWorkout(workout.id, {
         title,
         exerciseList,
       });
@@ -101,6 +118,16 @@ function WorkoutEditScreen({ route }) {
             onClose={() => setModal(false)}
             addExerciseToList={addExerciseToList}
           ></ExerciseListModal>
+          <AddExerciseModal
+            visible={modal}
+            onClose={() => {
+              setSelectedExercise(null);
+              () => setModal(false);
+            }}
+            exercise={selectedExercise}
+            addToWorkout={false}
+            addExerciseToList={addExerciseToList}
+          />
         </View>
         <TouchableOpacity
           onPress={handleUpdateWorkout}

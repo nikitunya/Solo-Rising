@@ -115,7 +115,6 @@ const ExerciseListModal = ({ modal, onClose, addExerciseToList }) => {
           setSelectedExercise(null);
           onClose();
         }}
-        // onClose={() => setSelectedExercise(null)}
         exercise={selectedExercise}
         addToWorkout={true}
         addExerciseToList={addExerciseToList}

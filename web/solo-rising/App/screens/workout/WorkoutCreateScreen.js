@@ -12,7 +12,6 @@ import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import ExerciseListModal from "../exercise/ExerciseListModal";
 import { createWorkout } from "../../../services/workoutService";
-import { auth } from "../../../services/firebase.config";
 
 function WorkoutCreateScreen() {
   const navigation = useNavigation();
@@ -23,7 +22,7 @@ function WorkoutCreateScreen() {
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => handleExercisePress(item)}>
       <View className="justify-center items-center bg-neutral-800 py-3 rounded-lg my-2">
-        <Text className="text-white">{item.name}</Text>
+        <Text className="text-white font-bold">{item.name}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -34,10 +33,9 @@ function WorkoutCreateScreen() {
 
   const handleCreateWorkout = async () => {
     try {
-      await createWorkout(auth.currentUser?.uid, title, exerciseList);
+      await createWorkout(title, exerciseList);
       navigation.navigate("Training");
     } catch (error) {
-      setLoading(false);
       console.log(error);
     }
   };
