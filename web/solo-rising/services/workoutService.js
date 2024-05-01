@@ -1,5 +1,4 @@
 import {
-  addDoc,
   collection,
   deleteDoc,
   doc,
@@ -60,7 +59,6 @@ export const deleteWorkout = async (workoutId) => {
     const workoutRef = doc(db, "users", auth.currentUser?.uid, "workouts", workoutId);
     await deleteDoc(workoutRef);
     console.log("Workout deleted successfully");
-    return await getWorkouts();
   } catch (error) {
     console.error("Error deleting workout: ", error);
     throw error;

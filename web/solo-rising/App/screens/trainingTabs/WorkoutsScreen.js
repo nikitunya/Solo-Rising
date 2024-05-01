@@ -16,16 +16,16 @@ function WorkoutsScreen() {
   const [workouts, setWorkouts] = useState([]);
   const [selectedWorkout, setSelectedWorkout] = useState(null);
 
-  useEffect(() => {
-    const fetchWorkouts = async () => {
-      try {
-        const userWorkouts = await getWorkouts();
-        setWorkouts(userWorkouts);
-      } catch (error) {
-        console.error("Error fetching workouts:", error);
-      }
-    };
+  const fetchWorkouts = async () => {
+    try {
+      const userWorkouts = await getWorkouts();
+      setWorkouts(userWorkouts);
+    } catch (error) {
+      console.error("Error fetching workouts:", error);
+    }
+  };
 
+  useEffect(() => {
     if (isFocused) {
       fetchWorkouts();
     }
@@ -47,8 +47,8 @@ function WorkoutsScreen() {
         navigation.navigate("WorkoutEdit", selectedWorkout);
         break;
       case 1:
-        let updatedWorkouts = deleteWorkout(workout.id);
-        setWorkouts(updatedWorkouts);
+        deleteWorkout(workout.id);
+        fetchWorkouts();
         console.log("Succesfully Deleted");
         break;
       default:
