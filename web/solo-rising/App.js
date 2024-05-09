@@ -1,8 +1,14 @@
-import AppNavigation from "./App/navigation/appNavigation";
+import { NavigationContainer } from "@react-navigation/native";
+import AuthNavigator from "./App/navigation/AuthNavigator";
+
 
 function App() {
   return (
-    <AppNavigation />
+    // isAuthntecited
+    <NavigationContainer>
+      {/* isAuthntecited ? AuthNavigator : DrawerNavigator */}
+      <AuthNavigator />
+    </NavigationContainer>
   );
 }
  

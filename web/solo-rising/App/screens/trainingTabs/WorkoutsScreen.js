@@ -2,9 +2,9 @@ import { AntDesign } from "@expo/vector-icons";
 import { useIsFocused, useNavigation } from "@react-navigation/native";
 import React, { useEffect, useRef, useState } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
-import { auth } from "../../../services/firebase.config";
 import { deleteWorkout, getWorkouts } from "../../../services/workoutService";
 import ActionSheet from "react-native-actionsheet";
+import { ROUTES } from "../../constants";
 
 const OPTIONS = ["Edit", "Delete", "Cancel"];
 const CANCEL_BUTTON_INDEX = 2;
@@ -44,7 +44,7 @@ function WorkoutsScreen() {
   const handleAction = (index, workout) => {
     switch (index) {
       case 0:
-        navigation.navigate("WorkoutEdit", selectedWorkout);
+        navigation.navigate(ROUTES.WORKOUT_EDIT, selectedWorkout);
         break;
       case 1:
         deleteWorkout(workout.id);
@@ -82,7 +82,7 @@ function WorkoutsScreen() {
       <FlatList data={workouts} renderItem={renderItem} />
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate("WorkoutCreate");
+          navigation.navigate(ROUTES.WORKOUT_CREATE);
         }}
       >
         <View className="flex justify-center items-center bg-blue-700 py-1 rounded-3xl my-4 mx-6">
