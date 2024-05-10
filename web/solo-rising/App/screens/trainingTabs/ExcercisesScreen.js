@@ -9,9 +9,15 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import { colors } from "../../utils/colors/index.js";
 import SelectDropdown from "react-native-select-dropdown";
-import { useNavigation } from "@react-navigation/native";
-import { ROUTES } from "../../constants/index.js";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
+import {
+  COLORS,
+  ROUTES,
+  PRIMARY_MUCLES,
+  MUCLE_GROUPS,
+} from "../../constants/index.js";
 import { getExercisesByPrimaryMuscle } from "../api/exerciseApi.ts";
+import { getAllExercises, getExercisesByName } from "../../../services/exerciseService.js";
 
 function ExcercisesScreen() {
   const muscles = [
@@ -34,22 +40,37 @@ function ExcercisesScreen() {
   ];
 
   const [exercises, setExercises] = useState([]);
+  const [searchInput, setSearchInput] = useState("");
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
-  // useEffect(() => {
-  //   const fetchExercises = async () => {
-  //     try {
-  //       const exerciseList = await getExercisesByPrimaryMuscle("chest");
-  //       setExercises(exerciseList);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
+  const fetchExercises = async () => {
+    try {
+      const exerciseList = await getAllExercises(20);
+      setExercises(exerciseList);
+    } catch (error) {
+      console.error("Error fetching workouts:", error);
+    }
+  };
 
-  //   fetchExercises();
-  // }, []);
+  useEffect(() => {
+    if (isFocused) {
+      fetchExercises();
+    }
+  }, [isFocused]);
 
-  // console.log(exercises);
+  useEffect(() => {
+    const fetchExercisesByName = async () => {
+      try {
+        const filteredExercises = await getExercisesByName(searchInput);
+        setExercises(filteredExercises);
+      } catch (error) {
+        console.error("Error fetching exercises by name:", error);
+      }
+    };
+
+    fetchExercisesByName();
+  }, [searchInput]);
 
   const handleExercisePress = (selectedExercise) => {
     navigation.navigate(ROUTES.EXERCISE_VIEW, { exercise: selectedExercise });
@@ -57,7 +78,17 @@ function ExcercisesScreen() {
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => handleExercisePress(item)}>
-      <View className="flex-1 justify-center items-center bg-zinc-800 py-3 rounded-3xl my-2">
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: COLORS.secondaryBackground,
+          paddingVertical: 10,
+          borderRadius: 20,
+          marginVertical: 6,
+        }}
+      >
         <Text className="text-white">{item.name}</Text>
       </View>
     </TouchableOpacity>
@@ -66,26 +97,31 @@ function ExcercisesScreen() {
   return (
     <View className="flex-1 bg-black px-4 pt-3">
       <View className="flex-row items-center justify-between bg-gray-100 rounded-full py-2 px-4">
-        <TextInput className="flex-1 text-gray-700" placeholder="Freesearch" />
+        <TextInput
+          className="flex-1 text-gray-700"
+          placeholder="Freesearch"
+          value={searchInput}
+          onChangeText={(text) => setSearchInput(text)}
+        />
         <AntDesign name="search1" size={24} color={colors.textColor} />
       </View>
       <View className="flex-row justify-between mt-3">
-        <SelectDropdown
-          data={muscles}
+        {/* <SelectDropdown
+          data={PRIMARY_MUCLES}
           defaultButtonText="Muscle"
           onSelect={(selectedItem, index) => {
             // handle selection
           }}
           {...dropdownStyles}
-        />
-        <SelectDropdown
+        /> */}
+        {/* <SelectDropdown
           data={type}
           defaultButtonText="Type"
           onSelect={(selectedItem, index) => {
             // handle selection
           }}
           {...dropdownStyles}
-        />
+        /> */}
       </View>
       <View
         className="py-2"

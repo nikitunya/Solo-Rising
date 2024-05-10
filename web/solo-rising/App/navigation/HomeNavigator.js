@@ -14,11 +14,10 @@ function HomeNavigator() {
         headerShown: false,
         tabBarShowLabel: false,
         tabBarInactiveTintColor: "#fff",
-        tabBarActiveTintColor: "#64cc4f",
+        tabBarActiveTintColor: COLORS.primaryBlue,
         tabBarStyle: {
           backgroundColor: "#27272A",
           borderTopWidth: 0,
-          borderRadius: 15,
         },
         tabBarIcon: ({ color, size, focused }) => {
           let iconName;

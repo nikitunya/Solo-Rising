@@ -86,6 +86,7 @@ function WorkoutsScreen() {
       <FlatList data={workouts} renderItem={renderItem} />
       <TouchableOpacity
         onPress={() => {
+          // saveExercises();
           navigation.navigate(ROUTES.WORKOUT_CREATE);
         }}
       >
