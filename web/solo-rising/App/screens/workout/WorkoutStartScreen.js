@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import {
   Dimensions,
@@ -8,17 +7,23 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import { COLORS } from "../../constants";
+import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import MuscleGroupImage from "../api/MuscleGroupsImage";
+import { COLORS } from "../../constants";
+
 const { height, width } = Dimensions.get("window");
 
 function WorkoutStartScreen({ route }) {
   const navigation = useNavigation();
   const workout = route.params.workout;
   const [timer, setTimer] = useState(0);
-  const [data, SetData] = useState(workout.exerciseList);
-  const [sets, setSets] = useState([]);
+  const [data, setData] = useState(
+    workout.exerciseList.map((exercise) => ({
+      ...exercise,
+      sets: [{ reps: "", weight: "" }],
+    }))
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -38,13 +43,50 @@ function WorkoutStartScreen({ route }) {
       .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
   };
 
-  const updateSet = (exerciseIndex, field, value) => {
-    const newSets = [...sets]; // Copy the sets state
-    newSets[exerciseIndex][field] = value; // Update reps or weight for the exercise
-    setSets(newSets); // Update the sets state
+  const addSet = (exerciseIndex) => {
+    console.log(exerciseIndex);
+    setData((prevData) => {
+      const newData = [...prevData];
+      newData[exerciseIndex].sets.push({ reps: "", weight: "" });
+      console.log(newData.sets);
+      return newData;
+    });
+  };
+
+  const saveWorkout = () => {
+    console.log(data[0].sets)
+    // const currentDate = new Date();
+    // const newWorkout = {
+    //   name: workout.title,
+    //   time: formatTime(timer),
+    //   date: currentDate.toLocaleDateString(),
+    //   time: currentDate.toLocaleTimeString(),
+    //   exercises: data.map((exercise) => ({
+    //     name: exercise.name,
+    //     sets: exercise.sets,
+    //   })),
+    // };
+    // Here you can save `newWorkout` to your data store or perform any other action with it
+    // console.log("Saved Workout:", newWorkout);
   };
 
   const renderExerciseItem = ({ item, index }) => {
+    const handleRepsChange = (text, setIndex) => {
+      setData((prevData) => {
+        const newData = [...prevData];
+        newData[index].sets[setIndex].reps = text;
+        return newData;
+      });
+    };
+  
+    const handleWeightChange = (text, setIndex) => {
+      setData((prevData) => {
+        const newData = [...prevData];
+        newData[index].sets[setIndex].weight = text;
+        return newData;
+      });
+    };
+
     return (
       <View style={{ width: width - 50, height: height, alignItems: "center" }}>
         <TouchableOpacity
@@ -66,49 +108,40 @@ function WorkoutStartScreen({ route }) {
               imageSize={250}
             />
 
-            <View className="flex-row justify-between mt-2">
-              <TouchableOpacity className="mr-3 justify-center">
-                <AntDesign name="retweet" size={30} color={COLORS.primaryBlue} />
-              </TouchableOpacity>
-              <View className="flex-row items-center">
+            {item.sets.map((set, setIndex) => (
+              <View
+                key={`${set.reps}-${set.weight}-${setIndex}`}
+                className="flex-row justify-between mt-2"
+              >
+                <TouchableOpacity className="mr-3 justify-center">
+                  <AntDesign
+                    name="retweet"
+                    size={30}
+                    color={COLORS.primaryBlue}
+                  />
+                </TouchableOpacity>
+                <View className="flex-row items-center">
+                  <TextInput
+                    placeholder="Reps"
+                    placeholderTextColor={COLORS.white}
+                    keyboardType="numeric"
+                    className="mr-2 bg-neutral-900 rounded-lg text-lg text-white w-16 h-10 text-center"
+                    value={set.reps}
+                    onChangeText={(text) => handleRepsChange(text, setIndex)}
+                  />
+                  <Text className="text-lg mr-2 text-white">x</Text>
+                </View>
                 <TextInput
-                  // value={sets[index]?.reps || ''} // Access reps from sets state
-                  // onChangeText={(text) => updateSet(index, 'reps', text)}
-                  placeholder="Reps"
+                  placeholder="Weight"
                   placeholderTextColor={COLORS.white}
                   keyboardType="numeric"
-                  style={{
-                    width: 60,
-                    height: 40,
-                    marginRight: 10,
-                    padding: 10,
-                    backgroundColor: COLORS.primaryBackground,
-                    borderRadius: 5,
-                    fontSize: 16,
-                    color: COLORS.white
-                  }}
+                  className="mr-2 bg-neutral-900 rounded-lg text-lg text-white w-16 h-10 text-center"
+                  value={set.weight}
+                  onChangeText={(text) => handleWeightChange(text, setIndex)}
                 />
-                <Text className="text-lg mr-2 text-white">x</Text>
               </View>
-              <TextInput
-                // value={sets[index]?.weight || ''} // Access weight from sets state
-                // onChangeText={(text) => updateSet(index, 'weight', text)}
-                placeholder="Weight"
-                placeholderTextColor={COLORS.white}
-                keyboardType="numeric"
-                style={{
-                  width: 80,
-                  height: 40,
-                  padding: 10,
-                  backgroundColor: COLORS.primaryBackground,
-                  borderRadius: 5,
-                  fontSize: 16,
-                  color: COLORS.white
-                }}
-              />
-            </View>
+            ))}
 
-            {/* Add Set Button */}
             <TouchableOpacity
               style={{ marginTop: 10 }}
               onPress={() => addSet(index)}
@@ -145,7 +178,10 @@ function WorkoutStartScreen({ route }) {
           </Text>
         </View>
         <View className="flex-row items-center">
-          <TouchableOpacity className="py-1 px-5 rounded-full bg-blue-700 mt-16">
+          <TouchableOpacity
+            className="py-1 px-5 rounded-full bg-blue-700 mt-16"
+            onPress={saveWorkout}
+          >
             <Text className="text-xl font-bold text-white">End</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -169,10 +205,6 @@ function WorkoutStartScreen({ route }) {
               data={data}
               showsHorizontalScrollIndicator={false}
               pagingEnabled
-              // onScroll={(e) => {
-              //   const x = e.nativeEvent.contentOffset.x;
-              //   setCurrentIndex((x / width).toFixed(0));
-              // }}
               horizontal
               renderItem={renderExerciseItem}
             />
