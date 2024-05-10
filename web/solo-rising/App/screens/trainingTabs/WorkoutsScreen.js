@@ -5,10 +5,11 @@ import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { deleteWorkout, getWorkouts } from "../../../services/workoutService";
 import ActionSheet from "react-native-actionsheet";
 import { ROUTES } from "../../constants";
+import { saveExercises } from "../../../services/exerciseService";
 
-const OPTIONS = ["Edit", "Delete", "Cancel"];
-const CANCEL_BUTTON_INDEX = 2;
-const DESTRUCTIVE_BUTTON_INDEX = 1;
+const OPTIONS = ["Edit", "Start", "Delete", "Cancel"];
+const CANCEL_BUTTON_INDEX = 3;
+const DESTRUCTIVE_BUTTON_INDEX = 2;
 
 function WorkoutsScreen() {
   const navigation = useNavigation();
@@ -47,6 +48,9 @@ function WorkoutsScreen() {
         navigation.navigate(ROUTES.WORKOUT_EDIT, selectedWorkout);
         break;
       case 1:
+        navigation.navigate(ROUTES.WORKOUT_START, selectedWorkout);
+        break;
+      case 2:
         deleteWorkout(workout.id);
         fetchWorkouts();
         console.log("Succesfully Deleted");

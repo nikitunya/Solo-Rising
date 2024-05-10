@@ -1,5 +1,5 @@
 import { Modal, Text, TouchableOpacity, View } from "react-native";
-import MuscleGroupImage from "../Components/MuscleGroupsImage";
+import MuscleGroupImage from "../api/MuscleGroupsImage";
 import { AntDesign } from "@expo/vector-icons";
 
 const AddExerciseModal = ({

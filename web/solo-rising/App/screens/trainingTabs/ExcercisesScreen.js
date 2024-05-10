@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FlatList,
   Text,
@@ -10,6 +10,8 @@ import { AntDesign } from "@expo/vector-icons";
 import { colors } from "../../utils/colors/index.js";
 import SelectDropdown from "react-native-select-dropdown";
 import { useNavigation } from "@react-navigation/native";
+import { ROUTES } from "../../constants/index.js";
+import { getExercisesByPrimaryMuscle } from "../api/exerciseApi.ts";
 
 function ExcercisesScreen() {
   const muscles = [
@@ -30,64 +32,27 @@ function ExcercisesScreen() {
     "streching",
     "plyometrics",
   ];
-  const exerciseData = [
-    {
-      equipment: "Dumbbell",
-      exercise_type: "Strength",
-      experience: "Beginner",
-      force_type: "Push (Bilateral)",
-      mechanics: "Compound",
-      name: "Dumbbell Bench Press",
-      primary_muscles: "Chest",
-      secondary_muscles: "['Shoulders', 'Triceps']",
-    },
-    {
-      equipment: "Dumbbell",
-      exercise_type: "Strength",
-      experience: "Intermediate",
-      force_type: "Push",
-      mechanics: "Compound",
-      name: "Dumbbell Pullover",
-      primary_muscles: "Chest",
-      secondary_muscles: "['Lats', 'Shoulders', 'Triceps']",
-    },
-    {
-      equipment: "Dumbbell",
-      exercise_type: "Strength",
-      experience: "Beginner",
-      force_type: "Push (Bilateral)",
-      mechanics: "Compound",
-      name: "Incline Dumbbell Bench Press",
-      primary_muscles: "Chest",
-      secondary_muscles: "['Shoulders', 'Triceps']",
-    },
-    {
-      equipment: "Bodyweight",
-      exercise_type: "Strength",
-      experience: "Beginner",
-      force_type: "Pull (Bilateral)",
-      mechanics: "Compound",
-      name: "Pull Up",
-      primary_muscles: "Lats",
-      secondary_muscles: "['Abs', 'Biceps', 'Shoulders', 'Upper Back']",
-    },
-    {
-      equipment: "Dumbbell",
-      exercise_type: "Strength",
-      experience: "Beginner",
-      force_type: "Pull",
-      mechanics: "Isolation",
-      name: "One Arm Standing Dumbbell Curl",
-      primary_muscles: "Biceps",
-      secondary_muscles: "[]",
-    },
-  ];
 
-  const [exercise, setExercise] = useState(exerciseData);
+  const [exercises, setExercises] = useState([]);
   const navigation = useNavigation();
 
+  // useEffect(() => {
+  //   const fetchExercises = async () => {
+  //     try {
+  //       const exerciseList = await getExercisesByPrimaryMuscle("chest");
+  //       setExercises(exerciseList);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+
+  //   fetchExercises();
+  // }, []);
+
+  // console.log(exercises);
+
   const handleExercisePress = (selectedExercise) => {
-    navigation.navigate("ExcerciseView", { exercise: selectedExercise });
+    navigation.navigate(ROUTES.EXERCISE_VIEW, { exercise: selectedExercise });
   };
 
   const renderItem = ({ item }) => (
@@ -126,11 +91,15 @@ function ExcercisesScreen() {
         className="py-2"
         style={{ borderBottomWidth: 1, borderBottomColor: colors.textColor }}
       />
-      <FlatList
-        data={exercise}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.name}
-      />
+      {exercises.length > 0 ? (
+        <FlatList
+          data={exercises}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.name}
+        />
+      ) : (
+        <Text>Loading...</Text>
+      )}
     </View>
   );
 }

@@ -3,7 +3,7 @@ import React from "react";
 import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import DismissKeyboard from "../../components/DismissKeyboard";
 import { AntDesign } from "@expo/vector-icons";
-import MuscleGroupImage from "../Components/MuscleGroupsImage";
+import MuscleGroupImage from "../api/MuscleGroupsImage";
 
 function ExcerciseViewScreen({ route }) {
   const { exercise } = route.params;

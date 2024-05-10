@@ -12,7 +12,6 @@ import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import ExerciseListModal from "../exercise/ExerciseListModal";
 import { updateWorkout } from "../../../services/workoutService";
-import { auth } from "../../../services/firebase.config";
 import AddExerciseModal from "../exercise/AddExerciseModal";
 
 function WorkoutEditScreen({ route }) {
