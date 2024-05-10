@@ -6,6 +6,7 @@ import { deleteWorkout, getWorkouts } from "../../../services/workoutService";
 import ActionSheet from "react-native-actionsheet";
 import { ROUTES } from "../../constants";
 import { saveExercises } from "../../../services/exerciseService";
+import WorkoutPreviewModal from "../workout/WorkoutPreviewModal";
 
 const OPTIONS = ["Edit", "Start", "Delete", "Cancel"];
 const CANCEL_BUTTON_INDEX = 3;
@@ -15,6 +16,7 @@ function WorkoutsScreen() {
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const [workouts, setWorkouts] = useState([]);
+  const [modal, setModal] = useState(false);
   const [selectedWorkout, setSelectedWorkout] = useState(null);
 
   const fetchWorkouts = async () => {
@@ -48,7 +50,9 @@ function WorkoutsScreen() {
         navigation.navigate(ROUTES.WORKOUT_EDIT, selectedWorkout);
         break;
       case 1:
-        navigation.navigate(ROUTES.WORKOUT_START, selectedWorkout);
+        setModal(true);
+        setSelectedWorkout(workout);
+        // navigation.navigate(ROUTES.WORKOUT_START, selectedWorkout);
         break;
       case 2:
         deleteWorkout(workout.id);
@@ -86,7 +90,6 @@ function WorkoutsScreen() {
       <FlatList data={workouts} renderItem={renderItem} />
       <TouchableOpacity
         onPress={() => {
-          // saveExercises();
           navigation.navigate(ROUTES.WORKOUT_CREATE);
         }}
       >
@@ -94,6 +97,12 @@ function WorkoutsScreen() {
           <AntDesign name="plus" size={30} color="white" />
         </View>
       </TouchableOpacity>
+      <Text className="text-white">{modal}</Text>
+      <WorkoutPreviewModal
+        modal={modal}
+        onClose={() => setModal(false)}
+        workout={selectedWorkout}
+      />
     </View>
   );
 }
