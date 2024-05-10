@@ -7,64 +7,30 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddExerciseModal from "./AddExerciseModal";
+import { useIsFocused } from "@react-navigation/native";
+import { getAllExercises } from "../../../services/exerciseService";
 
 const ExerciseListModal = ({ modal, onClose, addExerciseToList }) => {
-
-  const [exerciseList, setExerciseList] = useState([
-    {
-      equipment: "Dumbbell",
-      exercise_type: "Strength",
-      experience: "Beginner",
-      force_type: "Push (Bilateral)",
-      mechanics: "Compound",
-      name: "Dumbbell Bench Press",
-      primary_muscles: "Chest",
-      secondary_muscles: "['Shoulders', 'Triceps']",
-    },
-    {
-      equipment: "Dumbbell",
-      exercise_type: "Strength",
-      experience: "Intermediate",
-      force_type: "Push",
-      mechanics: "Compound",
-      name: "Dumbbell Pullover",
-      primary_muscles: "Chest",
-      secondary_muscles: "['Lats', 'Shoulders', 'Triceps']",
-    },
-    {
-      equipment: "Dumbbell",
-      exercise_type: "Strength",
-      experience: "Beginner",
-      force_type: "Push (Bilateral)",
-      mechanics: "Compound",
-      name: "Incline Dumbbell Bench Press",
-      primary_muscles: "Chest",
-      secondary_muscles: "['Shoulders', 'Triceps']",
-    },
-    {
-      equipment: "Bodyweight",
-      exercise_type: "Strength",
-      experience: "Beginner",
-      force_type: "Pull (Bilateral)",
-      mechanics: "Compound",
-      name: "Pull Up",
-      primary_muscles: "Lats",
-      secondary_muscles: "['Abs', 'Biceps', 'Shoulders', 'Upper Back']",
-    },
-    {
-      equipment: "Dumbbell",
-      exercise_type: "Strength",
-      experience: "Beginner",
-      force_type: "Pull",
-      mechanics: "Isolation",
-      name: "One Arm Standing Dumbbell Curl",
-      primary_muscles: "Biceps",
-      secondary_muscles: "[]",
-    },
-  ]);
+  const [exerciseList, setExerciseList] = useState([]);
   const [selectedExercise, setSelectedExercise] = useState(null);
+  const isFocused = useIsFocused();
+
+  const fetchExercises = async () => {
+    try {
+      const exerciseList = await getAllExercises();
+      setExerciseList(exerciseList);
+    } catch (error) {
+      console.error("Error fetching workouts:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (isFocused) {
+      fetchExercises();
+    }
+  }, [isFocused]);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => handleExercisePress(item)}>

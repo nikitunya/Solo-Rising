@@ -1,44 +1,40 @@
 import React from "react";
-import { View, Text, useWindowDimensions } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
-import { SceneMap, TabBar, TabView } from "react-native-tab-view";
-import { colors } from '../../utils/colors/index.js'
-import ExcercisesScreen from "../trainingTabs/ExcercisesScreen.js";
+import { View, Text } from "react-native";
 import WorkoutsScreen from "../trainingTabs/WorkoutsScreen.js";
-
-const renderScene = SceneMap({
-  workout: WorkoutsScreen,
-  excercise: ExcercisesScreen,
-});
-
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
+import { ROUTES } from "../../constants/index.js";
 
 function TrainingScreen() {
-  const layout = useWindowDimensions();
+  const navigation = useNavigation();
 
-  const [index, setIndex] = React.useState(0);
-  const [routes] = React.useState([
-    { key: "workout", title: "Workouts" },
-    { key: "excercise", title: "Excercises" },
-  ]);
-  
   return (
     <View className="flex-1 bg-neutral-900">
       <View className="bg-zinc-800 h-24 rounded-bl-3xl rounded-br-3xl flex-row justify-center px-4 ">
-        <Text className="text-2xl absolute bottom-6 font-bold text-green-600">Trained today: 1.35 minutes</Text>
-        {/* <View className="absolute bottom-6 right-5">
-          <AntDesign name="plus" size={30} color="#16a34a" />
-        </View> */}
+        <Text className="text-2xl absolute bottom-6 font-bold text-white">
+          My Workouts
+        </Text>
       </View>
-      <View className="pt-4 flex-1">
-        <TabView
-          navigationState={{ index, routes }}
-          renderScene={renderScene}
-          onIndexChange={setIndex}
-          initialLayout={{ width: layout.width }}
-          className="rounded-3xl"
-          renderTabBar={props => <TabBar {...props} style={{backgroundColor: "#27272A"}} indicatorStyle={{backgroundColor: "#1D4ED8"}}/>}
-        />
+      <View className="flex-row items-center justify-around mt-3">
+        <TouchableOpacity onPress={() => navigation.navigate(ROUTES.EXERCISE_LIST)}>
+          <View className="flex justify-center items-center bg-blue-700 py-1 rounded-3xl my-4 mx-6">
+            <Text className="text-white py-1 px-9">Exercises</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <View className="flex justify-center items-center bg-blue-700 py-1 rounded-3xl my-4 mx-6">
+            <Text className="text-white py-1 px-9">Activities</Text>
+          </View>
+        </TouchableOpacity>
       </View>
+      <View
+        className="py-2"
+        style={{
+          borderBottomWidth: 1,
+          borderBottomColor: "white",
+        }}
+      />
+      <WorkoutsScreen />
     </View>
   );
 }
