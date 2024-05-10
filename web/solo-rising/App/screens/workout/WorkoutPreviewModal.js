@@ -46,8 +46,8 @@ function WorkoutPreviewModal({ modal, onClose, workout }) {
     <Text className="text-white my-1">{item.name}</Text>
   );
 
-  const handleStartWorkout = () => {
-    navigation.navigate(ROUTES.WORKOUT_START);
+  const handleStartWorkout = (workout) => {
+    navigation.navigate(ROUTES.WORKOUT_START, { workout: workout });
     onClose(); // Close the modal
   };
 
@@ -87,7 +87,7 @@ function WorkoutPreviewModal({ modal, onClose, workout }) {
         <View className="absolute bottom-10 left-0 right-0 flex items-center">
           <TouchableOpacity
             className="py-2 px-16 rounded-lg bg-blue-700"
-            onPress={() => handleStartWorkout()}
+            onPress={() => handleStartWorkout(workout)}
           >
             <Text className="text-xl font-bold text-white">Start</Text>
           </TouchableOpacity>
