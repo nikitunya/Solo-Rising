@@ -3,5 +3,6 @@ export default {
     primaryBackground: "#171717",
     secondaryBackground: "#27272A",
     gray: "#808080",
-    white: "#FFFFFF"
+    white: "#FFFFFF",
+    bone: "#CCC4B4"
 }
