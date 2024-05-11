@@ -12,6 +12,7 @@ import { AntDesign } from "@expo/vector-icons";
 import MuscleGroupImage from "../api/MuscleGroupsImage";
 import { COLORS, ROUTES } from "../../constants";
 import { ScrollView } from "react-native-gesture-handler";
+import { Timestamp } from "firebase/firestore";
 
 const { height, width } = Dimensions.get("window");
 
@@ -45,11 +46,9 @@ function WorkoutStartScreen({ route }) {
   };
 
   const addSet = (exerciseIndex) => {
-    console.log(exerciseIndex);
     setData((prevData) => {
       const newData = [...prevData];
       newData[exerciseIndex].sets.push({ reps: "", weight: "" });
-      console.log(newData.sets);
       return newData;
     });
   };
@@ -74,11 +73,13 @@ function WorkoutStartScreen({ route }) {
     const training = {
       title: workout.title,
       duration: formatTime(timer),
-      date: currentDate.toLocaleDateString(),
+      date: Timestamp.fromDate(currentDate),
       time: currentDate.toLocaleTimeString(),
       exercises: data.map((exercise) => ({
         name: exercise.name,
         sets: exercise.sets,
+        primary_muscles: exercise.primary_muscles,
+        secondary_muscles: exercise.secondary_muscles
       })),
       volume: totalVolume
     };

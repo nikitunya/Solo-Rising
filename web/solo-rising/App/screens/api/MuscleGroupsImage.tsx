@@ -19,7 +19,6 @@ export default function MuscleGroupImage(props: MuscleGroupImageProps) {
   useEffect(() => {
     const fetchData = async () => {
       const allMuscleGroups = await getAllMuscleGroups();
-
       let primaryGroups = convertMuscleGroups(primaryMuscleGroups);
       let secondaryGroups = convertMuscleGroups(secondaryMuscleGroups);
 

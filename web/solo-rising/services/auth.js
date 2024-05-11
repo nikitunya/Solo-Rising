@@ -2,7 +2,8 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
-import { auth } from "./firebase.config";
+import { auth, db } from "./firebase.config";
+import { doc, getDoc } from "firebase/firestore";
 
 
 export const signUp = async (email, password) => {
@@ -35,3 +36,26 @@ export const login = async (email, password) => {
   }
 };
 
+export const getCurrentUserData = async () => {
+  const user = auth.currentUser;
+  if (user) {
+    try {
+      const userDocRef = doc(db, "users", user.uid);
+      const userDocSnapshot = await getDoc(userDocRef);
+
+      if (userDocSnapshot.exists()) {
+        const userData = userDocSnapshot.data();
+        return userData;
+      } else {
+        console.log("User document not found in Firestore.");
+        return null;
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+      return null;
+    }
+  } else {
+    console.log("No user signed in.");
+    return null;
+  }
+};

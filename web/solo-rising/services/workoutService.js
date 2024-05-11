@@ -10,7 +10,12 @@ import { auth, db } from "./firebase.config";
 
 export const createWorkout = async (title, exerciseList) => {
   try {
-    const userWorkoutsRef = collection(db, "users", auth.currentUser?.uid, "workouts");
+    const userWorkoutsRef = collection(
+      db,
+      "users",
+      auth.currentUser?.uid,
+      "workouts"
+    );
 
     const newWorkoutRef = doc(userWorkoutsRef);
 
@@ -27,10 +32,13 @@ export const createWorkout = async (title, exerciseList) => {
 
 export const getWorkouts = async () => {
   try {
-    const userWorkoutsRef = collection(db, "users", auth.currentUser?.uid, "workouts");
-
+    const userWorkoutsRef = collection(
+      db,
+      "users",
+      auth.currentUser?.uid,
+      "workouts"
+    );
     const userWorkoutsSnapshot = await getDocs(userWorkoutsRef);
-
     const userWorkouts = userWorkoutsSnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
@@ -45,7 +53,13 @@ export const getWorkouts = async () => {
 
 export const updateWorkout = async (workoutId, updatedData) => {
   try {
-    const workoutRef = doc(db, "users", auth.currentUser?.uid, "workouts", workoutId);
+    const workoutRef = doc(
+      db,
+      "users",
+      auth.currentUser?.uid,
+      "workouts",
+      workoutId
+    );
     await updateDoc(workoutRef, updatedData);
     console.log("Updated succesfully");
   } catch (error) {
@@ -56,11 +70,17 @@ export const updateWorkout = async (workoutId, updatedData) => {
 
 export const deleteWorkout = async (workoutId) => {
   try {
-    const workoutRef = doc(db, "users", auth.currentUser?.uid, "workouts", workoutId);
+    const workoutRef = doc(
+      db,
+      "users",
+      auth.currentUser?.uid,
+      "workouts",
+      workoutId
+    );
     await deleteDoc(workoutRef);
     console.log("Workout deleted successfully");
   } catch (error) {
     console.error("Error deleting workout: ", error);
     throw error;
   }
-}
+};
