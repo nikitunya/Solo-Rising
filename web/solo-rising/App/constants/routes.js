@@ -1,6 +1,7 @@
 export default {
     LOGIN: 'Login',
     SIGNUP: 'SignUp',
+    SIGNUP_SECOND: 'Second SignUp',
 
     HOME: 'Home',
 
@@ -14,7 +15,8 @@ export default {
     WORKOUT_CREATE: 'Workout Create',
     WORKOUT_EDIT: 'Workout Edit',
     WORKOUT_START: 'Workout Start',
+    WORKOUT_REVIEW: 'Workout Review',
 
     EXERCISE_LIST: 'Exercist List',
-    EXERCISE_VIEW: 'Exercise View'
+    EXERCISE_VIEW: 'Exercise View',
 }

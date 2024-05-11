@@ -10,7 +10,8 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import MuscleGroupImage from "../api/MuscleGroupsImage";
-import { COLORS } from "../../constants";
+import { COLORS, ROUTES } from "../../constants";
+import { ScrollView } from "react-native-gesture-handler";
 
 const { height, width } = Dimensions.get("window");
 
@@ -53,21 +54,38 @@ function WorkoutStartScreen({ route }) {
     });
   };
 
+  const calculateVolume = (sets) => {
+    return sets.reduce((totalVolume, set) => {
+      const reps = parseInt(set.reps);
+      const weight = parseFloat(set.weight);
+      if (!isNaN(reps) && !isNaN(weight)) {
+        totalVolume += reps * weight;
+      }
+      return totalVolume;
+    }, 0);
+  };
+
   const saveWorkout = () => {
-    console.log(data[0].sets)
-    // const currentDate = new Date();
-    // const newWorkout = {
-    //   name: workout.title,
-    //   time: formatTime(timer),
-    //   date: currentDate.toLocaleDateString(),
-    //   time: currentDate.toLocaleTimeString(),
-    //   exercises: data.map((exercise) => ({
-    //     name: exercise.name,
-    //     sets: exercise.sets,
-    //   })),
-    // };
+    const currentDate = new Date();
+    const totalVolume = data.reduce((total, exercise) => {
+      return total + calculateVolume(exercise.sets);
+    }, 0);
+
+    const training = {
+      title: workout.title,
+      duration: formatTime(timer),
+      date: currentDate.toLocaleDateString(),
+      time: currentDate.toLocaleTimeString(),
+      exercises: data.map((exercise) => ({
+        name: exercise.name,
+        sets: exercise.sets,
+      })),
+      volume: totalVolume
+    };
+
+    navigation.navigate(ROUTES.WORKOUT_REVIEW, { training: training });
     // Here you can save `newWorkout` to your data store or perform any other action with it
-    // console.log("Saved Workout:", newWorkout);
+    // console.log("Saved Workout:", training);
   };
 
   const renderExerciseItem = ({ item, index }) => {
@@ -77,8 +95,9 @@ function WorkoutStartScreen({ route }) {
         newData[index].sets[setIndex].reps = text;
         return newData;
       });
+      // console.log(data[])
     };
-  
+
     const handleWeightChange = (text, setIndex) => {
       setData((prevData) => {
         const newData = [...prevData];
@@ -87,8 +106,26 @@ function WorkoutStartScreen({ route }) {
       });
     };
 
+    const copySet = (setIndex) => {
+      setData((prevData) => {
+        const newData = [...prevData];
+        const aboveSet = { ...newData[index].sets[setIndex - 1] };
+        const newSet = { ...aboveSet };
+        newData[index].sets.splice(setIndex, 0, newSet);
+        return newData;
+      });
+    };
+
+    const removeSet = (setIndexToRemove) => {
+      setData((prevData) => {
+        const newData = [...prevData];
+        newData[index].sets.splice(setIndexToRemove, 1);
+        return newData;
+      });
+    };
+
     return (
-      <View style={{ width: width - 50, height: height, alignItems: "center" }}>
+      <View style={{ width: width, height: height, alignItems: "center" }}>
         <TouchableOpacity
           disabled={true}
           style={{
@@ -107,40 +144,52 @@ function WorkoutStartScreen({ route }) {
               secondaryMuscleGroups={item.secondary_muscles}
               imageSize={250}
             />
-
-            {item.sets.map((set, setIndex) => (
-              <View
-                key={`${set.reps}-${set.weight}-${setIndex}`}
-                className="flex-row justify-between mt-2"
-              >
-                <TouchableOpacity className="mr-3 justify-center">
-                  <AntDesign
-                    name="retweet"
-                    size={30}
-                    color={COLORS.primaryBlue}
-                  />
-                </TouchableOpacity>
-                <View className="flex-row items-center">
-                  <TextInput
-                    placeholder="Reps"
-                    placeholderTextColor={COLORS.white}
-                    keyboardType="numeric"
-                    className="mr-2 bg-neutral-900 rounded-lg text-lg text-white w-16 h-10 text-center"
-                    value={set.reps}
-                    onChangeText={(text) => handleRepsChange(text, setIndex)}
-                  />
-                  <Text className="text-lg mr-2 text-white">x</Text>
+            <ScrollView
+              style={{ maxHeight: 250, width: "70%" }}
+              contentContainerStyle={{ flexGrow: 1 }}
+            >
+              {item.sets.map((set, setIndex) => (
+                <View key={setIndex} className="flex-row justify-between mt-2">
+                  <View className="flex-row items-center">
+                    <TouchableOpacity
+                      className="mr-3 justify-center"
+                      onPress={() => copySet(setIndex + 1)}
+                    >
+                      <AntDesign
+                        name="retweet"
+                        size={30}
+                        color={COLORS.primaryBlue}
+                      />
+                    </TouchableOpacity>
+                    <TextInput
+                      placeholder="Reps"
+                      placeholderTextColor={COLORS.white}
+                      keyboardType="numeric"
+                      className="mr-2 bg-neutral-900 rounded-lg text-lg text-white w-16 h-10 text-center"
+                      value={set.reps}
+                      onChangeText={(text) => handleRepsChange(text, setIndex)}
+                    />
+                    <Text className="text-lg mr-2 text-white">x</Text>
+                    <TextInput
+                      placeholder="Weight"
+                      placeholderTextColor={COLORS.white}
+                      keyboardType="numeric"
+                      className="mr-2 bg-neutral-900 rounded-lg text-lg text-white w-16 h-10 text-center"
+                      value={set.weight}
+                      onChangeText={(text) =>
+                        handleWeightChange(text, setIndex)
+                      }
+                    />
+                    <TouchableOpacity
+                      className="ml-3 justify-center"
+                      onPress={() => removeSet(setIndex)}
+                    >
+                      <AntDesign name="close" size={30} color="red" />
+                    </TouchableOpacity>
+                  </View>
                 </View>
-                <TextInput
-                  placeholder="Weight"
-                  placeholderTextColor={COLORS.white}
-                  keyboardType="numeric"
-                  className="mr-2 bg-neutral-900 rounded-lg text-lg text-white w-16 h-10 text-center"
-                  value={set.weight}
-                  onChangeText={(text) => handleWeightChange(text, setIndex)}
-                />
-              </View>
-            ))}
+              ))}
+            </ScrollView>
 
             <TouchableOpacity
               style={{ marginTop: 10 }}

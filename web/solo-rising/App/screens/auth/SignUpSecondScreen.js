@@ -62,12 +62,12 @@ export default function SignUpSecondScreen() {
               <AntDesign name="arrowleft" size={20} color="white" />
             </TouchableOpacity>
           </View>
-          <View className="flex-row justify-center py-3">
+          {/* <View className="flex-row justify-center py-3">
             <Image
               source={require("../utils/images/logo.png")}
               style={{ width: 250, height: 250 }}
             />
-          </View>
+          </View> */}
         </SafeAreaView>
         <View className="flex-1 bg-white px-8 pt-8 rounded-t-3xl">
           <View className="form space-y-2">

@@ -15,6 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import DismissKeyboard from "../../components/DismissKeyboard";
 import { login } from "../../../services/auth";
 import { auth } from "../../../services/firebase.config";
+import { ROUTES } from "../../constants";
 
 const LoginScreen = (props) => {
   const screenWidth = Dimensions.get("window").width;
@@ -130,7 +131,7 @@ const LoginScreen = (props) => {
                 Don't have an account?
               </Text>
               {/* <TouchableOpacity onPress={() => navigation.navigate("SignUp")}> */}
-              <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
+              <TouchableOpacity onPress={() => navigation.navigate(ROUTES.SIGNUP_SECOND)}>
                 <Text className="font-semibold text-blue-700"> Sign Up</Text>
               </TouchableOpacity>
             </View>
