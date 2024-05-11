@@ -54,7 +54,8 @@ function ProfileScreen() {
     fetchTrainings();
   }, []);
 
-  if (statistics && userData && trainings) { // todo: optimize this trash
+  if (statistics && userData && trainings) {
+    // todo: optimize this trash
     trainings.forEach((training) => {
       training.exercises.forEach((exercise) => {
         if (exercise.primary_muscles) {
@@ -117,6 +118,24 @@ function ProfileScreen() {
           <View></View>
         )}
         <Border />
+        <View className="flex-row justify-between">
+          <TouchableOpacity
+            className="py-3 border border-blue-700 rounded-xl ml-5"
+            onPress={() => navigation.navigate(ROUTES.PROFILE_EDIT)}
+          >
+            <Text className="text-xl font-bold text-center text-white px-3">
+              Edit Profile
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            className="py-3 border border-red-700 rounded-xl mr-5"
+            onPress={() => handleSignOut()}
+          >
+            <Text className="text-xl font-bold text-center text-white px-3">
+              Log out
+            </Text>
+          </TouchableOpacity>
+        </View>
         <ScrollView>
           <View className="flex-1">
             <TouchableOpacity
@@ -155,9 +174,7 @@ function ProfileScreen() {
                 <Text className="text-white text-lg font-bold">
                   Muscles Trained This Week
                 </Text>
-                <Text className="text-white text-lg font-bold">
-                  40%
-                </Text>
+                <Text className="text-white text-lg font-bold">40%</Text>
               </View>
               <MuscleGroupImage
                 primaryMuscleGroups={primaryMusclesString}

@@ -3,8 +3,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { auth, db } from "./firebase.config";
-import { doc, getDoc } from "firebase/firestore";
-
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export const signUp = async (email, password) => {
   try {
@@ -57,5 +56,17 @@ export const getCurrentUserData = async () => {
   } else {
     console.log("No user signed in.");
     return null;
+  }
+};
+
+export const updateUserData = async (newData) => {
+  try {
+    console.log(newData)
+    const userDocRef = doc(db, "users", auth?.currentUser?.uid);
+    await setDoc(userDocRef, newData, { merge: true });
+    return true;
+  } catch (error) {
+    console.error("Error updating user data:", error);
+    return false;
   }
 };

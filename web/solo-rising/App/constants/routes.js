@@ -8,6 +8,7 @@ export default {
     PROFILE: 'Profile',
     PROFILE_NAVIGATOR: 'Profile Navigator',
     PROFILE_PERFOMANCE: 'Profile Perfomance',
+    PROFILE_EDIT: 'Edit Profile',
 
     FRIENDS: 'Friends',
 

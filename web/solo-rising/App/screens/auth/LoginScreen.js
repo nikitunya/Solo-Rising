@@ -131,7 +131,7 @@ const LoginScreen = (props) => {
                 Don't have an account?
               </Text>
               {/* <TouchableOpacity onPress={() => navigation.navigate("SignUp")}> */}
-              <TouchableOpacity onPress={() => navigation.navigate(ROUTES.SIGNUP_SECOND)}>
+              <TouchableOpacity onPress={() => navigation.navigate(ROUTES.SIGNUP)}>
                 <Text className="font-semibold text-blue-700"> Sign Up</Text>
               </TouchableOpacity>
             </View>
