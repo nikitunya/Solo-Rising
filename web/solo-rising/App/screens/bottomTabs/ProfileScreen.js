@@ -10,7 +10,7 @@ import {
   getThisWeekTrainings,
   getTrainingStatistics,
 } from "../../../services/trainingService";
-import { COLORS } from "../../constants";
+import { COLORS, ROUTES } from "../../constants";
 import MuscleGroupImage from "../api/MuscleGroupsImage";
 
 function ProfileScreen() {
@@ -54,7 +54,7 @@ function ProfileScreen() {
     fetchTrainings();
   }, []);
 
-  if (statistics && userData && trainings) {
+  if (statistics && userData && trainings) { // todo: optimize this trash
     trainings.forEach((training) => {
       training.exercises.forEach((exercise) => {
         if (exercise.primary_muscles) {
@@ -121,7 +121,7 @@ function ProfileScreen() {
           <View className="flex-1">
             <TouchableOpacity
               className="my-2"
-              onPress={() => getThisWeekTrainings()}
+              onPress={() => navigation.navigate(ROUTES.PROFILE_PERFOMANCE)}
             >
               <View className="py-3 rounded-full bg-zinc-800 mx-4">
                 <View className="flex-row justify-between">

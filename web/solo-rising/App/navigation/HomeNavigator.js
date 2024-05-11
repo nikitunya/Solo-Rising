@@ -1,10 +1,10 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ProfileScreen from "../screens/bottomTabs/ProfileScreen";
 import FriendsScreen from "../screens/bottomTabs/FriendsScreen";
-import TrainingScreen from "../screens/bottomTabs/TrainingScreen";
 import Icon from "react-native-vector-icons/Ionicons";
 import { COLORS, ROUTES } from "../constants";
 import TrainingNavigator from "./TrainingNavigator";
+import ProfileNavigator from "./ProfileNavigator";
 const Tab = createBottomTabNavigator();
 
 function HomeNavigator() {
@@ -22,7 +22,7 @@ function HomeNavigator() {
         tabBarIcon: ({ color, size, focused }) => {
           let iconName;
 
-          if (route.name === ROUTES.PROFILE) {
+          if (route.name === ROUTES.PROFILE_NAVIGATOR) {
             iconName = "person";
           } else if (route.name === ROUTES.FRIENDS) {
             iconName = "person-add";
@@ -34,9 +34,15 @@ function HomeNavigator() {
         },
       })}
     >
-      <Tab.Screen name={ROUTES.PROFILE} component={ProfileScreen} />
+      <Tab.Screen
+        name={ROUTES.PROFILE_NAVIGATOR}
+        component={ProfileNavigator}
+      />
       <Tab.Screen name={ROUTES.FRIENDS} component={FriendsScreen} />
-      <Tab.Screen name={ROUTES.TRAINING_NAVIGATOR} component={TrainingNavigator} />
+      <Tab.Screen
+        name={ROUTES.TRAINING_NAVIGATOR}
+        component={TrainingNavigator}
+      />
     </Tab.Navigator>
   );
 }

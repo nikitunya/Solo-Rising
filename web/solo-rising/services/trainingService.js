@@ -104,3 +104,42 @@ export const getThisWeekTrainings = async () => {
     console.log(error);
   }
 };
+
+export const getThisYearTrainings = async () => {
+  try {
+    const userTrainingsRef = collection(
+      db,
+      "users",
+      auth.currentUser?.uid,
+      "trainings"
+    );
+
+    const today = new Date();
+    const startOfYearDate = new Date(today.getFullYear(), 0, 1); // January 1st of the current year
+    const endOfPreviousMonthDate = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      0
+    ); // End of previous month
+
+    const startTimestamp = Timestamp.fromDate(startOfYearDate);
+    const endTimestamp = Timestamp.fromDate(endOfPreviousMonthDate);
+
+    const yearTrainingsSnapshot = await getDocs(
+      query(
+        userTrainingsRef,
+        where("date", ">=", startTimestamp),
+        where("date", "<=", endTimestamp)
+      )
+    );
+
+    const yearTrainings = yearTrainingsSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    return yearTrainings;
+  } catch (error) {
+    console.log(error);
+  }
+};
