@@ -12,19 +12,27 @@ import {
 import { auth, db } from "./firebase.config";
 import { formatDuration, formatNumber } from "../App/utils/calculations";
 import { startOfWeek, endOfWeek } from "date-fns";
+import { getCurrentUserData, updateUserData } from "./auth";
+import { updateCurrentUser } from "firebase/auth";
 
 export const createTraining = async (training) => {
   try {
-    const userTrainingRef = collection(
-      db,
-      "users",
-      auth.currentUser?.uid,
-      "trainings"
-    );
-
-    const newTrainingRef = doc(userTrainingRef);
-
-    await setDoc(newTrainingRef, training);
+    getCurrentUserData().then((user) => {
+      user.xp = user.xp + training.totalXp;
+      if (user.xp > user.level * 1000) {
+        user.level += 1;
+      }
+      updateUserData(user).then(() => {
+        const userTrainingRef = collection(
+          db,
+          "users",
+          auth.currentUser?.uid,
+          "trainings"
+        );
+        const newTrainingRef = doc(userTrainingRef);
+        setDoc(newTrainingRef, training);
+      });
+    });
 
     console.log("Training was saved successfully");
   } catch (error) {

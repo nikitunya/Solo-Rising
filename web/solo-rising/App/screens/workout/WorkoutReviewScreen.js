@@ -17,10 +17,9 @@ function WorkoutReviewScreen({ route }) {
   const training = route.params.training;
 
   const calculateExpierience = () => {
-    const [hours, minutes, seconds] = training.duration.split(':').map(Number);
-    const totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
-    const tenMinuteIntervals = Math.ceil(totalSeconds / 600)  - 1;
-
+    const totalSeconds = training.duration;
+    const tenMinuteIntervals = Math.ceil(totalSeconds / 600) - 1;
+  
     setDurationXp(tenMinuteIntervals * XP.XP_FOR_DURATION);
     setVolumeXp(training.volume * XP.XP_FOR_KG);
     setTotalXp(volumeXp + prXp + achivmentXp + durationXp);
@@ -39,7 +38,7 @@ function WorkoutReviewScreen({ route }) {
       }
     }
     createTraining(updatedTraining);
-    // navigation.navigate(ROUTES.TRAINING)
+    navigation.navigate(ROUTES.TRAINING)
   };
 
   return (

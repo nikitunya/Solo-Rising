@@ -64,6 +64,11 @@ function WorkoutStartScreen({ route }) {
     }, 0);
   };
 
+  const getSecondsFromFormattedTime = (formattedTime) => {
+    const [hours, minutes, seconds] = formattedTime.split(":").map(Number);
+    return hours * 3600 + minutes * 60 + seconds;
+  };
+
   const saveWorkout = () => {
     const currentDate = new Date();
     const totalVolume = data.reduce((total, exercise) => {
@@ -72,16 +77,15 @@ function WorkoutStartScreen({ route }) {
 
     const training = {
       title: workout.title,
-      duration: formatTime(timer),
+      duration: getSecondsFromFormattedTime(formatTime(timer)),
       date: Timestamp.fromDate(currentDate),
-      time: currentDate.toLocaleTimeString(),
       exercises: data.map((exercise) => ({
         name: exercise.name,
         sets: exercise.sets,
         primary_muscles: exercise.primary_muscles,
-        secondary_muscles: exercise.secondary_muscles
+        secondary_muscles: exercise.secondary_muscles,
       })),
-      volume: totalVolume
+      volume: totalVolume,
     };
 
     navigation.navigate(ROUTES.WORKOUT_REVIEW, { training: training });
