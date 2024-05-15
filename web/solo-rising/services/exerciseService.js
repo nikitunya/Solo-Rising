@@ -10,11 +10,10 @@ import {
   where,
   writeBatch,
 } from "firebase/firestore";
-import { db } from "./firebase.config";
+import { auth, db } from "./firebase.config";
 
 export const saveExercises = async () => {
   try {
-    console.log("Started");
     const exercisesCollectionRef = collection(db, "exercises");
     const batch = writeBatch(db);
 
@@ -66,6 +65,21 @@ export const getAllExercises = async () => {
       exercises.push({ id: doc.id, ...doc.data() });
     });
     return exercises;
+  } catch (error) {
+    console.error("Error getting exercises: ", error);
+    throw error;
+  }
+};
+
+export const createCustomExercise = async (exercise) => {
+  try {
+    const exerciseRef = collection(db, "exercises");
+
+    const newExerciseRef = doc(exerciseRef);
+
+    await setDoc(newExerciseRef, exercise);
+
+    console.log("Training was saved successfully");
   } catch (error) {
     console.error("Error getting exercises: ", error);
     throw error;

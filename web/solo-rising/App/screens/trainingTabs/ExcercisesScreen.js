@@ -19,12 +19,14 @@ import {
   getAllExercises,
   getExercisesByName,
 } from "../../../services/exerciseService.js";
+import CreateExerciseModal from "../exercise/CreateExerciseModal.js";
 
 function ExcercisesScreen() {
   const [exercises, setExercises] = useState([]);
   const [searchInput, setSearchInput] = useState("");
   const navigation = useNavigation();
   const isFocused = useIsFocused();
+  const [modal, setModal] = useState(false);
 
   const fetchExercises = async () => {
     try {
@@ -129,6 +131,21 @@ function ExcercisesScreen() {
       ) : (
         <Text>Loading...</Text>
       )}
+      <TouchableOpacity
+        onPress={() => {
+          setModal(true)
+        }}
+      >
+        <View className="flex justify-center items-center bg-blue-700 py-1 rounded-3xl my-4 mx-6">
+          <AntDesign name="plus" size={30} color="white" />
+        </View>
+      </TouchableOpacity>
+      <CreateExerciseModal
+        visible={modal}
+        onClose={() => {
+          setModal(false);
+        }}
+      />
     </View>
   );
 }
