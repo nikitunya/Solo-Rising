@@ -16,7 +16,7 @@ function ExcerciseViewScreen({ route }) {
           <View className="flex-row justify-start">
             <TouchableOpacity
               onPress={() => navigation.goBack()}
-              className="p-2 rounded-tr-2xl rounded-bl-2xl ml-4 mt-2 bg-green-600"
+              className="p-2 rounded-tr-2xl rounded-bl-2xl ml-4 mt-2 bg-blue-700"
             >
               <AntDesign name="arrowleft" size={20} color="white" />
             </TouchableOpacity>

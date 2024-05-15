@@ -6,6 +6,8 @@ import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import Border from "../../components/Border";
 import { ROUTES, XP } from "../../constants";
 import { createTraining } from "../../../services/trainingService";
+import { createPost } from "../../../services/postsService";
+import { auth } from "../../../services/firebase.config";
 
 function WorkoutReviewScreen({ route }) {
   const navigation = useNavigation();
@@ -19,7 +21,7 @@ function WorkoutReviewScreen({ route }) {
   const calculateExpierience = () => {
     const totalSeconds = training.duration;
     const tenMinuteIntervals = Math.ceil(totalSeconds / 600) - 1;
-  
+
     setDurationXp(tenMinuteIntervals * XP.XP_FOR_DURATION);
     setVolumeXp(training.volume * XP.XP_FOR_KG);
     setTotalXp(volumeXp + prXp + achivmentXp + durationXp);
@@ -30,15 +32,37 @@ function WorkoutReviewScreen({ route }) {
     const updatedTraining = {
       ...training,
       totalXp: totalXp,
-      xp : {
+      xp: {
         volumeXp,
         prXp,
         achivmentXp,
-        durationXp
-      }
-    }
-    createTraining(updatedTraining);
-    navigation.navigate(ROUTES.TRAINING)
+        durationXp,
+      },
+    };
+    const post = {
+      name: "New Trophy",
+      description: "test unlock Plates Master achievement",
+      exercises: [],
+      field: "totalVolume",
+      image: "/plate_bronze.png",
+      requirements: ">=50000",
+      unlockedBy: [auth.currentUser.uid],
+    };
+    createTraining(updatedTraining).then(() => {
+      createPost(post).then(() => {
+        navigation.navigate(ROUTES.TRAINING);
+      });
+    });
+  };
+
+  const formatDuration = (seconds) => {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+
+    return `${hours.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`;
   };
 
   return (
@@ -74,7 +98,9 @@ function WorkoutReviewScreen({ route }) {
         </View>
         <View className="mr-10">
           <Text className="text-lg font-bold text-white">Time</Text>
-          <Text className="text-base text-white">{training.duration}</Text>
+          <Text className="text-base text-white">
+            {formatDuration(training.duration)}
+          </Text>
         </View>
       </View>
       <Border />

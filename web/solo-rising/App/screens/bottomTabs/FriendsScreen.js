@@ -24,7 +24,7 @@ function FriendsScreen() {
         })
       );
       const imageUrlMap = Object.assign({}, ...urls);
-      setPosts(postsWithImages);
+      setPosts(postsData);
       setImageUrls(imageUrlMap);
     };
 
@@ -80,7 +80,7 @@ function FriendsScreen() {
       )}
       <TouchableOpacity
         onPress={() => {
-          navigation.navigate(ROUTES.WORKOUT_CREATE);
+          navigation.navigate(ROUTES.CREATE_POST);
         }}
       >
         <View className="flex justify-center items-center bg-blue-700 py-1 rounded-3xl my-4 mx-6">
