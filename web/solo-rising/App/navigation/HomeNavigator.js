@@ -1,10 +1,10 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import ProfileScreen from "../screens/bottomTabs/ProfileScreen";
-import FriendsScreen from "../screens/bottomTabs/FriendsScreen";
 import Icon from "react-native-vector-icons/Ionicons";
 import { COLORS, ROUTES } from "../constants";
 import TrainingNavigator from "./TrainingNavigator";
 import ProfileNavigator from "./ProfileNavigator";
+import FriendsNavigator from "./FriendsNavigator";
+
 const Tab = createBottomTabNavigator();
 
 function HomeNavigator() {
@@ -24,7 +24,7 @@ function HomeNavigator() {
 
           if (route.name === ROUTES.PROFILE_NAVIGATOR) {
             iconName = "person";
-          } else if (route.name === ROUTES.FRIENDS) {
+          } else if (route.name === ROUTES.FRIENDS_NAVIGATOR) {
             iconName = "person-add";
           } else if (route.name === ROUTES.TRAINING_NAVIGATOR) {
             iconName = "fitness";
@@ -38,7 +38,7 @@ function HomeNavigator() {
         name={ROUTES.PROFILE_NAVIGATOR}
         component={ProfileNavigator}
       />
-      <Tab.Screen name={ROUTES.FRIENDS} component={FriendsScreen} />
+      <Tab.Screen name={ROUTES.FRIENDS_NAVIGATOR} component={FriendsNavigator} />
       <Tab.Screen
         name={ROUTES.TRAINING_NAVIGATOR}
         component={TrainingNavigator}

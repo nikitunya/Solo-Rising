@@ -4,5 +4,7 @@ export default {
     secondaryBackground: "#27272A",
     gray: "#808080",
     white: "#FFFFFF",
-    bone: "#CCC4B4"
+    bone: "#CCC4B4",
+    textColor: "#222222",
+    red: "#FF0000"
 }

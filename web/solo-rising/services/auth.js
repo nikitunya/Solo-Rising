@@ -59,10 +59,10 @@ export const getCurrentUserData = async () => {
   }
 };
 
-export const updateUserData = async (newData) => {
+export const updateUserData = async (newData, userId) => {
   try {
     console.log(newData)
-    const userDocRef = doc(db, "users", auth?.currentUser?.uid);
+    const userDocRef = doc(db, "users", userId ? userId : auth?.currentUser?.uid);
     await setDoc(userDocRef, newData, { merge: true });
     return true;
   } catch (error) {
@@ -70,3 +70,21 @@ export const updateUserData = async (newData) => {
     return false;
   }
 };
+
+export const getUserData = async (userId) => {
+  try {
+    const userDocRef = doc(db, "users", userId);
+    const userDocSnapshot = await getDoc(userDocRef);
+
+    if (userDocSnapshot.exists()) {
+      const userData = userDocSnapshot.data();
+      return userData;
+    } else {
+      console.log("User document not found in Firestore.");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    return null;
+  }
+}

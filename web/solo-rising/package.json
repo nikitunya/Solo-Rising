@@ -26,6 +26,7 @@
     "entypo": "^2.2.1",
     "expo": "~51.0.2",
     "expo-firebase": "^0.0.0-alpha.0",
+    "expo-image-picker": "~15.0.4",
     "expo-status-bar": "~1.12.1",
     "firebase": "^10.11.1",
     "nativewind": "^2.0.11",
@@ -46,8 +47,7 @@
     "react-native-svg": "^15.2.0",
     "react-native-tab-view": "^3.5.2",
     "twrnc": "^3.6.8",
-    "typescript": "^5.3.0",
-    "expo-image-picker": "~15.0.4"
+    "typescript": "^5.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",

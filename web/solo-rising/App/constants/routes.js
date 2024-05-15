@@ -11,6 +11,10 @@ export default {
     PROFILE_EDIT: 'Edit Profile',
 
     FRIENDS: 'Friends',
+    FRIENDS_NAVIGATOR: 'Friends Navigator',
+    ADD_FRIEND: 'Add Friend',
+    ADD_FRIEND_PROFILE: 'Add Friend Profile',
+    VIEW_FRIENDS: 'View Friends',
 
     TRAINING: 'Training',
     TRAINING_NAVIGATOR: 'Training Navigator',
