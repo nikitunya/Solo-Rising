@@ -17,6 +17,7 @@ function WorkoutReviewScreen({ route }) {
   const [durationXp, setDurationXp] = useState(0);
   const [totalXp, setTotalXp] = useState(0);
   const training = route.params.training;
+  const view = route.params.view;
 
   const calculateExpierience = () => {
     const totalSeconds = training.duration;
@@ -143,11 +144,15 @@ function WorkoutReviewScreen({ route }) {
           </View>
         ))}
       </ScrollView>
-      <TouchableOpacity onPress={() => handleCreate()}>
-        <View className="flex justify-center items-center bg-blue-700 py-1 rounded-3xl m-4">
-          <Text className="text-white text-lg">End Workout</Text>
-        </View>
-      </TouchableOpacity>
+      {!view ? (
+        <TouchableOpacity onPress={() => handleCreate()}>
+          <View className="flex justify-center items-center bg-blue-700 py-1 rounded-3xl m-4">
+            <Text className="text-white text-lg">End Workout</Text>
+          </View>
+        </TouchableOpacity>
+      ) : (
+        <View />
+      )}
     </View>
   );
 }

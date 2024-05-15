@@ -94,7 +94,7 @@ function ProfileScreen() {
         }
       });
     });
-  
+
     const totalMusclesCount = allMuscles.length;
 
     const primaryMusclesString = JSON.stringify(primaryMuscles).replace(
@@ -107,15 +107,24 @@ function ProfileScreen() {
       "'"
     );
 
+    const formatDuration = (seconds) => {
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      const remainingSeconds = seconds % 60;
+
+      return `${hours.toString().padStart(2, "0")}:${minutes
+        .toString()
+        .padStart(2, "0")}:${remainingSeconds.toString().padStart(2, "0")}`;
+    };
+
     const totalAvailableMuscles = PRIMARY_MUCLES.length;
     const percentage = (totalMusclesCount / totalAvailableMuscles) * 100;
     const formattedPercentage = percentage.toFixed(2) + "%";
 
-
     if (loading) {
       return <View className="flex-1 bg-neutral-900"></View>;
     }
-    
+
     return (
       <View className="flex-1 bg-neutral-900">
         <View className="flex-row items-center">
@@ -224,7 +233,7 @@ function ProfileScreen() {
                       Total Time
                     </Text>
                     <Text className="text-white text-base">
-                      {statistics.totalDuration}
+                      {formatDuration(statistics.totalDuration)}
                     </Text>
                   </View>
                 </View>
@@ -235,7 +244,9 @@ function ProfileScreen() {
                 <Text className="text-white text-lg font-bold">
                   Muscles Trained This Week
                 </Text>
-                <Text className="text-white text-lg font-bold">{formattedPercentage}</Text>
+                <Text className="text-white text-lg font-bold">
+                  {formattedPercentage}
+                </Text>
               </View>
               <MuscleGroupImage
                 primaryMuscleGroups={primaryMusclesString}

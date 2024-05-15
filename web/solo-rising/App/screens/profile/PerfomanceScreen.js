@@ -6,6 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { format, subDays } from "date-fns";
 import BarCharComponent from "../../components/BarCharComponent";
 import { ScrollView } from "react-native-gesture-handler";
+import { ROUTES } from "../../constants";
 function PerfomanceScreen() {
   const navigation = useNavigation();
   const [volumeChartData, setVolumeChartData] = useState([]);
@@ -91,7 +92,7 @@ function PerfomanceScreen() {
           >
             <AntDesign name="arrowleft" size={20} color="white" />
           </TouchableOpacity>
-          <TouchableOpacity className="mr-3">
+          <TouchableOpacity className="mr-3" onPress={() => navigation.navigate(ROUTES.WORKOUT_HISTORY)}>
             <View className="flex justify-center items-center bg-blue-700 py-1 rounded-3xl my-4">
               <Text className="flex text-white text-base font-bold p-1">
                 Workout History

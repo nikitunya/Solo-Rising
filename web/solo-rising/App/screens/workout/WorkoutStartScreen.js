@@ -88,7 +88,7 @@ function WorkoutStartScreen({ route }) {
       volume: totalVolume,
     };
 
-    navigation.navigate(ROUTES.WORKOUT_REVIEW, { training: training });
+    navigation.navigate(ROUTES.WORKOUT_REVIEW, { training: training, view: false });
     // Here you can save `newWorkout` to your data store or perform any other action with it
     // console.log("Saved Workout:", training);
   };

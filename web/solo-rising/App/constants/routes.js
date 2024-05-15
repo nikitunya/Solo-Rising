@@ -24,6 +24,7 @@ export default {
     WORKOUT_EDIT: 'Workout Edit',
     WORKOUT_START: 'Workout Start',
     WORKOUT_REVIEW: 'Workout Review',
+    WORKOUT_HISTORY: 'Workout History',
 
     EXERCISE_LIST: 'Exercist List',
     EXERCISE_VIEW: 'Exercise View',

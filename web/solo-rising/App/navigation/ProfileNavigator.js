@@ -4,6 +4,8 @@ import PerfomanceScreen from "../screens/profile/PerfomanceScreen";
 import ProfileScreen from "../screens/bottomTabs/ProfileScreen";
 import EditProfileScreen from "../screens/profile/EditProfileSreen";
 import CreatePostScreen from "../screens/posts/CreatePostScreen";
+import WorkoutHistoryScreen from "../screens/workout/WorkoutHistoryScreen";
+import WorkoutReviewScreen from "../screens/workout/WorkoutReviewScreen";
 
 const Stack = createStackNavigator();
 
@@ -14,6 +16,8 @@ function ProfileNavigator() {
             <Stack.Screen name={ROUTES.PROFILE_PERFOMANCE} component={PerfomanceScreen} />
             <Stack.Screen name={ROUTES.PROFILE_EDIT} component={EditProfileScreen} />
             <Stack.Screen name={ROUTES.CREATE_POST} component={CreatePostScreen} />
+            <Stack.Screen name={ROUTES.WORKOUT_HISTORY} component={WorkoutHistoryScreen} />
+            <Stack.Screen name={ROUTES.WORKOUT_REVIEW} component={WorkoutReviewScreen} />
         </Stack.Navigator>
     )
 }
