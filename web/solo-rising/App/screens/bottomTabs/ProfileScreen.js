@@ -143,6 +143,38 @@ function ProfileScreen() {
               onPress={() => navigation.navigate(ROUTES.PROFILE_PERFOMANCE)}
             >
               <View className="py-3 rounded-full bg-zinc-800 mx-4">
+                <View className="flex-row justify-between mx-6">
+                  <Image
+                    source={require("../../utils/images/trophies/bench_bronze.png")}
+                    style={{
+                      width: screenWidth * 0.2,
+                      height: screenWidth * 0.2,
+                    }}
+                  />
+                  <Image
+                    source={require("../../utils/images/trophies/deadlift_silver.png")}
+                    style={{
+                      width: screenWidth * 0.2,
+                      height: screenWidth * 0.2,
+                    }}
+                  />
+                  <Image
+                    source={require("../../utils/images/trophies/squat_gold.png")}
+                    style={{
+                      width: screenWidth * 0.2,
+                      height: screenWidth * 0.2,
+                    }}
+                  />
+                </View>
+              </View>
+            </TouchableOpacity>
+          </View>
+          <View className="flex-1">
+            <TouchableOpacity
+              className="my-2"
+              onPress={() => navigation.navigate(ROUTES.PROFILE_PERFOMANCE)}
+            >
+              <View className="py-3 rounded-full bg-zinc-800 mx-4">
                 <View className="flex-row justify-between">
                   <View className="ml-6 items-center">
                     <Text className="text-blue-500 text-base font-bold">#</Text>
