@@ -1,6 +1,7 @@
 import { addDoc, collection, deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
 import { auth, db } from "./firebase.config";
 import { getCurrentUserData, getUserData, updateUserData } from "./auth";
+import { errorToast, successToast } from "../App/utils/toasts";
 
 export const getFriends = async (searchInput) => {
   try {
@@ -36,9 +37,9 @@ export const sendFriendRequest = async (
       status: "pending",
       senderUsername: senderUsername,
     });
-    console.log("Friend request sent successfully!");
+    successToast("Friend request sent successfully!");
   } catch (error) {
-    console.error("Error sending friend request:", error);
+    errorToast("Error sending friend request");
     throw error; // Optionally, you can re-throw the error to handle it in the UI
   }
 };
@@ -65,9 +66,9 @@ export const getFriendRequests = async () => {
 export const deleteFriendRequest = async (requestId) => {
   try {
     await deleteDoc(doc(db, "friendRequests", requestId));
-    console.log("Friend request deleted successfully!");
+    successToast("Friend request deleted successfully!")
   } catch (error) {
-    console.error("Error deleting friend request:", error);
+    errorToast("Error deleting friend request");
     throw error;
   }
 };

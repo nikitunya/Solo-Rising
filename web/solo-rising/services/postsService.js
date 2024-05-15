@@ -7,6 +7,7 @@ import {
   addDoc,
 } from "firebase/firestore";
 import { auth } from "./firebase.config";
+import { errorToast, successToast } from "../App/utils/toasts";
 
 export const getAllPosts = async () => {
   try {
@@ -40,10 +41,10 @@ export const createPost = async (postData) => {
 
     const newPostRef = await addDoc(postsRef, postData);
 
-    console.log("Post added with ID: ", newPostRef.id);
+    successToast("Post created succesfully");
     return newPostRef.id;
   } catch (error) {
-    console.error("Error adding post: ", error);
+    errorToast("Error while creating Toast");
     return null;
   }
 };

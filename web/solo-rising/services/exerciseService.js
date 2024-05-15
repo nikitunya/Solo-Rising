@@ -11,27 +11,25 @@ import {
   writeBatch,
 } from "firebase/firestore";
 import { auth, db } from "./firebase.config";
+import { errorToast, successToast } from "../App/utils/toasts";
 
 export const saveExercises = async () => {
   try {
     const exercisesCollectionRef = collection(db, "exercises");
     const batch = writeBatch(db);
 
-    // Loop through each exercise in the exerciseList array
     exerciseData.forEach((exercise) => {
-      // Create a new document reference for each exercise
       const newExerciseRef = doc(exercisesCollectionRef);
 
-      // Set the data for the exercise document
       setDoc(newExerciseRef, exercise, { batch });
     });
 
     // Commit the batched write
     await batch.commit();
 
-    console.log("Exercises were saved successfully");
+    successToast("Exercises were saved successfully");
   } catch (error) {
-    console.error("Error saving exercises: ", error);
+    errorToast("Error saving exercise");
     throw error;
   }
 };
@@ -79,9 +77,9 @@ export const createCustomExercise = async (exercise) => {
 
     await setDoc(newExerciseRef, exercise);
 
-    console.log("Training was saved successfully");
+    successToast("Excercise was created successfully");
   } catch (error) {
-    console.error("Error getting exercises: ", error);
+    errorToast("Error while create exercise");
     throw error;
   }
 };

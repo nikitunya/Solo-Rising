@@ -14,6 +14,7 @@ import { formatDuration, formatNumber } from "../App/utils/calculations";
 import { startOfWeek, endOfWeek } from "date-fns";
 import { getCurrentUserData, updateUserData } from "./auth";
 import { updateCurrentUser } from "firebase/auth";
+import { errorToast, successToast } from "../App/utils/toasts";
 
 export const createTraining = async (training) => {
   try {
@@ -34,9 +35,9 @@ export const createTraining = async (training) => {
       });
     });
 
-    console.log("Training was saved successfully");
+    successToast("Training was saved successfully");
   } catch (error) {
-    console.log(error);
+    errorToast("Error while creating training");
   }
 };
 

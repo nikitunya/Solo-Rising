@@ -12,6 +12,7 @@ import {
 } from "../../../services/trainingService";
 import { COLORS, PRIMARY_MUCLES, ROUTES } from "../../constants";
 import MuscleGroupImage from "../api/MuscleGroupsImage";
+import Toast from "react-native-toast-message";
 
 function ProfileScreen() {
   const navigation = useNavigation();

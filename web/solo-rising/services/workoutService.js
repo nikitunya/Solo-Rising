@@ -7,6 +7,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { auth, db } from "./firebase.config";
+import { errorToast, successToast } from "../App/utils/toasts";
 
 export const createWorkout = async (title, exerciseList) => {
   try {
@@ -24,9 +25,9 @@ export const createWorkout = async (title, exerciseList) => {
       exerciseList: exerciseList,
     });
 
-    console.log("Workout was saved successfully");
+    successToast("Workout was saved successfully");
   } catch (error) {
-    console.log(error);
+    errorToast("Error while creating workout");
   }
 };
 
@@ -61,9 +62,9 @@ export const updateWorkout = async (workoutId, updatedData) => {
       workoutId
     );
     await updateDoc(workoutRef, updatedData);
-    console.log("Updated succesfully");
+    successToast("Updated succesfully");
   } catch (error) {
-    console.error("Error updating workout: ", error);
+    errorToast("Error updating workout");
     throw error;
   }
 };
@@ -78,9 +79,9 @@ export const deleteWorkout = async (workoutId) => {
       workoutId
     );
     await deleteDoc(workoutRef);
-    console.log("Workout deleted successfully");
+    successToast("Workout deleted successfully");
   } catch (error) {
-    console.error("Error deleting workout: ", error);
+    errorToast("Error deleting workout");
     throw error;
   }
 };
