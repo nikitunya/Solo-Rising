@@ -10,7 +10,7 @@ import {
   getThisWeekTrainings,
   getTrainingStatistics,
 } from "../../../services/trainingService";
-import { COLORS, ROUTES } from "../../constants";
+import { COLORS, PRIMARY_MUCLES, ROUTES } from "../../constants";
 import MuscleGroupImage from "../api/MuscleGroupsImage";
 
 function ProfileScreen() {
@@ -21,6 +21,7 @@ function ProfileScreen() {
   const [trainings, setTrainings] = useState(null);
   const [maxXp, setMaxXp] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const primaryMuscles = [];
   const secondaryMuscles = [];
@@ -35,27 +36,32 @@ function ProfileScreen() {
   };
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchData = async () => {
       const userData = await getCurrentUserData();
-      setUserData(userData);
-      setMaxXp(userData.level * 1000);
-      setProgress((userData.xp / maxXp) * 100);
+      if (userData) {
+        setUserData(userData);
+        setMaxXp();
+        setProgress((userData.xp / (userData.level * 1000)) * 100);
+      }
+
+      const weekStatistics = await getTrainingStatistics();
+      if (weekStatistics) {
+        setStatistics(weekStatistics);
+      }
+
+      const weekTrainings = await getThisWeekTrainings();
+      if (weekTrainings) {
+        setTrainings(weekTrainings);
+      }
+      setLoading(false);
     };
 
-    const fetchStatistics = async () => {
-      setStatistics(await getTrainingStatistics());
-    };
-
-    const fetchTrainings = async () => {
-      setTrainings(await getThisWeekTrainings());
-    };
-    fetchUserData();
-    fetchStatistics();
-    fetchTrainings();
+    fetchData();
   }, []);
 
   if (statistics && userData && trainings) {
-    // todo: optimize this trash
+    const allMuscles = [];
+
     trainings.forEach((training) => {
       training.exercises.forEach((exercise) => {
         if (exercise.primary_muscles) {
@@ -72,6 +78,24 @@ function ProfileScreen() {
         }
       });
     });
+    trainings.forEach((training) => {
+      training.exercises.forEach((exercise) => {
+        if (exercise.primary_muscles) {
+          allMuscles.push(exercise.primary_muscles);
+        }
+        if (exercise.secondary_muscles) {
+          const jsonString = exercise.secondary_muscles.replace(/'/g, '"');
+          const secondaryList = JSON.parse(jsonString);
+          secondaryList.forEach((muscle) => {
+            if (!allMuscles.includes(muscle)) {
+              allMuscles.push(muscle);
+            }
+          });
+        }
+      });
+    });
+  
+    const totalMusclesCount = allMuscles.length;
 
     const primaryMusclesString = JSON.stringify(primaryMuscles).replace(
       /"/g,
@@ -83,6 +107,15 @@ function ProfileScreen() {
       "'"
     );
 
+    const totalAvailableMuscles = PRIMARY_MUCLES.length;
+    const percentage = (totalMusclesCount / totalAvailableMuscles) * 100;
+    const formattedPercentage = percentage.toFixed(2) + "%";
+
+
+    if (loading) {
+      return <View className="flex-1 bg-neutral-900"></View>;
+    }
+    
     return (
       <View className="flex-1 bg-neutral-900">
         <View className="flex-row items-center">
@@ -94,10 +127,10 @@ function ProfileScreen() {
           <View className="flex-1 flex-row justify-between items-center mt-20">
             <View>
               <Text className="text-white text-lg font-bold">
-                {userData ? userData.username : "username"}
+                {userData.username}
               </Text>
               <Text className="text-basm text-zinc-400">
-                {userData ? userData.fullName : "fullname"}
+                {userData.fullName}
               </Text>
               <Text className="text-sm text-zinc-400">Maintain</Text>
             </View>
@@ -107,16 +140,12 @@ function ProfileScreen() {
             </View>
           </View>
         </View>
-        {userData ? (
-          <ExperienceBar
-            progress={progress}
-            level={userData.level}
-            currentXP={userData.xp}
-            maxXp={maxXp}
-          />
-        ) : (
-          <View></View>
-        )}
+        <ExperienceBar
+          progress={progress}
+          level={userData.level}
+          currentXP={userData.xp}
+          maxXp={userData.level * 1000}
+        />
         <Border />
         <View className="flex-row justify-between">
           <TouchableOpacity
@@ -206,7 +235,7 @@ function ProfileScreen() {
                 <Text className="text-white text-lg font-bold">
                   Muscles Trained This Week
                 </Text>
-                <Text className="text-white text-lg font-bold">40%</Text>
+                <Text className="text-white text-lg font-bold">{formattedPercentage}</Text>
               </View>
               <MuscleGroupImage
                 primaryMuscleGroups={primaryMusclesString}

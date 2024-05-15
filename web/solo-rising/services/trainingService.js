@@ -61,22 +61,23 @@ export const getTrainings = async () => {
 
 export const getTrainingStatistics = async () => {
   const trainings = await getTrainings();
+  if (trainings) {
+    var trainingCount = trainings.length;
+    var totalVolume = 0;
+    var totalDuration = 0;
 
-  var trainingCount = trainings.length;
-  var totalVolume = 0;
-  var totalDuration = 0;
+    trainings.forEach((training) => {
+      totalVolume += training.volume || 0;
+      totalDuration += training.duration || 0;
+    });
 
-  trainings.forEach((training) => {
-    totalVolume += training.volume || 0;
-    totalDuration += training.duration || 0;
-  });
-
-  return {
-    trainingCount,
-    totalVolume,
-    totalDuration,
-    formattedVolume: formatNumber(totalVolume),
-  };
+    return {
+      trainingCount,
+      totalVolume,
+      totalDuration,
+      formattedVolume: formatNumber(totalVolume),
+    };
+  }
 };
 
 export const getThisWeekTrainings = async () => {

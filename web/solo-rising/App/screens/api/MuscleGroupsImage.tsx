@@ -1,6 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { Image } from "react-native";
-import { getAllMuscleGroups, getImagePrimaryAndSecondaryMuscles, getImagePrimaryMuscles } from './muscleGroupApi' // Assuming muscleGroupApi exists
+import {
+  getAllMuscleGroups,
+  getImagePrimaryAndSecondaryMuscles,
+  getImagePrimaryMuscles,
+} from "./muscleGroupApi"; // Assuming muscleGroupApi exists
 
 interface MuscleGroupImageProps {
   primaryMuscleGroups: string;
@@ -8,8 +12,34 @@ interface MuscleGroupImageProps {
   imageSize?: number; // Optional image size parameter
 }
 
+const muscleGroupMappings = {
+  "lower back": "back_lower",
+  "calves": "calfs",
+  "abs": "abs",
+  "adductors": "adductors",
+  "biceps": "biceps",
+  "chest": "chest",
+  "forearms": "forearms",
+  "glutes": "gluteus",
+  "hamstrings": "hamstring",
+  "lats": "latissimus",
+  "middle back": "back_upper",
+  "neck": "neck",
+  "quads": "quadriceps",
+  "shoulders": "shoulders",
+  "traps": "shoulders_back",
+  "triceps": "triceps",
+  "upper Back": "back_upper"
+};
+
 function convertMuscleGroups(muscleGroups: string): string[] {
-  return muscleGroups.replace(/[\[\]']/g, '').split(',').map(item => item.trim().toLowerCase());
+  return muscleGroups
+    .replace(/[\[\]']/g, "")
+    .split(",")
+    .map((item) => {
+      const trimmedItem = item.trim().toLowerCase();
+      return muscleGroupMappings[trimmedItem] || trimmedItem; // Use mapping if available, otherwise use original name
+    });
 }
 
 export default function MuscleGroupImage(props: MuscleGroupImageProps) {
@@ -21,17 +51,26 @@ export default function MuscleGroupImage(props: MuscleGroupImageProps) {
       const allMuscleGroups = await getAllMuscleGroups();
       let primaryGroups = convertMuscleGroups(primaryMuscleGroups);
       let secondaryGroups = convertMuscleGroups(secondaryMuscleGroups);
-
-      primaryGroups = primaryGroups.filter(group => allMuscleGroups.includes(group));
-      secondaryGroups = secondaryGroups.filter(group => allMuscleGroups.includes(group));
+      console.log(primaryGroups);
+      primaryGroups = primaryGroups.filter((group) => {
+        const isIncluded = allMuscleGroups.includes(group);
+        return isIncluded;
+      });
+      secondaryGroups = secondaryGroups.filter((group) => {
+        const isIncluded = allMuscleGroups.includes(group);
+        return isIncluded;
+      });
 
       let imageUrl: string;
-      if (!primaryGroups.length) {
+      if (!primaryGroups.length && secondaryGroups.length) {
         imageUrl = await getImagePrimaryMuscles(secondaryGroups);
-      } else if (!secondaryGroups.length) {
+      } else if (!secondaryGroups.length && primaryGroups.length) {
         imageUrl = await getImagePrimaryMuscles(primaryGroups);
       } else {
-        imageUrl = await getImagePrimaryAndSecondaryMuscles(primaryGroups, secondaryGroups);
+        imageUrl = await getImagePrimaryAndSecondaryMuscles(
+          primaryGroups,
+          secondaryGroups
+        );
       }
       setImage(imageUrl);
     };
@@ -45,7 +84,12 @@ export default function MuscleGroupImage(props: MuscleGroupImageProps) {
   }, [primaryMuscleGroups, secondaryMuscleGroups, imageSize]); // Re-fetch on changes
 
   const imageComponent = useMemo(() => {
-    return image ? <Image source={{ uri: image }} style={{ width: imageSize, height: imageSize }} /> : null;
+    return image ? (
+      <Image
+        source={{ uri: image }}
+        style={{ width: imageSize, height: imageSize }}
+      />
+    ) : null;
   }, [image, imageSize]);
 
   return imageComponent;

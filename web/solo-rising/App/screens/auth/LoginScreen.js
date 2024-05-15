@@ -34,12 +34,12 @@ const LoginScreen = (props) => {
   }, []);
 
   const handleLogin = async () => {
-    navigation.navigate("Home");
     try {
       const user = await login(email, password);
       if (user) {
         const id = user.uid;
         setLoading(false);
+        navigation.navigate(ROUTES.PROFILE_NAVIGATOR);
       }
     } catch (error) {
       console.log(error);
@@ -131,7 +131,9 @@ const LoginScreen = (props) => {
                 Don't have an account?
               </Text>
               {/* <TouchableOpacity onPress={() => navigation.navigate("SignUp")}> */}
-              <TouchableOpacity onPress={() => navigation.navigate(ROUTES.SIGNUP)}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate(ROUTES.SIGNUP)}
+              >
                 <Text className="font-semibold text-blue-700"> Sign Up</Text>
               </TouchableOpacity>
             </View>
