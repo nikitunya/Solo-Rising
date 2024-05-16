@@ -44,7 +44,7 @@ function WorkoutsScreen() {
     setSelectedWorkout(workout);
   };
 
-  const handleAction = (index, workout) => {
+  const handleAction = (index, workout) => { // TODO: fix here again deletes wrong index
     switch (index) {
       case 0:
         navigation.navigate(ROUTES.WORKOUT_EDIT, selectedWorkout);
@@ -55,6 +55,7 @@ function WorkoutsScreen() {
         // navigation.navigate(ROUTES.WORKOUT_START, selectedWorkout);
         break;
       case 2:
+        console.log(index)
         deleteWorkout(workout.id);
         fetchWorkouts();
         console.log("Succesfully Deleted");

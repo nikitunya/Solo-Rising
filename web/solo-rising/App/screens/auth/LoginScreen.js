@@ -15,7 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import DismissKeyboard from "../../components/DismissKeyboard";
 import { login } from "../../../services/auth";
 import { auth } from "../../../services/firebase.config";
-import { ROUTES } from "../../constants";
+import { COLORS, ROUTES } from "../../constants";
 
 const LoginScreen = (props) => {
   const screenWidth = Dimensions.get("window").width;
@@ -100,28 +100,10 @@ const LoginScreen = (props) => {
             <View className="flex-row justify-center space-x-12">
               <TouchableOpacity
                 className="p-2 rounded-2xl"
-                // style={{ backgroundColor: colors.iconBackground }}
+                style={{ backgroundColor: COLORS.white }}
               >
                 <Image
                   source={require("../../utils/images/google.png")}
-                  className="w-10 h-10"
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                className="p-2 rounded-2xl"
-                // style={{ backgroundColor: colors.iconBackground }}
-              >
-                <Image
-                  source={require("../../utils/images/apple.png")}
-                  className="w-10 h-10"
-                />
-              </TouchableOpacity>
-              <TouchableOpacity
-                className="p-2 rounded-2xl"
-                // style={{ backgroundColor: colors.iconBackground }}
-              >
-                <Image
-                  source={require("../../utils/images/facebook.png")}
                   className="w-10 h-10"
                 />
               </TouchableOpacity>

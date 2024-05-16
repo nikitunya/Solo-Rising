@@ -56,3 +56,18 @@ export async function getImagePrimaryMuscles(muscleGroups: string[]) {
     throw new Error("Failed to fetch image");
   }
 }
+
+export async function getBaseImage() {
+  try {
+    const response = await api.get("/getBaseImage", {
+      params: {
+        transparentBackground: "1",
+      },
+      responseType: "blob" as ResponseType,
+    });
+    return URL.createObjectURL(response.data);
+  } catch (error) {
+    console.error("Error fetching image:", error);
+    throw new Error("Failed to fetch image");
+  }
+}

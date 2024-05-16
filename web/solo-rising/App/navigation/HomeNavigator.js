@@ -25,7 +25,7 @@ function HomeNavigator() {
           if (route.name === ROUTES.PROFILE_NAVIGATOR) {
             iconName = "person";
           } else if (route.name === ROUTES.FRIENDS_NAVIGATOR) {
-            iconName = "person-add";
+            iconName = "people";
           } else if (route.name === ROUTES.TRAINING_NAVIGATOR) {
             iconName = "fitness";
           }

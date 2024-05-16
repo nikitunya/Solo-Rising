@@ -13,12 +13,12 @@ const CreateExerciseModal = ({ visible, onClose }) => {
   const navigation = useNavigation();
   const [equipment, setEquipment] = useState("Darbell");
   const [exercise_type, setExerciseType] = useState("");
-  const [experience, setExperience] = useState("");
-  const [force_type, setForceType] = useState("");
-  const [mechanics, setMechanics] = useState("");
-  const [name, setName] = useState("");
+  const [experience, setExperience] = useState("Intermediate");
+  const [force_type, setForceType] = useState("Pull");
+  const [mechanics, setMechanics] = useState("Compound");
+  const [name, setName] = useState("Nikita");
   const [primary_muscles, setPrimaryMuscles] = useState("");
-  const [record, setRecord] = useState("");
+  const [record, setRecord] = useState("110");
 
   const handleCreateCustomExercise = () => {
     if (

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Dimensions, Image, Text, TouchableOpacity, View } from "react-native";
 import { auth } from "../../../services/firebase.config";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
 import { getCurrentUserData } from "../../../services/auth";
 import ExperienceBar from "../../components/ExperienceBar";
@@ -17,6 +17,7 @@ import Toast from "react-native-toast-message";
 function ProfileScreen() {
   const navigation = useNavigation();
   const screenWidth = Dimensions.get("window").width;
+  const isFocused = useIsFocused();
   const [userData, setUserData] = useState(null);
   const [statistics, setStatistics] = useState(null);
   const [trainings, setTrainings] = useState(null);
@@ -36,29 +37,36 @@ function ProfileScreen() {
       .catch((error) => alert(error.message));
   };
 
+  const fetchData = async () => {
+    const userData = await getCurrentUserData();
+    if (userData) {
+      setUserData(userData);
+      setMaxXp();
+      setProgress((userData.xp / (userData.level * 1000)) * 100);
+    }
+
+    const weekStatistics = await getTrainingStatistics();
+    if (weekStatistics) {
+      setStatistics(weekStatistics);
+    }
+
+    const weekTrainings = await getThisWeekTrainings();
+    if (weekTrainings) {
+      setTrainings(weekTrainings);
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      const userData = await getCurrentUserData();
-      if (userData) {
-        setUserData(userData);
-        setMaxXp();
-        setProgress((userData.xp / (userData.level * 1000)) * 100);
-      }
-
-      const weekStatistics = await getTrainingStatistics();
-      if (weekStatistics) {
-        setStatistics(weekStatistics);
-      }
-
-      const weekTrainings = await getThisWeekTrainings();
-      if (weekTrainings) {
-        setTrainings(weekTrainings);
-      }
-      setLoading(false);
-    };
-
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (isFocused) {
+      fetchData();
+      console.log(999);
+    }
+  }, [isFocused]);
 
   if (statistics && userData && trainings) {
     const allMuscles = [];

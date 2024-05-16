@@ -1,6 +1,6 @@
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import Border from "../../components/Border";
@@ -12,31 +12,26 @@ import { auth } from "../../../services/firebase.config";
 function WorkoutReviewScreen({ route }) {
   const navigation = useNavigation();
   const [volumeXp, setVolumeXp] = useState(0);
-  const [prXp, setPrXp] = useState(0);
-  const [achivmentXp, setAchievmentXp] = useState(0);
-  const [durationXp, setDurationXp] = useState(0);
-  const [totalXp, setTotalXp] = useState(0);
   const training = route.params.training;
   const view = route.params.view;
 
-  const calculateExpierience = () => {
-    const totalSeconds = training.duration;
-    const tenMinuteIntervals = Math.ceil(totalSeconds / 600) - 1;
-
-    setDurationXp(tenMinuteIntervals * XP.XP_FOR_DURATION);
-    setVolumeXp(training.volume * XP.XP_FOR_KG);
-    setTotalXp(volumeXp + prXp + achivmentXp + durationXp);
-  };
 
   const handleCreate = () => {
-    calculateExpierience();
+    // calculateExpierience();
+    const totalSeconds = training.duration;
+    const prXp = 0;
+    const achievementXp = 0;
+    const tenMinuteIntervals = Math.ceil(totalSeconds / 600) - 1;
+    const durationXp = tenMinuteIntervals * XP.XP_FOR_DURATION;
+    const volumeXp = training.volume * XP.XP_FOR_KG;
+    const totalXp = volumeXp + prXp + achievementXp + durationXp
     const updatedTraining = {
       ...training,
       totalXp: totalXp,
       xp: {
         volumeXp,
         prXp,
-        achivmentXp,
+        achievementXp,
         durationXp,
       },
     };

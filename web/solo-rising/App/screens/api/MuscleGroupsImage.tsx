@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Image } from "react-native";
 import {
   getAllMuscleGroups,
+  getBaseImage,
   getImagePrimaryAndSecondaryMuscles,
   getImagePrimaryMuscles,
 } from "./muscleGroupApi"; // Assuming muscleGroupApi exists
@@ -14,22 +15,22 @@ interface MuscleGroupImageProps {
 
 const muscleGroupMappings = {
   "lower back": "back_lower",
-  "calves": "calfs",
-  "abs": "abs",
-  "adductors": "adductors",
-  "biceps": "biceps",
-  "chest": "chest",
-  "forearms": "forearms",
-  "glutes": "gluteus",
-  "hamstrings": "hamstring",
-  "lats": "latissimus",
+  calves: "calfs",
+  abs: "abs",
+  adductors: "adductors",
+  biceps: "biceps",
+  chest: "chest",
+  forearms: "forearms",
+  glutes: "gluteus",
+  hamstrings: "hamstring",
+  lats: "latissimus",
   "middle back": "back_upper",
-  "neck": "neck",
-  "quads": "quadriceps",
-  "shoulders": "shoulders",
-  "traps": "shoulders_back",
-  "triceps": "triceps",
-  "upper Back": "back_upper"
+  neck: "neck",
+  quads: "quadriceps",
+  shoulders: "shoulders",
+  traps: "shoulders_back",
+  triceps: "triceps",
+  "upper Back": "back_upper",
 };
 
 function convertMuscleGroups(muscleGroups: string): string[] {
@@ -62,7 +63,9 @@ export default function MuscleGroupImage(props: MuscleGroupImageProps) {
       });
 
       let imageUrl: string;
-      if (!primaryGroups.length && secondaryGroups.length) {
+      if (!primaryGroups.length && !secondaryGroups.length) {
+        imageUrl = await getBaseImage();
+      } else if (!primaryGroups.length && secondaryGroups.length) {
         imageUrl = await getImagePrimaryMuscles(secondaryGroups);
       } else if (!secondaryGroups.length && primaryGroups.length) {
         imageUrl = await getImagePrimaryMuscles(primaryGroups);
