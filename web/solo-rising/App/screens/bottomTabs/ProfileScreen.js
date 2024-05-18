@@ -13,6 +13,7 @@ import {
 import { COLORS, PRIMARY_MUCLES, ROUTES } from "../../constants";
 import MuscleGroupImage from "../api/MuscleGroupsImage";
 import Toast from "react-native-toast-message";
+import { getBestThreeTrophies } from "../../../services/trophiesService";
 
 function ProfileScreen() {
   const navigation = useNavigation();
@@ -24,6 +25,7 @@ function ProfileScreen() {
   const [maxXp, setMaxXp] = useState(0);
   const [progress, setProgress] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [bestTrophies, setBestTrophies] = useState([]);
 
   const primaryMuscles = [];
   const secondaryMuscles = [];
@@ -54,6 +56,12 @@ function ProfileScreen() {
     if (weekTrainings) {
       setTrainings(weekTrainings);
     }
+
+    const trophies = await getBestThreeTrophies();
+    if (trophies) {
+      setBestTrophies(trophies);
+    }
+
     setLoading(false);
   };
 
@@ -64,7 +72,6 @@ function ProfileScreen() {
   useEffect(() => {
     if (isFocused) {
       fetchData();
-      console.log(999);
     }
   }, [isFocused]);
 
@@ -187,31 +194,20 @@ function ProfileScreen() {
           <View className="flex-1">
             <TouchableOpacity
               className="my-2"
-              onPress={() => navigation.navigate(ROUTES.PROFILE_PERFOMANCE)}
+              onPress={() => navigation.navigate(ROUTES.MY_TROPHIES)}
             >
               <View className="py-3 rounded-full bg-zinc-800 mx-4">
                 <View className="flex-row justify-between mx-6">
-                  <Image
-                    source={require("../../utils/images/trophies/bench_bronze.png")}
-                    style={{
-                      width: screenWidth * 0.2,
-                      height: screenWidth * 0.2,
-                    }}
-                  />
-                  <Image
-                    source={require("../../utils/images/trophies/deadlift_silver.png")}
-                    style={{
-                      width: screenWidth * 0.2,
-                      height: screenWidth * 0.2,
-                    }}
-                  />
-                  <Image
-                    source={require("../../utils/images/trophies/squat_gold.png")}
-                    style={{
-                      width: screenWidth * 0.2,
-                      height: screenWidth * 0.2,
-                    }}
-                  />
+                  {bestTrophies.map((trophy, index) => (
+                    <Image
+                      key={index}
+                      source={{ uri: trophy.imageUrl }}
+                      style={{
+                        width: screenWidth * 0.2,
+                        height: screenWidth * 0.2,
+                      }}
+                    />
+                  ))}
                 </View>
               </View>
             </TouchableOpacity>

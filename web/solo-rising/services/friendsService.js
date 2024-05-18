@@ -17,7 +17,6 @@ export const getFriends = async (searchInput) => {
       .map((doc) => ({ id: doc.id, ...doc.data() }))
       .filter((user) => user.id !== currentUser.uid);
 
-    console.log(usersList);
     return usersList;
   } catch (error) {
     console.log(error);
@@ -56,7 +55,6 @@ export const getFriendRequests = async () => {
       ...doc.data(),
     }));
 
-    console.log(requestsList);
     return requestsList;
   } catch (error) {
     console.error("Error fetching friend requests:", error);

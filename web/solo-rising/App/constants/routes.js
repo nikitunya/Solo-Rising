@@ -28,4 +28,7 @@ export default {
 
     EXERCISE_LIST: 'Exercist List',
     EXERCISE_VIEW: 'Exercise View',
+
+    MY_TROPHIES: 'My Trophies',
+    TROPHIES_INFO: 'Trophies Info'
 }

@@ -16,7 +16,6 @@ function FriendsScreen() {
   useEffect(() => {
     const fetchData = async () => {
       const postsData = await getAllPosts();
-      console.log(postsData)
       const postsWithImages = postsData.filter((post) => post.image);
       const urls = await Promise.all(
         postsWithImages.map(async (post) => {

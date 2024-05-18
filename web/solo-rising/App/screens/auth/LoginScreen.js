@@ -108,7 +108,7 @@ const LoginScreen = (props) => {
                 />
               </TouchableOpacity>
             </View>
-            <View className="flex-row justify-center mt-3">
+            <View className="flex-row justify-center mt-1">
               <Text className="font-semibold text-gray-700">
                 Don't have an account?
               </Text>

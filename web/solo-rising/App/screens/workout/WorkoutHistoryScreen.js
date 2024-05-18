@@ -13,7 +13,6 @@ function WorkoutHistoryScreen() {
   useEffect(() => {
     const fetchData = async () => {
       const trainingsData = await getTrainings();
-      console.log(trainingsData);
       setTrainings(trainingsData);
     };
     fetchData();

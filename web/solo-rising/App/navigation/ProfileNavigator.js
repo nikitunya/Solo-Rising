@@ -6,6 +6,8 @@ import EditProfileScreen from "../screens/profile/EditProfileSreen";
 import CreatePostScreen from "../screens/posts/CreatePostScreen";
 import WorkoutHistoryScreen from "../screens/workout/WorkoutHistoryScreen";
 import WorkoutReviewScreen from "../screens/workout/WorkoutReviewScreen";
+import MyTrophiesScreen from "../screens/profile/MyTrophiesScreen";
+import TrophiesInfoScreen from "../screens/profile/TrophieInfoScreen";
 
 const Stack = createStackNavigator();
 
@@ -18,6 +20,8 @@ function ProfileNavigator() {
             <Stack.Screen name={ROUTES.CREATE_POST} component={CreatePostScreen} />
             <Stack.Screen name={ROUTES.WORKOUT_HISTORY} component={WorkoutHistoryScreen} />
             <Stack.Screen name={ROUTES.WORKOUT_REVIEW} component={WorkoutReviewScreen} />
+            <Stack.Screen name={ROUTES.MY_TROPHIES} component={MyTrophiesScreen} />
+            <Stack.Screen name={ROUTES.TROPHIES_INFO} component={TrophiesInfoScreen} />
         </Stack.Navigator>
     )
 }
