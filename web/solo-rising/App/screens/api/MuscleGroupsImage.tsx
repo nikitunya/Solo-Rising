@@ -51,8 +51,10 @@ export default function MuscleGroupImage(props: MuscleGroupImageProps) {
     const fetchData = async () => {
       const allMuscleGroups = await getAllMuscleGroups();
       let primaryGroups = convertMuscleGroups(primaryMuscleGroups);
-      let secondaryGroups = convertMuscleGroups(secondaryMuscleGroups);
-      console.log(primaryGroups);
+      let secondaryGroups = []
+      if (secondaryMuscleGroups) {
+        secondaryGroups = convertMuscleGroups(secondaryMuscleGroups);
+      }
       primaryGroups = primaryGroups.filter((group) => {
         const isIncluded = allMuscleGroups.includes(group);
         return isIncluded;

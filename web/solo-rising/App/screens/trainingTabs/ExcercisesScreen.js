@@ -126,7 +126,7 @@ function ExcercisesScreen() {
         <FlatList
           data={exercises}
           renderItem={renderItem}
-          keyExtractor={(item) => item.name}
+          keyExtractor={(item) => item.id}
         />
       ) : (
         <Text>Loading...</Text>

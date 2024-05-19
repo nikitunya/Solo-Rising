@@ -83,14 +83,12 @@ function WorkoutStartScreen({ route }) {
         name: exercise.name,
         sets: exercise.sets,
         primary_muscles: exercise.primary_muscles,
-        secondary_muscles: exercise.secondary_muscles,
+        secondary_muscles: exercise.secondary_muscles !== undefined ? exercise.secondary_muscles : [],
       })),
       volume: totalVolume,
     };
 
     navigation.navigate(ROUTES.WORKOUT_REVIEW, { training: training, view: false });
-    // Here you can save `newWorkout` to your data store or perform any other action with it
-    // console.log("Saved Workout:", training);
   };
 
   const renderExerciseItem = ({ item, index }) => {
@@ -100,7 +98,6 @@ function WorkoutStartScreen({ route }) {
         newData[index].sets[setIndex].reps = text;
         return newData;
       });
-      // console.log(data[])
     };
 
     const handleWeightChange = (text, setIndex) => {

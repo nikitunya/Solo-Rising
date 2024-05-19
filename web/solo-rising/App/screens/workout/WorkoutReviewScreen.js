@@ -8,23 +8,47 @@ import { ROUTES, XP } from "../../constants";
 import { createTraining } from "../../../services/trainingService";
 import { createPost } from "../../../services/postsService";
 import { auth } from "../../../services/firebase.config";
+import {
+  getExercisesByNames,
+  updateExercise,
+} from "../../../services/exerciseService";
+import {
+  getTrophiesNotUnlockedByUser,
+  updateTrophie,
+} from "../../../services/trophiesService";
+import { Timestamp } from "firebase/firestore";
 
 function WorkoutReviewScreen({ route }) {
   const navigation = useNavigation();
   const [volumeXp, setVolumeXp] = useState(0);
   const training = route.params.training;
   const view = route.params.view;
+  const [maxWeights, setMaxWeights] = useState({});
 
+  useEffect(() => {
+    const calculateMaxWeights = () => {
+      const maxWeightsMap = {};
+      training.exercises.forEach((exercise) => {
+        const maxWeight = Math.max(
+          ...exercise.sets.map((set) => parseFloat(set.weight))
+        );
+        maxWeightsMap[exercise.name] = maxWeight;
+      });
+      setMaxWeights(maxWeightsMap);
+    };
+
+    calculateMaxWeights();
+  }, [training]);
 
   const handleCreate = () => {
-    // calculateExpierience();
+    const currentDate = new Date();
     const totalSeconds = training.duration;
     const prXp = 0;
     const achievementXp = 0;
     const tenMinuteIntervals = Math.ceil(totalSeconds / 600) - 1;
     const durationXp = tenMinuteIntervals * XP.XP_FOR_DURATION;
     const volumeXp = training.volume * XP.XP_FOR_KG;
-    const totalXp = volumeXp + prXp + achievementXp + durationXp
+    const totalXp = volumeXp + prXp + achievementXp + durationXp;
     const updatedTraining = {
       ...training,
       totalXp: totalXp,
@@ -35,19 +59,58 @@ function WorkoutReviewScreen({ route }) {
         durationXp,
       },
     };
-    const post = {
-      name: "New Trophy",
-      description: "test unlock Plates Master achievement",
-      exercises: [],
-      field: "totalVolume",
-      image: "/plate_bronze.png",
-      requirements: ">=50000",
-      unlockedBy: [auth.currentUser.uid],
-    };
-    createTraining(updatedTraining).then(() => {
-      createPost(post).then(() => {
-        navigation.navigate(ROUTES.TRAINING);
+
+    getExercisesByNames(Object.keys(maxWeights)).then((exercises) => {
+      exercises.forEach((exercise) => {
+        if (!exercise.records) {
+          exercise.records = {};
+        }
+        const currentRecord = exercise.records[auth.currentUser.uid];
+        if (
+          currentRecord < maxWeights[exercise.name] ||
+          currentRecord === undefined
+        ) {
+          exercise.records[auth.currentUser.uid] = maxWeights[exercise.name];
+          updateExercise(exercise);
+        }
       });
+    });
+
+    getTrophiesNotUnlockedByUser().then((trophies) => {
+      trophies.forEach((trophie) => {
+        getExercisesByNames(Object.keys(maxWeights)).then((exercises) => {
+          exercises.forEach((exercise) => {
+            if (!exercise.records) {
+              exercise.records = {};
+            }
+            if (trophie.exercises.length > 0) {
+              const trophyExerciseNames = trophie.exercises.map(
+                (ex) => ex.name
+              );
+
+              if (
+                trophyExerciseNames.includes(exercise.name) &&
+                trophie.requirment <= maxWeights[exercise.name]
+              ) {
+                const post = {
+                  name: "New Trophy",
+                  description: `${auth.currentUser.email} unlocked ${trophie.name} achievement`,
+                  image: trophie.image,
+                  unlockedBy: [auth.currentUser.uid],
+                  date: Timestamp.fromDate(currentDate),
+                };
+                trophie.unlockedBy.push(auth.currentUser.uid);
+                updateTrophie(trophie);
+                createPost(post);
+              }
+            }
+          });
+        });
+      });
+    });
+
+    createTraining(updatedTraining).then(() => {
+      navigation.navigate(ROUTES.TRAINING);
     });
   };
 

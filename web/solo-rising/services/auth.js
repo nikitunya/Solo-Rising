@@ -61,7 +61,6 @@ export const getCurrentUserData = async () => {
 
 export const updateUserData = async (newData, userId) => {
   try {
-    console.log(newData)
     const userDocRef = doc(db, "users", userId ? userId : auth?.currentUser?.uid);
     await setDoc(userDocRef, newData, { merge: true });
     return true;

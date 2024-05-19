@@ -4,6 +4,7 @@ import {
   getDocs,
   query,
   setDoc,
+  updateDoc,
   where,
   writeBatch,
 } from "firebase/firestore";
@@ -112,15 +113,9 @@ export const getBestThreeTrophies = async () => {
         if (trophy.unlockedBy == auth.currentUser.uid) {
           if (!bestTrophy || trophy.type === "gold") {
             bestTrophy = trophy;
-          } else if (
-            trophy.type === "silver" &&
-            bestTrophy.type !== "gold"
-          ) {
+          } else if (trophy.type === "silver" && bestTrophy.type !== "gold") {
             bestTrophy = trophy;
-          } else if (
-            trophy.type === "bronze" &&
-            bestTrophy.type === "bronze"
-          ) {
+          } else if (trophy.type === "bronze" && bestTrophy.type === "bronze") {
             bestTrophy = trophy;
           }
         }
@@ -134,6 +129,37 @@ export const getBestThreeTrophies = async () => {
     return sortedTrophies.slice(0, 3);
   } catch (error) {
     errorToast("Error getting best trophies");
+    throw error;
+  }
+};
+
+export const getTrophiesNotUnlockedByUser = async () => {
+  try {
+    const currentUser = auth.currentUser;
+    const trophiesRef = collection(db, "trophies");
+    const trophiesSnapshot = await getDocs(trophiesRef);
+    const trophiesList = trophiesSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    const notUlockedTrophies = trophiesList.filter(
+      (trophy) => !trophy.unlockedBy.includes(currentUser.uid)
+    );
+
+    return notUlockedTrophies;
+  } catch (error) {
+    console.error("Error fetching trophies:", error);
+  }
+};
+
+export const updateTrophie = async (trophie) => {
+  try {
+    const trophieRef = doc(db, "trophies", trophie.id);
+    await updateDoc(trophieRef, trophie);
+    successToast("Updated succesfully");
+  } catch (error) {
+    errorToast("Error updating trophie");
     throw error;
   }
 };

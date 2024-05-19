@@ -83,7 +83,7 @@ function ProfileScreen() {
         if (exercise.primary_muscles) {
           primaryMuscles.push(exercise.primary_muscles);
         }
-        if (exercise.secondary_muscles) {
+        if (exercise.secondary_muscles.length > 0) {
           const jsonString = exercise.secondary_muscles.replace(/'/g, '"');
           const secondaryList = JSON.parse(jsonString);
           secondaryList.forEach((muscle) => {
@@ -99,7 +99,7 @@ function ProfileScreen() {
         if (exercise.primary_muscles) {
           allMuscles.push(exercise.primary_muscles);
         }
-        if (exercise.secondary_muscles) {
+        if (exercise.secondary_muscles.length > 0) {
           const jsonString = exercise.secondary_muscles.replace(/'/g, '"');
           const secondaryList = JSON.parse(jsonString);
           secondaryList.forEach((muscle) => {

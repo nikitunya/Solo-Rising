@@ -10,12 +10,13 @@ import {
 import { useEffect, useState } from "react";
 import AddExerciseModal from "./AddExerciseModal";
 import { useIsFocused } from "@react-navigation/native";
-import { getAllExercises } from "../../../services/exerciseService";
+import { getAllExercises, getExercisesByName } from "../../../services/exerciseService";
 
 const ExerciseListModal = ({ modal, onClose, addExerciseToList }) => {
   const [exerciseList, setExerciseList] = useState([]);
   const [selectedExercise, setSelectedExercise] = useState(null);
   const isFocused = useIsFocused();
+  const [searchInput, setSearchInput] = useState("");
 
   const fetchExercises = async () => {
     try {
@@ -25,6 +26,19 @@ const ExerciseListModal = ({ modal, onClose, addExerciseToList }) => {
       console.error("Error fetching workouts:", error);
     }
   };
+
+  useEffect(() => {
+    const fetchExercisesByName = async () => {
+      try {
+        const filteredExercises = await getExercisesByName(searchInput);
+        setExerciseList(filteredExercises);
+      } catch (error) {
+        console.error("Error fetching exercises by name:", error);
+      }
+    };
+
+    fetchExercisesByName();
+  }, [searchInput]);
 
   useEffect(() => {
     if (isFocused) {
@@ -57,6 +71,8 @@ const ExerciseListModal = ({ modal, onClose, addExerciseToList }) => {
             <TextInput
               className="flex-1 text-gray-700"
               placeholder="Freesearch"
+              value={searchInput}
+              onChangeText={(text) => setSearchInput(text)}
             />
             <AntDesign name="search1" size={24} color="black" />
           </View>

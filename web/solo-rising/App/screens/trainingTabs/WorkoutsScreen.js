@@ -55,10 +55,8 @@ function WorkoutsScreen() {
         // navigation.navigate(ROUTES.WORKOUT_START, selectedWorkout);
         break;
       case 2:
-        console.log(index)
         deleteWorkout(workout.id);
         fetchWorkouts();
-        console.log("Succesfully Deleted");
         break;
       default:
         break;

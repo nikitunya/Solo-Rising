@@ -35,6 +35,7 @@ const CreateExerciseModal = ({ visible, onClose }) => {
     const exercise = {
       name: name,
       primary_muscles: primary_muscles,
+      secondary_mucles: [],
       exercise_type: exercise_type,
       experience: experience,
       force_type: force_type,
@@ -83,7 +84,6 @@ const CreateExerciseModal = ({ visible, onClose }) => {
                 searchPlaceholder="Search..."
                 value={primary_muscles}
                 onChange={(item) => {
-                  console.log(item.value);
                   setPrimaryMuscles(item.value);
                 }}
                 renderLeftIcon={() => (
