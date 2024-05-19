@@ -43,7 +43,6 @@ export const createTraining = async (training) => {
 
 export const getTrainings = async (userId) => {
   try {
-    console.log(userId)
     const userWorkoutsRef = collection(
       db,
       "users",
@@ -126,15 +125,12 @@ export const getThisYearTrainings = async () => {
     );
 
     const today = new Date();
-    const startOfYearDate = new Date(today.getFullYear(), 0, 1); // January 1st of the current year
-    const endOfPreviousMonthDate = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      0
-    ); // End of previous month
+    const startOfPreviousMonth = new Date(today.getFullYear() - 1, today.getMonth(), 1); 
+    const endOfCurrentMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0); // End of the current month
+    
+    const startTimestamp = Timestamp.fromDate(startOfPreviousMonth);
+    const endTimestamp = Timestamp.fromDate(endOfCurrentMonth);
 
-    const startTimestamp = Timestamp.fromDate(startOfYearDate);
-    const endTimestamp = Timestamp.fromDate(endOfPreviousMonthDate);
 
     const yearTrainingsSnapshot = await getDocs(
       query(
