@@ -31,9 +31,8 @@ function CreatePostScreen() {
       unlockedBy: [auth.currentUser.uid],
       date: Timestamp.fromDate(currentDate),
     };
-    createPost(post).then(() => {
-      navigation.navigate(ROUTES.FRIENDS);
-    });
+    createPost(post);
+    navigation.navigate(ROUTES.FRIENDS);
   };
   return (
     <DismissKeyboard>

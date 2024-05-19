@@ -4,6 +4,7 @@ import FriendsScreen from "../screens/bottomTabs/FriendsScreen";
 import AddFriendScreen from "../screens/friends/AddFriendScreen";
 import AddFriendProfile from "../screens/friends/AddFriendProfile";
 import ViewFriendsScreen from "../screens/friends/ViewFriendsScreen";
+import CreatePostScreen from "../screens/posts/CreatePostScreen";
 
 const Stack = createStackNavigator();
 
@@ -20,6 +21,7 @@ function FriendsNavigator() {
         component={AddFriendProfile}
       />
       <Stack.Screen name={ROUTES.VIEW_FRIENDS} component={ViewFriendsScreen} />
+      <Stack.Screen name={ROUTES.CREATE_POST} component={CreatePostScreen} />
     </Stack.Navigator>
   );
 }
