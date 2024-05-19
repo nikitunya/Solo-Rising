@@ -1,11 +1,13 @@
 import { AntDesign } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
-import { TouchableOpacity, View, Text } from "react-native";
+import { TouchableOpacity, View, Text, Dimensions, Image } from "react-native";
 import { COLORS, ROUTES } from "../../constants";
 import { useNavigation } from "@react-navigation/native";
 import { FlatList, ScrollView, TextInput } from "react-native-gesture-handler";
 import Border from "../../components/Border";
 import { getFriends } from "../../../services/friendsService";
+
+const screenWidth = Dimensions.get("window").width;
 
 function AddFriendScreen() {
   const navigation = useNavigation();
@@ -28,7 +30,11 @@ function AddFriendScreen() {
       }
     >
       <View className="flex-row justify-between items-center bg-zinc-800 py-2 px-4 rounded-3xl my-1 mx-2">
-        <Text className="text-blue-700 font-bold text-lg flex-1">
+        <Image
+          source={require("../../utils/images/logo.png")}
+          style={{ width: screenWidth * 0.15, height: screenWidth * 0.15 }}
+        />
+        <Text className="text-blue-700 font-bold text-lg flex-1 ml-3">
           {item.level}
         </Text>
         <View className="flex-1 items-center">

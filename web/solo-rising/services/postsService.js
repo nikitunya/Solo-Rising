@@ -5,9 +5,11 @@ import {
   where,
   getDocs,
   addDoc,
+  Timestamp,
 } from "firebase/firestore";
 import { auth } from "./firebase.config";
 import { errorToast, successToast } from "../App/utils/toasts";
+import { endOfTomorrow, startOfYesterday } from "date-fns";
 
 export const getAllPosts = async () => {
   try {
@@ -15,17 +17,27 @@ export const getAllPosts = async () => {
     const db = getFirestore();
     const postsRef = collection(db, "posts");
 
-    const q = query(
-      postsRef,
-      where("unlockedBy", "array-contains", currentUser)
-    );
+    const yesterday = startOfYesterday();
+    const tomorrow = endOfTomorrow();
 
-    const querySnapshot = await getDocs(q);
+    // Convert JavaScript Date objects to Firestore Timestamp objects
+    const startTimestamp = Timestamp.fromDate(yesterday);
+    const endTimestamp = Timestamp.fromDate(tomorrow);
+
+    const querySnapshot = await getDocs(
+      query(
+        postsRef,
+        where("date", ">=", startTimestamp),
+        where("date", "<=", endTimestamp)
+      )
+    );
 
     const posts = [];
     querySnapshot.forEach((doc) => {
       posts.push({ id: doc.id, ...doc.data() });
     });
+
+    const filteredPosts = posts.filter(post => post.unlockedBy.includes(currentUser));
 
     return posts;
   } catch (error) {

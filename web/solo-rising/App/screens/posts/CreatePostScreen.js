@@ -8,6 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import { COLORS, ROUTES } from "../../constants";
 import { auth } from "../../../services/firebase.config";
 import { createPost } from "../../../services/postsService";
+import { Timestamp } from "firebase/firestore";
 
 function CreatePostScreen() {
   const navigation = useNavigation();
@@ -15,22 +16,24 @@ function CreatePostScreen() {
   const [description, setDescription] = useState("");
 
   const handleCreatePost = () => {
+    const currentDate = new Date();
     if (!name || !description) {
       alert("All fields are required.");
       return;
     }
     const post = {
-        name: name,
-        description: description,
-        exercises: [],
-        field: "",
-        image: "",
-        requirements: "",
-        unlockedBy: [auth.currentUser.uid]
-    }
+      name: name,
+      description: description,
+      exercises: [],
+      field: "",
+      image: "",
+      requirements: "",
+      unlockedBy: [auth.currentUser.uid],
+      date: Timestamp.fromDate(currentDate),
+    };
     createPost(post).then(() => {
-        navigation.navigate(ROUTES.FRIENDS)
-    })
+      navigation.navigate(ROUTES.FRIENDS);
+    });
   };
   return (
     <DismissKeyboard>

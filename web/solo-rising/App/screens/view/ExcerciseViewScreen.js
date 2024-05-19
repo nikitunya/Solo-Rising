@@ -4,6 +4,7 @@ import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import DismissKeyboard from "../../components/DismissKeyboard";
 import { AntDesign } from "@expo/vector-icons";
 import MuscleGroupImage from "../api/MuscleGroupsImage";
+import { auth } from "../../../services/firebase.config";
 
 function ExcerciseViewScreen({ route }) {
   const { exercise } = route.params;
@@ -33,12 +34,14 @@ function ExcerciseViewScreen({ route }) {
             difficulty: {exercise.experience}
           </Text>
         </View>
-        <TouchableOpacity>
-          <View className="justify-center items-center bg-zinc-800 py-4 rounded-3xl my-3 mx-3">
-            <Text className="text-white text-lg">Personal Record:</Text>
-            <Text className="text-white text-xl">100 kg</Text>
-          </View>
-        </TouchableOpacity>
+        <View className="justify-center items-center bg-zinc-800 py-4 rounded-3xl my-3 mx-3">
+          <Text className="text-white text-lg">Personal Record:</Text>
+          <Text className="text-white text-xl">
+            {exercise.records && exercise.records[auth.currentUser.uid]
+              ? `${exercise.records[auth.currentUser.uid]} kgs`
+              : "N/A"}
+          </Text>
+        </View>
         <View className="justify-center items-center bg-zinc-800 py-4 rounded-3xl my-3 mx-3">
           <MuscleGroupImage
             primaryMuscleGroups={String(exercise.primary_muscles)}

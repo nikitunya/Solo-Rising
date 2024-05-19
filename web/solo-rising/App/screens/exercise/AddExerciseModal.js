@@ -42,7 +42,7 @@ const AddExerciseModal = ({
         <TouchableOpacity>
           <View className="justify-center items-center bg-zinc-800 py-4 rounded-3xl my-3 mx-3">
             <Text className="text-white text-lg">Personal Record:</Text>
-            <Text className="text-white text-xl">100 kg</Text>
+            <Text className="text-white text-xl">{exercise.records[auth.currentUser.uid]} kgs</Text>
           </View>
         </TouchableOpacity>
         <View className="justify-center items-center bg-zinc-800 py-4 rounded-3xl my-3 mx-3">

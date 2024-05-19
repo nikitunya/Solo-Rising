@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { Image, Text, View } from "react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
@@ -12,24 +12,27 @@ function FriendsScreen() {
   const navigation = useNavigation();
   const [posts, setPosts] = useState([]);
   const [imageUrls, setImageUrls] = useState({});
+  const isFocused = useIsFocused();
+
+  const fetchData = async () => {
+    const postsData = await getAllPosts();
+    const postsWithImages = postsData.filter((post) => post.image);
+    const urls = await Promise.all(
+      postsWithImages.map(async (post) => {
+        const imageUrl = await getImage(post.image);
+        return { [post.id]: imageUrl };
+      })
+    );
+    const imageUrlMap = Object.assign({}, ...urls);
+    setPosts(postsData);
+    setImageUrls(imageUrlMap);
+  }
 
   useEffect(() => {
-    const fetchData = async () => {
-      const postsData = await getAllPosts();
-      const postsWithImages = postsData.filter((post) => post.image);
-      const urls = await Promise.all(
-        postsWithImages.map(async (post) => {
-          const imageUrl = await getImage(post.image);
-          return { [post.id]: imageUrl };
-        })
-      );
-      const imageUrlMap = Object.assign({}, ...urls);
-      setPosts(postsData);
-      setImageUrls(imageUrlMap);
-    };
-
-    fetchData();
-  }, []);
+    if (isFocused) {
+      fetchData();
+    }
+  }, [isFocused]);
 
   const renderItem = ({ item }) => (
     <TouchableOpacity className="flex-row items-center justify-between py-2">
@@ -42,7 +45,7 @@ function FriendsScreen() {
         ) : (
           <AntDesign name="user" size={50} color="white" className="mr-4" />
         )}
-        <View className="flex-1 items-center">
+        <View className="ml-2 flex-1 items-center">
           <Text className="text-3lg font-bold text-white">{item.name}</Text>
           <Text className="text-base text-white">{item.description}</Text>
         </View>

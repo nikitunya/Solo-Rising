@@ -15,7 +15,10 @@ function FriendsNavigator() {
     >
       <Stack.Screen name={ROUTES.FRIENDS} component={FriendsScreen} />
       <Stack.Screen name={ROUTES.ADD_FRIEND} component={AddFriendScreen} />
-      <Stack.Screen name={ROUTES.ADD_FRIEND_PROFILE} component={AddFriendProfile} />
+      <Stack.Screen
+        name={ROUTES.ADD_FRIEND_PROFILE}
+        component={AddFriendProfile}
+      />
       <Stack.Screen name={ROUTES.VIEW_FRIENDS} component={ViewFriendsScreen} />
     </Stack.Navigator>
   );

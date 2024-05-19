@@ -41,12 +41,13 @@ export const createTraining = async (training) => {
   }
 };
 
-export const getTrainings = async () => {
+export const getTrainings = async (userId) => {
   try {
+    console.log(userId)
     const userWorkoutsRef = collection(
       db,
       "users",
-      auth.currentUser?.uid,
+      userId ? userId : auth.currentUser?.uid,
       "trainings"
     );
     const userTrainingSnaphsot = await getDocs(userWorkoutsRef);
@@ -60,8 +61,8 @@ export const getTrainings = async () => {
   }
 };
 
-export const getTrainingStatistics = async () => {
-  const trainings = await getTrainings();
+export const getTrainingStatistics = async (userId) => {
+  const trainings = await getTrainings(userId);
   if (trainings) {
     var trainingCount = trainings.length;
     var totalVolume = 0;
@@ -81,12 +82,12 @@ export const getTrainingStatistics = async () => {
   }
 };
 
-export const getThisWeekTrainings = async () => {
+export const getThisWeekTrainings = async (userId) => {
   try {
     const userTrainingsRef = collection(
       db,
       "users",
-      auth.currentUser?.uid,
+      userId ? userId : auth.currentUser?.uid,
       "trainings"
     );
 

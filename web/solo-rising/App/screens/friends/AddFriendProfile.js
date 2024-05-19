@@ -8,6 +8,12 @@ import { auth } from "../../../services/firebase.config";
 import { ROUTES } from "../../constants";
 import { useNavigation } from "@react-navigation/native";
 import { getCurrentUserData } from "../../../services/auth";
+import { AntDesign } from "@expo/vector-icons";
+import {
+  getThisWeekTrainings,
+  getTrainingStatistics,
+} from "../../../services/trainingService";
+import MuscleGroupImage from "../api/MuscleGroupsImage";
 
 function AddFriendProfile({ route }) {
   const navigation = useNavigation();
@@ -17,30 +23,110 @@ function AddFriendProfile({ route }) {
   const [maxXp, setMaxXp] = useState(0);
   const [progress, setProgress] = useState(0);
   const [currentUserData, setCurrentUserData] = useState(null);
+  const [statistics, setStatistics] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [trainings, setTrainings] = useState(null);
+
+  const primaryMuscles = [];
+  const secondaryMuscles = [];
 
   useEffect(() => {
     const maxXpValue = user.level * 1000;
     const progressValue = (user.xp / maxXpValue) * 100;
     setMaxXp(maxXpValue);
     setProgress(progressValue);
-  }, [user]);
+  }, []);
+
+  const fetchData = async () => {
+    const userData = await getCurrentUserData();
+    setCurrentUserData(userData);
+
+    const weekStatistics = await getTrainingStatistics(user.id);
+    if (weekStatistics) {
+      setStatistics(weekStatistics);
+    }
+
+    const weekTrainings = await getThisWeekTrainings(user.id);
+    if (weekTrainings) {
+      setTrainings(weekTrainings);
+    }
+
+    setLoading(false);
+  };
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      const userData = await getCurrentUserData();
-      setCurrentUserData(userData);
-    }
-    fetchUserData();
-  }, [currentUserData]);
+    fetchData();
+  }, []);
 
   const handleAddFriend = async () => {
     await sendFriendRequest(currentUser.uid, user.id, currentUserData.username);
     navigation.navigate(ROUTES.FRIENDS);
   };
 
+  const allMuscles = [];
+
+  if (trainings) {
+    trainings.forEach((training) => {
+      training.exercises.forEach((exercise) => {
+        if (exercise.primary_muscles) {
+          primaryMuscles.push(exercise.primary_muscles);
+        }
+        if (exercise.secondary_muscles.length > 0) {
+          const jsonString = exercise.secondary_muscles.replace(/'/g, '"');
+          const secondaryList = JSON.parse(jsonString);
+          secondaryList.forEach((muscle) => {
+            if (!secondaryMuscles.includes(muscle)) {
+              secondaryMuscles.push(muscle);
+            }
+          });
+        }
+      });
+    });
+    trainings.forEach((training) => {
+      training.exercises.forEach((exercise) => {
+        if (exercise.primary_muscles) {
+          allMuscles.push(exercise.primary_muscles);
+        }
+        if (exercise.secondary_muscles.length > 0) {
+          const jsonString = exercise.secondary_muscles.replace(/'/g, '"');
+          const secondaryList = JSON.parse(jsonString);
+          secondaryList.forEach((muscle) => {
+            if (!allMuscles.includes(muscle)) {
+              allMuscles.push(muscle);
+            }
+          });
+        }
+      });
+    });
+  }
+
+  const totalMusclesCount = allMuscles.length;
+
+  const primaryMusclesString = JSON.stringify(primaryMuscles).replace(
+    /"/g,
+    "'"
+  );
+
+  const secondaryMusclesString = JSON.stringify(secondaryMuscles).replace(
+    /"/g,
+    "'"
+  );
+
+  if (loading) {
+    return <View className="flex-1 bg-neutral-900"></View>;
+  }
+
   return (
     <View className="flex-1 bg-neutral-900">
       <View className="flex-row items-center">
+        <View>
+          <TouchableOpacity
+            onPress={() => navigation.goBack()}
+            className="p-2 rounded-tr-2xl rounded-bl-2xl mt-2 bg-blue-700 ml-4"
+          >
+            <AntDesign name="arrowleft" size={20} color="white" />
+          </TouchableOpacity>
+        </View>
         <Image
           source={require("../../utils/images/logo.png")}
           style={{ width: screenWidth * 0.2, height: screenWidth * 0.2 }}
@@ -80,7 +166,7 @@ function AddFriendProfile({ route }) {
       <Border />
       <ScrollView>
         <View className="flex-1">
-          {/* <View className="py-3 rounded-full bg-zinc-800 mx-4">
+          <View className="py-3 rounded-full bg-zinc-800 mx-4">
             <View className="flex-row justify-between">
               <View className="ml-6 items-center">
                 <Text className="text-blue-500 text-base font-bold">#</Text>
@@ -105,19 +191,19 @@ function AddFriendProfile({ route }) {
                 </Text>
               </View>
             </View>
-          </View> */}
-          {/* <View className="justify-center items-center bg-zinc-800 py-4 rounded-3xl my-3 mx-3">
+          </View>
+          <View className="justify-center items-center bg-zinc-800 py-4 rounded-3xl my-3 mx-3">
             <View className="items-center justify-center">
               <Text className="text-white text-lg font-bold">
                 Muscles Trained This Week
               </Text>
-              <Text className="text-white text-lg font-bold">40%</Text>
+              <Text className="text-white text-lg font-bold">0%</Text>
             </View>
             <MuscleGroupImage
               primaryMuscleGroups={primaryMusclesString}
               secondaryMuscleGroups={secondaryMusclesString}
             />
-          </View> */}
+          </View>
         </View>
       </ScrollView>
     </View>

@@ -42,23 +42,8 @@ function WorkoutReviewScreen({ route }) {
 
   const handleCreate = () => {
     const currentDate = new Date();
-    const totalSeconds = training.duration;
-    const prXp = 0;
-    const achievementXp = 0;
-    const tenMinuteIntervals = Math.ceil(totalSeconds / 600) - 1;
-    const durationXp = tenMinuteIntervals * XP.XP_FOR_DURATION;
-    const volumeXp = training.volume * XP.XP_FOR_KG;
-    const totalXp = volumeXp + prXp + achievementXp + durationXp;
-    const updatedTraining = {
-      ...training,
-      totalXp: totalXp,
-      xp: {
-        volumeXp,
-        prXp,
-        achievementXp,
-        durationXp,
-      },
-    };
+    var prXp = 0;
+    var achievementXp = 0;
 
     getExercisesByNames(Object.keys(maxWeights)).then((exercises) => {
       exercises.forEach((exercise) => {
@@ -72,46 +57,67 @@ function WorkoutReviewScreen({ route }) {
         ) {
           exercise.records[auth.currentUser.uid] = maxWeights[exercise.name];
           updateExercise(exercise);
+          prXp += XP.XP_PR;
         }
       });
     });
 
-    getTrophiesNotUnlockedByUser().then((trophies) => {
-      trophies.forEach((trophie) => {
-        getExercisesByNames(Object.keys(maxWeights)).then((exercises) => {
-          exercises.forEach((exercise) => {
-            if (!exercise.records) {
-              exercise.records = {};
-            }
-            if (trophie.exercises.length > 0) {
-              const trophyExerciseNames = trophie.exercises.map(
-                (ex) => ex.name
-              );
-
-              if (
-                trophyExerciseNames.includes(exercise.name) &&
-                trophie.requirment <= maxWeights[exercise.name]
-              ) {
-                const post = {
-                  name: "New Trophy",
-                  description: `${auth.currentUser.email} unlocked ${trophie.name} achievement`,
-                  image: trophie.image,
-                  unlockedBy: [auth.currentUser.uid],
-                  date: Timestamp.fromDate(currentDate),
-                };
-                trophie.unlockedBy.push(auth.currentUser.uid);
-                updateTrophie(trophie);
-                createPost(post);
+    getTrophiesNotUnlockedByUser()
+      .then((trophies) => {
+        trophies.forEach((trophie) => {
+          getExercisesByNames(Object.keys(maxWeights)).then((exercises) => {
+            exercises.forEach((exercise) => {
+              if (!exercise.records) {
+                exercise.records = {};
               }
-            }
+              if (trophie.exercises.length > 0) {
+                const trophyExerciseNames = trophie.exercises.map(
+                  (ex) => ex.name
+                );
+
+                if (
+                  trophyExerciseNames.includes(exercise.name) &&
+                  trophie.requirment <= maxWeights[exercise.name]
+                ) {
+                  const post = {
+                    name: "New Trophy",
+                    description: `${auth.currentUser.email} unlocked ${trophie.name} achievement`,
+                    image: trophie.image,
+                    unlockedBy: [auth.currentUser.uid],
+                    date: Timestamp.fromDate(currentDate),
+                  };
+                  trophie.unlockedBy.push(auth.currentUser.uid);
+                  updateTrophie(trophie);
+                  createPost(post);
+                  achievementXp += XP.XP_ACHIEVEMENT;
+                }
+              }
+            });
           });
         });
-      });
-    });
+      })
+      .then(() => {
+        const totalSeconds = training.duration;
+        const tenMinuteIntervals = Math.ceil(totalSeconds / 600) - 1;
+        const durationXp = tenMinuteIntervals * XP.XP_FOR_DURATION;
+        const volumeXp = training.volume * XP.XP_FOR_KG;
+        const totalXp = volumeXp + prXp + achievementXp + durationXp;
 
-    createTraining(updatedTraining).then(() => {
-      navigation.navigate(ROUTES.TRAINING);
-    });
+        const updatedTraining = {
+          ...training,
+          totalXp: totalXp,
+          xp: {
+            volumeXp,
+            prXp,
+            achievementXp,
+            durationXp,
+          },
+        };
+
+        createTraining(updatedTraining).then(() => {
+          navigation.navigate(ROUTES.TRAINING);
+        });
+      });
   };
 
   const formatDuration = (seconds) => {
