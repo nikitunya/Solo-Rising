@@ -18,7 +18,6 @@ const CreateExerciseModal = ({ visible, onClose }) => {
   const [mechanics, setMechanics] = useState("Compound");
   const [name, setName] = useState("Nikita");
   const [primary_muscles, setPrimaryMuscles] = useState("");
-  const [record, setRecord] = useState("110");
 
   const handleCreateCustomExercise = () => {
     if (
@@ -40,7 +39,6 @@ const CreateExerciseModal = ({ visible, onClose }) => {
       experience: experience,
       force_type: force_type,
       mechanics: mechanics,
-      record: record,
       user: auth?.currentUser?.uid,
       type: "Custom"
     };
@@ -144,14 +142,6 @@ const CreateExerciseModal = ({ visible, onClose }) => {
                 placeholder="Enter Mechanics"
                 value={mechanics}
                 onChangeText={setMechanics}
-                placeholderTextColor={COLORS.white}
-              />
-              <Text className="text-white ml-4">Record</Text>
-              <TextInput
-                className="p-4 bg-neutral-900 text-white rounded-2xl mb-3"
-                placeholder="Enter Record"
-                value={record}
-                onChangeText={setRecord}
                 placeholderTextColor={COLORS.white}
               />
             </View>

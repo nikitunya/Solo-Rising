@@ -5,7 +5,6 @@ import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { deleteWorkout, getWorkouts } from "../../../services/workoutService";
 import ActionSheet from "react-native-actionsheet";
 import { ROUTES } from "../../constants";
-import { saveExercises } from "../../../services/exerciseService";
 import WorkoutPreviewModal from "../workout/WorkoutPreviewModal";
 
 const OPTIONS = ["Edit", "Start", "Delete", "Cancel"];
@@ -18,6 +17,7 @@ function WorkoutsScreen() {
   const [workouts, setWorkouts] = useState([]);
   const [modal, setModal] = useState(false);
   const [selectedWorkout, setSelectedWorkout] = useState(null);
+  const actionSheetRef = useRef(null);
 
   const fetchWorkouts = async () => {
     try {
@@ -34,25 +34,19 @@ function WorkoutsScreen() {
     }
   }, [isFocused]);
 
-  useEffect(() => {
-    if (selectedWorkout !== null) {
-      this.ActionSheet.show();
-    }
-  }, [selectedWorkout]);
-
   const showActionSheet = (workout) => {
     setSelectedWorkout(workout);
+    actionSheetRef.current.show();
   };
 
-  const handleAction = (index, workout) => { // TODO: fix here again deletes wrong index
+  const handleAction = (index, workout) => {
     switch (index) {
       case 0:
-        navigation.navigate(ROUTES.WORKOUT_EDIT, selectedWorkout);
+        navigation.navigate(ROUTES.WORKOUT_EDIT, workout);
         break;
       case 1:
         setModal(true);
         setSelectedWorkout(workout);
-        // navigation.navigate(ROUTES.WORKOUT_START, selectedWorkout);
         break;
       case 2:
         deleteWorkout(workout.id);
@@ -67,41 +61,36 @@ function WorkoutsScreen() {
     <TouchableOpacity onPress={() => showActionSheet(item)}>
       <View className="flex flex-row justify-between items-center bg-zinc-800 py-3 rounded-3xl my-2 mx-6">
         <Text className="text-white ml-4">{item.title}</Text>
-        <TouchableOpacity>
-          <View className="mr-4">
-            <ActionSheet
-              ref={(o) => (this.ActionSheet = o)}
-              options={OPTIONS}
-              cancelButtonIndex={CANCEL_BUTTON_INDEX}
-              destructiveButtonIndex={DESTRUCTIVE_BUTTON_INDEX}
-              onPress={(index) => {
-                handleAction(index, item);
-              }}
-            />
-          </View>
-        </TouchableOpacity>
       </View>
     </TouchableOpacity>
   );
 
   return (
     <View className="mt-5">
-      <FlatList data={workouts} renderItem={renderItem} />
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate(ROUTES.WORKOUT_CREATE);
-        }}
-      >
+      <FlatList data={workouts} renderItem={renderItem} keyExtractor={(item) => item.id.toString()} />
+      <TouchableOpacity onPress={() => navigation.navigate(ROUTES.WORKOUT_CREATE)}>
         <View className="flex justify-center items-center bg-blue-700 py-1 rounded-3xl my-4 mx-6">
           <AntDesign name="plus" size={30} color="white" />
         </View>
       </TouchableOpacity>
-      <Text className="text-white">{modal}</Text>
-      <WorkoutPreviewModal
-        modal={modal}
-        onClose={() => setModal(false)}
-        workout={selectedWorkout}
+      <ActionSheet
+        ref={actionSheetRef}
+        options={OPTIONS}
+        cancelButtonIndex={CANCEL_BUTTON_INDEX}
+        destructiveButtonIndex={DESTRUCTIVE_BUTTON_INDEX}
+        onPress={(index) => {
+          if (selectedWorkout) {
+            handleAction(index, selectedWorkout);
+          }
+        }}
       />
+      {modal && (
+        <WorkoutPreviewModal
+          modal={modal}
+          onClose={() => setModal(false)}
+          workout={selectedWorkout}
+        />
+      )}
     </View>
   );
 }

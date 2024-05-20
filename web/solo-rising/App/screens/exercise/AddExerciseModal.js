@@ -1,6 +1,7 @@
 import { Modal, Text, TouchableOpacity, View } from "react-native";
 import MuscleGroupImage from "../api/MuscleGroupsImage";
 import { AntDesign } from "@expo/vector-icons";
+import { auth } from "../../../services/firebase.config";
 
 const AddExerciseModal = ({
   modal,
@@ -42,7 +43,12 @@ const AddExerciseModal = ({
         <TouchableOpacity>
           <View className="justify-center items-center bg-zinc-800 py-4 rounded-3xl my-3 mx-3">
             <Text className="text-white text-lg">Personal Record:</Text>
-            <Text className="text-white text-xl">{exercise.records[auth.currentUser.uid]} kgs</Text>
+            <Text className="text-white text-xl">
+              {" "}
+              {exercise.records && exercise.records[auth.currentUser.uid]
+                ? `${exercise.records[auth.currentUser.uid]} kgs`
+                : "N/A"}
+            </Text>
           </View>
         </TouchableOpacity>
         <View className="justify-center items-center bg-zinc-800 py-4 rounded-3xl my-3 mx-3">

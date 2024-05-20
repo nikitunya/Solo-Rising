@@ -17,7 +17,6 @@ function ProfileNavigator() {
             <Stack.Screen name={ROUTES.PROFILE} component={ProfileScreen} />
             <Stack.Screen name={ROUTES.PROFILE_PERFOMANCE} component={PerfomanceScreen} />
             <Stack.Screen name={ROUTES.PROFILE_EDIT} component={EditProfileScreen} />
-            <Stack.Screen name={ROUTES.CREATE_POST} component={CreatePostScreen} />
             <Stack.Screen name={ROUTES.WORKOUT_HISTORY} component={WorkoutHistoryScreen} />
             <Stack.Screen name={ROUTES.WORKOUT_REVIEW} component={WorkoutReviewScreen} />
             <Stack.Screen name={ROUTES.MY_TROPHIES} component={MyTrophiesScreen} />
