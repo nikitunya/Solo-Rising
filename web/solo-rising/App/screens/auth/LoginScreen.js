@@ -21,8 +21,8 @@ const LoginScreen = (props) => {
   const screenWidth = Dimensions.get("window").width;
   const screenHeight = Dimensions.get("window").height;
   const navigation = useNavigation();
-  const [email, setEmail] = useState("test@gmail.com");
-  const [password, setPassword] = useState("123456");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -34,11 +34,13 @@ const LoginScreen = (props) => {
   }, []);
 
   const handleLogin = async () => {
+    if (!email || !password) {
+      return;
+    }
     try {
       const user = await login(email, password);
       if (user) {
         const id = user.uid;
-        setLoading(false);
         navigation.navigate(ROUTES.PROFILE_NAVIGATOR);
       }
     } catch (error) {

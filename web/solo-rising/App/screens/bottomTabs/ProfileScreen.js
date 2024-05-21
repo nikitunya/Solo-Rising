@@ -157,10 +157,10 @@ function ProfileScreen() {
               <Text className="text-basm text-zinc-400">
                 {userData.fullName}
               </Text>
-              <Text className="text-sm text-zinc-400">Maintain</Text>
+              <Text className="text-sm text-zinc-400">{userData.goal ? userData.goal : 'Maintain'}</Text>
             </View>
             <View className="items-center">
-              <Text className="text-white text-lg font-bold mr-4">1</Text>
+              <Text className="text-white text-lg font-bold mr-4">{userData.friends > 0 ? userData.friends.length : 0}</Text>
               <Text className="text-white text-lg font-bold mr-4">Friends</Text>
             </View>
           </View>

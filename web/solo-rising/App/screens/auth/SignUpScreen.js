@@ -16,14 +16,16 @@ import { saveUserData } from "../../../services/firebaseDatabase";
 
 function SignUpScreen() {
   const navigation = useNavigation();
-  const [fullName, setFullName] = useState("Nikita Gorcakovas");
-  const [username, setUsername] = useState("nikitunya");
-  const [email, setEmail] = useState("test@gmail.com");
-  const [password, setPassword] = useState("123456");
+  const [fullName, setFullName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false)
 
   const handleSignup = async () => {
     setLoading(true);
+    if (!fullName || !username || !email || !password)
+      return;
     try {
       const user = await signUp(email, password)
       if (user) {
@@ -88,7 +90,7 @@ function SignUpScreen() {
               <TouchableOpacity
                 // onPress={() => navigation.navigate("SignUpSecond")}
                 onPress={handleSignup}
-
+                testID="signup-button"
                 className="py-3 rounded-xl justify-center items-center flex-row mb-5 bg-blue-700"
               >
                 <Text className="font-xl font-bold text-center text-white">

@@ -135,6 +135,7 @@ function ExcercisesScreen() {
         onPress={() => {
           setModal(true)
         }}
+        testID="add-exercise-button"
       >
         <View className="flex justify-center items-center bg-blue-700 py-1 rounded-3xl my-4 mx-6">
           <AntDesign name="plus" size={30} color="white" />
@@ -145,6 +146,7 @@ function ExcercisesScreen() {
         onClose={() => {
           setModal(false);
         }}
+        testID="create-exercise-modal"
       />
     </View>
   );

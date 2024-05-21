@@ -11,12 +11,12 @@ import { createCustomExercise } from "../../../services/exerciseService";
 
 const CreateExerciseModal = ({ visible, onClose }) => {
   const navigation = useNavigation();
-  const [equipment, setEquipment] = useState("Darbell");
+  const [equipment, setEquipment] = useState("");
   const [exercise_type, setExerciseType] = useState("");
-  const [experience, setExperience] = useState("Intermediate");
-  const [force_type, setForceType] = useState("Pull");
-  const [mechanics, setMechanics] = useState("Compound");
-  const [name, setName] = useState("Nikita");
+  const [experience, setExperience] = useState("");
+  const [force_type, setForceType] = useState("");
+  const [mechanics, setMechanics] = useState("");
+  const [name, setName] = useState("");
   const [primary_muscles, setPrimaryMuscles] = useState("");
 
   const handleCreateCustomExercise = () => {
@@ -40,10 +40,10 @@ const CreateExerciseModal = ({ visible, onClose }) => {
       force_type: force_type,
       mechanics: mechanics,
       user: auth?.currentUser?.uid,
-      type: "Custom"
+      type: "Custom",
     };
     createCustomExercise(exercise).then(() => {
-        onClose();
+      onClose();
     });
   };
 
@@ -81,6 +81,7 @@ const CreateExerciseModal = ({ visible, onClose }) => {
                 placeholder={"Choose Primary Muscle"}
                 searchPlaceholder="Search..."
                 value={primary_muscles}
+                testID="primary-muscle-dropdown"
                 onChange={(item) => {
                   setPrimaryMuscles(item.value);
                 }}
@@ -103,6 +104,7 @@ const CreateExerciseModal = ({ visible, onClose }) => {
                 data={TYPES}
                 search
                 maxHeight={300}
+                testID="type-dropdown"
                 labelField="label"
                 valueField="value"
                 placeholder={"Choose Type"}

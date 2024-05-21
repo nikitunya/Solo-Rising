@@ -67,8 +67,15 @@ function WorkoutsScreen() {
 
   return (
     <View className="mt-5">
-      <FlatList data={workouts} renderItem={renderItem} keyExtractor={(item) => item.id.toString()} />
-      <TouchableOpacity onPress={() => navigation.navigate(ROUTES.WORKOUT_CREATE)}>
+      <FlatList
+        data={workouts}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id.toString()}
+      />
+      <TouchableOpacity
+        onPress={() => navigation.navigate(ROUTES.WORKOUT_CREATE)}
+        testID="add-workout-button"
+      >
         <View className="flex justify-center items-center bg-blue-700 py-1 rounded-3xl my-4 mx-6">
           <AntDesign name="plus" size={30} color="white" />
         </View>
