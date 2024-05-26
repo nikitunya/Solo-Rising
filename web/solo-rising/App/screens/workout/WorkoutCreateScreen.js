@@ -12,6 +12,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import ExerciseListModal from "../exercise/ExerciseListModal";
 import { createWorkout } from "../../../services/workoutService";
+import { ROUTES } from "../../constants";
 
 function WorkoutCreateScreen() {
   const navigation = useNavigation();
@@ -32,11 +33,15 @@ function WorkoutCreateScreen() {
   };
 
   const handleCreateWorkout = async () => {
-    try {
-      await createWorkout(title, exerciseList);
-      navigation.navigate("Training");
-    } catch (error) {
-      console.log(error);
+    if (!title) {
+      alert("Title is required!");
+    } else {
+      try {
+        await createWorkout(title, exerciseList);
+        navigation.navigate(ROUTES.TRAINING);
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 

@@ -24,7 +24,6 @@ export const createWorkout = async (title, exerciseList) => {
       title: title,
       exerciseList: exerciseList,
     });
-
     successToast("Workout was saved successfully");
   } catch (error) {
     errorToast("Error while creating workout");

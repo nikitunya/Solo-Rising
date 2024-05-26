@@ -31,32 +31,32 @@ describe("LoginScreen", () => {
   });
 
   it("should successfully log in with correct credentials", async () => {
-    // login.mockResolvedValueOnce({ uid: "12345" });
+    login.mockResolvedValueOnce({ uid: "12345" });
 
-    // const { getByPlaceholderText, getByText } = render(<LoginScreen />);
-    // const emailInput = getByPlaceholderText("Email");
-    // const passwordInput = getByPlaceholderText("Password");
-    // const loginButton = getByText("Login");
+    const { getByPlaceholderText, getByText } = render(<LoginScreen />);
+    const emailInput = getByPlaceholderText("Email");
+    const passwordInput = getByPlaceholderText("Password");
+    const loginButton = getByText("Login");
 
-    // fireEvent.changeText(emailInput, "test@gmail.com");
-    // fireEvent.changeText(passwordInput, "123456");
-    // fireEvent.press(loginButton);
+    fireEvent.changeText(emailInput, "test@gmail.com");
+    fireEvent.changeText(passwordInput, "123456");
+    fireEvent.press(loginButton);
 
-    // await waitFor(() => {
-    //   expect(login).toHaveBeenCalledWith("test@gmail.com", "123456");
-    //   expect(mockNavigate).toHaveBeenCalledWith(ROUTES.PROFILE_NAVIGATOR);
-    // });
+    await waitFor(() => {
+      expect(login).toHaveBeenCalledWith("test@gmail.com", "123456");
+      expect(mockNavigate).toHaveBeenCalledWith(ROUTES.PROFILE_NAVIGATOR);
+    });
   });
 
   it("should not authenticate if email and password fields are empty", async () => {
-    // const { getByText } = render(<LoginScreen />);
-    // const loginButton = getByText("Login");
+    const { getByText } = render(<LoginScreen />);
+    const loginButton = getByText("Login");
 
-    // fireEvent.press(loginButton);
+    fireEvent.press(loginButton);
 
-    // await waitFor(() => {
-    //   expect(login).not.toHaveBeenCalled(); // Make sure login function is not called
-    //   expect(mockNavigate).not.toHaveBeenCalled(); // Make sure navigation is not called
-    // });
+    await waitFor(() => {
+      expect(login).not.toHaveBeenCalled();
+      expect(mockNavigate).not.toHaveBeenCalled();
+    });
   });
 });
