@@ -13,9 +13,15 @@ import {
 } from "../../services/trophiesService";
 import { auth } from "../../services/firebase.config";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useNavigation } from "@react-navigation/native";
+import { ROUTES } from "../constants";
 
 jest.mock("../../services/postsService", () => ({
   createPost: jest.fn(),
+}));
+
+jest.mock("@react-navigation/native", () => ({
+  useNavigation: jest.fn(),
 }));
 
 jest.mock("../../services/trainingService", () => ({
@@ -34,6 +40,14 @@ jest.mock("../../services/trophiesService", () => ({
 
 jest.mock("@react-native-async-storage/async-storage", () => ({
   useNavigation: jest.fn(),
+}));
+
+jest.mock("../../services/firebase.config", () => ({
+  auth: {
+    currentUser: {
+      uid: "mockedUserId",
+    },
+  },
 }));
 
 const mockRoute = {
@@ -55,26 +69,46 @@ const mockRoute = {
 
 describe("WorkoutReviewScreen", () => {
   it("creates a new post in friend's section about the trophies earned", async () => {
-    // getExercisesByNames.mockResolvedValue([
-    //   { name: "Barbell Bench Press", records: { [auth.currentUser.uid]: 100 } },
-    // ]);
-    // updateExercise.mockImplementation((exercise) => Promise.resolve());
-    // getTrophiesNotUnlockedByUser.mockResolvedValue([
-    //   {
-    //     name: "New Trophy",
-    //     exercises: [{ name: "Barbell Bench Press" }],
-    //     requirment: 150,
-    //     image: "trophy_image_url",
-    //     unlockedBy: [],
-    //   },
-    // ]);
-    // updateTrophie.mockImplementation((trophie) => Promise.resolve());
-    // createPost.mockImplementation((post) => Promise.resolve());
-    // const { getByText } = render(<WorkoutReviewScreen route={mockRoute} />);
-    // fireEvent.press(getByText("End Workout"));
-    // await waitFor(() => {
-    //   expect(createTraining).toHaveBeenCalledTimes(1);
-    //   expect(createPost).toHaveBeenCalledTimes(1);
-    // });
+  
+    const mockedTraining = {
+      title: "Workout 1",
+      volume: 150,
+      duration: 3600,
+      exercises: [
+        {
+          name: "Barbell Bench Press",
+          sets: [{ reps: 10, weight: 150 }],
+        },
+      ],
+    };
+  
+    getExercisesByNames.mockResolvedValue([
+      { name: "Barbell Bench Press", records: { [auth.currentUser.uid]: 100 } },
+    ]);
+  
+    getTrophiesNotUnlockedByUser.mockResolvedValue([
+      {
+        name: "New Trophy",
+        exercises: [{ name: "Barbell Bench Press" }],
+        requirment: 150,
+        image: "trophy_image_url",
+        unlockedBy: [],
+      },
+    ]);
+  
+    createTraining.mockResolvedValue(); 
+  
+    const mockedNavigate = jest.fn();
+    useNavigation.mockReturnValue({ navigate: mockedNavigate });
+  
+    const { getByText } = render(<WorkoutReviewScreen route={{ params: { training: mockedTraining, view: false } }} />);
+  
+    fireEvent.press(getByText("End Workout"));
+  
+    await waitFor(() => {
+      expect(createTraining).toHaveBeenCalledTimes(1);
+      expect(mockedNavigate).toHaveBeenCalledWith(ROUTES.TRAINING);
+      expect(createPost).toHaveBeenCalledTimes(1);
+    });
   });
 });

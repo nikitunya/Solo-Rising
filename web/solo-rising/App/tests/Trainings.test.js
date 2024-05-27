@@ -35,35 +35,35 @@ jest.mock('../screens/workout/WorkoutPreviewModal', () => (props) => (
 ));
 
 describe('WorkoutsScreen', () => {
-  // const mockNavigate = jest.fn();
-  // const mockWorkouts = [
-  //   { id: 1, title: 'Workout 1' },
-  //   { id: 2, title: 'Workout 2' },
-  // ];
+  const mockNavigate = jest.fn();
+  const mockWorkouts = [
+    { id: 1, title: 'Workout 1' },
+    { id: 2, title: 'Workout 2' },
+  ];
 
-  // beforeEach(() => {
-  //   useNavigation.mockReturnValue({ navigate: mockNavigate });
-  //   useIsFocused.mockReturnValue(true);
-  //   getWorkouts.mockResolvedValue(mockWorkouts);
-  //   jest.clearAllMocks();
-  // });
+  beforeEach(() => {
+    useNavigation.mockReturnValue({ navigate: mockNavigate });
+    useIsFocused.mockReturnValue(true);
+    getWorkouts.mockResolvedValue(mockWorkouts);
+    jest.clearAllMocks();
+  });
 
   it('should display the list of workouts for a logged-in user', async () => {
-  //   const { getByText, getByTestId } = render(<WorkoutsScreen />);
+    const { getByText, getByTestId } = render(<WorkoutsScreen />);
 
-  //   await waitFor(() => {
-  //     expect(getWorkouts).toHaveBeenCalled();
-  //     expect(getByText('Workout 1')).toBeTruthy();
-  //     expect(getByText('Workout 2')).toBeTruthy();
-  //   });
-  // });
+    await waitFor(() => {
+      expect(getWorkouts).toHaveBeenCalled();
+      expect(getByText('Workout 1')).toBeTruthy();
+      expect(getByText('Workout 2')).toBeTruthy();
+    });
+  });
 
-  // it('should navigate to create workout screen when the add button is pressed', async () => {
-  //   const { getByTestId } = render(<WorkoutsScreen />);
+  it('should navigate to create workout screen when the add button is pressed', async () => {
+    const { getByTestId } = render(<WorkoutsScreen />);
 
-  //   const addButton = getByTestId('add-workout-button');
-  //   fireEvent.press(addButton);
+    const addButton = getByTestId('add-workout-button');
+    fireEvent.press(addButton);
 
-  //   expect(mockNavigate).toHaveBeenCalledWith(ROUTES.WORKOUT_CREATE);
+    expect(mockNavigate).toHaveBeenCalledWith(ROUTES.WORKOUT_CREATE);
   });
 });

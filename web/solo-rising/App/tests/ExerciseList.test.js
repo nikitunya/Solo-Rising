@@ -35,48 +35,48 @@ describe('ExcercisesScreen', () => {
   });
 
   it('should display the list of exercises for a logged-in user', async () => {
-    // const { getByText, getByPlaceholderText } = render(<ExcercisesScreen />);
+    const { getByText, getByPlaceholderText } = render(<ExcercisesScreen />);
 
-    // await waitFor(() => {
-    //   expect(getAllExercises).toHaveBeenCalled();
-    //   expect(getByText('Exercise 1')).toBeTruthy();
-    //   expect(getByText('Exercise 2')).toBeTruthy();
-    // });
+    await waitFor(() => {
+      expect(getAllExercises).toHaveBeenCalled();
+      expect(getByText('Exercise 1')).toBeTruthy();
+      expect(getByText('Exercise 2')).toBeTruthy();
+    });
 
-    // const searchInput = getByPlaceholderText('Freesearch');
-    // fireEvent.changeText(searchInput, 'Exercise');
+    const searchInput = getByPlaceholderText('Freesearch');
+    fireEvent.changeText(searchInput, 'Exercise');
 
-    // await waitFor(() => {
-    //   expect(getExercisesByName).toHaveBeenCalledWith('Exercise');
-    //   expect(getByText('Exercise 1')).toBeTruthy();
-    //   expect(getByText('Exercise 2')).toBeTruthy();
-    // });
+    await waitFor(() => {
+      expect(getExercisesByName).toHaveBeenCalledWith('Exercise');
+      expect(getByText('Exercise 1')).toBeTruthy();
+      expect(getByText('Exercise 2')).toBeTruthy();
+    });
   });
 
   it('should navigate to exercise view screen when an exercise item is pressed', async () => {
-    // const { getByText } = render(<ExcercisesScreen />);
+    const { getByText } = render(<ExcercisesScreen />);
 
-    // await waitFor(() => {
-    //   expect(getByText('Exercise 1')).toBeTruthy();
-    // });
+    await waitFor(() => {
+      expect(getByText('Exercise 1')).toBeTruthy();
+    });
 
-    // const exerciseItem = getByText('Exercise 1');
-    // fireEvent.press(exerciseItem);
+    const exerciseItem = getByText('Exercise 1');
+    fireEvent.press(exerciseItem);
 
-    // expect(mockNavigate).toHaveBeenCalledWith(ROUTES.EXERCISE_VIEW, { exercise: { id: 1, name: 'Exercise 1' } });
+    expect(mockNavigate).toHaveBeenCalledWith(ROUTES.EXERCISE_VIEW, { exercise: { id: 1, name: 'Exercise 1' } });
   });
 
   it('should show the create exercise modal when the add button is pressed', async () => {
-    // const { getByTestId, getByText } = render(<ExcercisesScreen />);
+    const { getByTestId, getByText } = render(<ExcercisesScreen />);
 
-    // await waitFor(() => {
-    //   expect(getByText('Exercise 1')).toBeTruthy();
-    // });
+    await waitFor(() => {
+      expect(getByText('Exercise 1')).toBeTruthy();
+    });
 
-    // const addButton = getByTestId('add-exercise-button');
-    // fireEvent.press(addButton);
+    const addButton = getByTestId('add-exercise-button');
+    fireEvent.press(addButton);
 
-    // const modal = getByTestId('create-exercise-modal');
-    // expect(modal).toBeTruthy();
+    const modal = getByTestId('create-exercise-modal');
+    expect(modal).toBeTruthy();
   });
 });

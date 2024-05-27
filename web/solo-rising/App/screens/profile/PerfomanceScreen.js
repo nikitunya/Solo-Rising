@@ -304,7 +304,7 @@ function PerfomanceScreen() {
                 Volume Over Time
               </Text>
               <View>
-                <BarCharComponent {...volumeChartParams} />
+                <BarCharComponent {...volumeChartParams} testID="VolumeBarCharComponent"/>
               </View>
               <View className="justify-between flex-row">
                 <TouchableOpacity onPress={() => handleTimePeriod("1W")}>
@@ -344,7 +344,7 @@ function PerfomanceScreen() {
                 Workouts Over Time
               </Text>
               <View>
-                <BarCharComponent {...countChartParams} />
+                <BarCharComponent {...countChartParams} testID="CountBarCharComponent"/>
               </View>
               <View className="justify-between flex-row">
                 <TouchableOpacity

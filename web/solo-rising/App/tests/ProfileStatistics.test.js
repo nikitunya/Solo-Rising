@@ -1,7 +1,9 @@
 import React from "react";
-import { fireEvent, render, waitFor } from "@testing-library/react-native";
+import { render, waitFor } from "@testing-library/react-native";
 import PerfomanceScreen from "../screens/profile/PerfomanceScreen";
 import { getThisYearTrainings } from "../../services/trainingService";
+import BarCharComponent from "../components/BarCharComponent";
+import { View } from "react-native";
 
 jest.mock("@react-navigation/native", () => ({
   useNavigation: jest.fn(),
@@ -14,6 +16,12 @@ jest.mock("../../services/trainingService", () => ({
   getThisYearTrainings: jest.fn(),
 }));
 
+jest.mock("../components/BarCharComponent", () => {
+  const React = require('react');
+  const { View } = require('react-native');
+  return (props) => <View testID="BarCharComponent" {...props} />;
+});
+
 describe("PerfomanceScreen", () => {
   it("displays user's favorite exercise and performance charts", async () => {
     const mockedTrainings = [
@@ -22,13 +30,20 @@ describe("PerfomanceScreen", () => {
       { date: new Date(), volume: 20 },
     ];
 
-    // getThisYearTrainings.mockResolvedValue(mockedTrainings);
+    getThisYearTrainings.mockResolvedValue(mockedTrainings);
 
-    // const { getByText } = render(<PerfomanceScreen />);
+    const { getByText, getByTestId } = render(<PerfomanceScreen />);
 
     await waitFor(() => {
-    //   expect(getByText("Favorite Exercise")).toBeDefined();
-    //   expect(getByText("Pull Ups")).toBeDefined();
+      expect(getByText("Favorite Exercise")).toBeDefined();
+      expect(getByText("Pull Ups")).toBeDefined();
     });
+
+    const volumeBarCharComponent = getByTestId("VolumeBarCharComponent");
+    expect(volumeBarCharComponent.props.data.length).toBeGreaterThan(0);
+  
+    // Test the second BarCharComponent
+    const countBarCharComponent = getByTestId("CountBarCharComponent");
+    expect(countBarCharComponent.props.data.length).toBeGreaterThan(0);
   });
 });

@@ -20,22 +20,22 @@ jest.mock("../../services/firebase.config", () => ({
 
 describe("ExcerciseViewScreen", () => {
   it("renders exercise information", () => {
-    // const exercise = {
-    //   name: "Mock Exercise",
-    //   exercise_type: "Strength",
-    //   experience: "Beginner",
-    //   records: {
-    //     mockedUserId: 50, // Mock record for the mocked user ID
-    //   },
-    //   primary_muscles: "Chest",
-    //   secondary_muscles: "",
-    // };
+    const exercise = {
+      name: "Mock Exercise",
+      exercise_type: "Strength",
+      experience: "Beginner",
+      records: {
+        mockedUserId: 50, // Mock record for the mocked user ID
+      },
+      primary_muscles: "Chest",
+      secondary_muscles: "",
+    };
 
-    // const { getByText } = render(<ExcerciseViewScreen route={{ params: { exercise } }} />);
+    const { getByText } = render(<ExcerciseViewScreen route={{ params: { exercise } }} />);
 
-    // expect(getByText("Mock Exercise")).toBeTruthy();
-    // expect(getByText("Type: Strength")).toBeTruthy();
-    // expect(getByText("difficulty: Beginner")).toBeTruthy();
-    // expect(getByText("50 kgs")).toBeTruthy(); // Verify that the user's record is rendered
+    expect(getByText("Mock Exercise")).toBeTruthy();
+    expect(getByText("Type: Strength")).toBeTruthy();
+    expect(getByText("Difficulty: Beginner")).toBeTruthy();
+    expect(getByText("50 kgs")).toBeTruthy(); // Verify that the user's record is rendered
   });
 });

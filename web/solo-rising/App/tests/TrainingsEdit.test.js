@@ -2,19 +2,17 @@ import React from "react";
 import { fireEvent, render, waitFor } from "@testing-library/react-native";
 import WorkoutEditScreen from "../screens/workout/WorkoutEditScreen";
 import { updateWorkout } from "../../services/workoutService";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 
-// Mock the useNavigation hook properly
 jest.mock("@react-navigation/native", () => ({
   useNavigation: jest.fn(),
+  useIsFocused: jest.fn(),
 }));
 
-// Mock the image fetching function to prevent errors
 jest.mock("../screens/api/muscleGroupApi", () => ({
-  // Mock the function that fetches images
   fetchImage: jest.fn(),
 }));
 
-// Mock the workout service
 jest.mock("../../services/workoutService", () => ({
   updateWorkout: jest.fn(),
 }));

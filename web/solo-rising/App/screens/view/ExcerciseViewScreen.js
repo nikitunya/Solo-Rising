@@ -31,7 +31,7 @@ function ExcerciseViewScreen({ route }) {
             Type: {exercise.exercise_type}
           </Text>
           <Text className="text-white text-lg capitalize">
-            difficulty: {exercise.experience}
+            Difficulty: {exercise.experience}
           </Text>
         </View>
         <View className="justify-center items-center bg-zinc-800 py-4 rounded-3xl my-3 mx-3">

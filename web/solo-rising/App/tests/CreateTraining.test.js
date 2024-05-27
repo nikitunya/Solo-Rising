@@ -49,7 +49,6 @@ describe("WorkoutCreateScreen", () => {
       "Test Workout"
     );
     fireEvent.press(getByText("ADD EXCERCISES TO WORKOUT"));
-    // Simulate adding an exercise here if needed
     fireEvent.press(getByText("CREATE"));
     await waitFor(() => {
       expect(createWorkout).toHaveBeenCalled();
