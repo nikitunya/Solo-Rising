@@ -2,21 +2,21 @@ import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
 import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+import {API_KEY, AUTH_DOMAIN, PROJECT_ID, STORAGE_BUCKET, MESSAGING_SENDER_ID, APP_ID, MEASURMENT_ID} from '@env';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDUeloQDu3m91iS1dmqwBxSGYcwHysyZK0",
-  authDomain: "solo-rising.firebaseapp.com",
-  projectId: "solo-rising",
-  storageBucket: "solo-rising.appspot.com",
-  messagingSenderId: "205232148474",
-  appId: "1:205232148474:web:b839619241de343ab71e43",
-  measurementId: "G-K3D2C8CY55"
+  apiKey: API_KEY,
+  authDomain: AUTH_DOMAIN,
+  projectId: PROJECT_ID,
+  storageBucket: STORAGE_BUCKET,
+  messagingSenderId: MESSAGING_SENDER_ID,
+  appId: APP_ID,
+  measurementId: MEASURMENT_ID
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Initialize Auth with persistence using AsyncStorage
 const auth = initializeAuth(app, {
   persistence: getReactNativePersistence(ReactNativeAsyncStorage)
 });
