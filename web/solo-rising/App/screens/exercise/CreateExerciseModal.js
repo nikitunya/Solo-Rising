@@ -9,7 +9,7 @@ import { auth } from "../../../services/firebase.config";
 import DismissKeyboard from "../../components/DismissKeyboard";
 import { createCustomExercise } from "../../../services/exerciseService";
 
-const CreateExerciseModal = ({ visible, onClose }) => {
+const CreateExerciseModal = ({ visible = false, onClose = () => {} }) => {
   const navigation = useNavigation();
   const [equipment, setEquipment] = useState("");
   const [exercise_type, setExerciseType] = useState("");
@@ -47,6 +47,12 @@ const CreateExerciseModal = ({ visible, onClose }) => {
     });
   };
 
+  const renderDropdownItem = (item, selectedItem) => (
+    <View style={[styles.itemStyle, item.value === selectedItem ? styles.selectedItemStyle : null]}>
+      <Text style={styles.itemTextStyle}>{item.label}</Text>
+    </View>
+  );
+
   return (
     <DismissKeyboard>
       <Modal
@@ -74,7 +80,6 @@ const CreateExerciseModal = ({ visible, onClose }) => {
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
                 data={PRIMARY_MUCLES}
-                search
                 maxHeight={300}
                 labelField="label"
                 valueField="value"
@@ -93,6 +98,7 @@ const CreateExerciseModal = ({ visible, onClose }) => {
                     size={20}
                   />
                 )}
+                renderItem={(item) => renderDropdownItem(item, primary_muscles)}
               />
               <Text className="text-white ml-4">Type</Text>
               <Dropdown
@@ -102,7 +108,6 @@ const CreateExerciseModal = ({ visible, onClose }) => {
                 inputSearchStyle={styles.inputSearchStyle}
                 iconStyle={styles.iconStyle}
                 data={TYPES}
-                search
                 maxHeight={300}
                 testID="type-dropdown"
                 labelField="label"
@@ -121,6 +126,7 @@ const CreateExerciseModal = ({ visible, onClose }) => {
                     size={20}
                   />
                 )}
+                renderItem={(item) => renderDropdownItem(item, exercise_type)}
               />
               <Text className="text-white ml-4">Experience</Text>
               <TextInput
@@ -201,6 +207,16 @@ const styles = StyleSheet.create({
   inputSearchStyle: {
     height: 40,
     fontSize: 16,
+  },
+  itemStyle: {
+    backgroundColor: COLORS.primaryBackground,
+    padding: 10,
+  },
+  selectedItemStyle: {
+    backgroundColor: COLORS.primaryBlue,
+  },
+  itemTextStyle: {
+    color: "white",
   },
 });
 
