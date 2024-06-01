@@ -13,6 +13,7 @@ import { AntDesign } from "@expo/vector-icons";
 import DismissKeyboard from "../../components/DismissKeyboard";
 import { signUp } from "../../../services/auth";
 import { saveUserData } from "../../../services/firebaseDatabase";
+import { addBronzeTrophiesToNewUser } from "../../../services/trophiesService";
 
 function SignUpScreen() {
   const navigation = useNavigation();
@@ -31,10 +32,10 @@ function SignUpScreen() {
       if (user) {
         const id = user.uid;
         await saveUserData(id, fullName, username);
+        await addBronzeTrophiesToNewUser(id);
       }
     } catch (error) {
       setLoading(false);
-      console.log(error);
     }
   }
 

@@ -110,12 +110,14 @@ export const getBestThreeTrophies = async () => {
     Object.values(groupedTrophies).forEach((trophies) => {
       let bestTrophy = null;
       trophies.forEach((trophy) => {
-        if (trophy.unlockedBy == auth.currentUser.uid) {
-          if (!bestTrophy || trophy.type === "gold") {
+        if (trophy.unlockedBy.includes(auth.currentUser.uid)) {
+          if (!bestTrophy) {
             bestTrophy = trophy;
-          } else if (trophy.type === "silver" && bestTrophy.type !== "gold") {
-            bestTrophy = trophy;
-          } else if (trophy.type === "bronze" && bestTrophy.type === "bronze") {
+          } else if (
+            (trophy.type === "gold") ||
+            (trophy.type === "silver" && bestTrophy.type !== "gold") ||
+            (trophy.type === "bronze" && bestTrophy.type === "bronze")
+          ) {
             bestTrophy = trophy;
           }
         }
@@ -128,8 +130,8 @@ export const getBestThreeTrophies = async () => {
 
     return sortedTrophies.slice(0, 3);
   } catch (error) {
-    errorToast("Error getting best trophies");
-    throw error;
+    console.error('Error fetching trophies:', error);
+    return [];
   }
 };
 
@@ -160,6 +162,26 @@ export const updateTrophie = async (trophie) => {
     successToast("Updated succesfully");
   } catch (error) {
     errorToast("Error updating trophie");
+    throw error;
+  }
+};
+
+export const addBronzeTrophiesToNewUser = async (userId) => {
+  try {
+    const bronzeTrophies = await getTrophiesByType('bronze');
+
+    const batch = writeBatch(db);
+
+    bronzeTrophies.forEach((trophy) => {
+      const trophyRef = doc(db, 'trophies', trophy.id);
+      const updatedUnlockedBy = Array.isArray(trophy.unlockedBy) ? [...trophy.unlockedBy, userId] : [userId];
+
+      batch.update(trophyRef, { unlockedBy: updatedUnlockedBy });
+    });
+
+    await batch.commit();
+
+  } catch (error) {
     throw error;
   }
 };

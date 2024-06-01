@@ -41,7 +41,7 @@ const LoginScreen = (props) => {
       const user = await login(email, password);
       if (user) {
         const id = user.uid;
-        navigation.navigate(ROUTES.PROFILE_NAVIGATOR);
+        navigation.navigate(ROUTES.HOME);
       }
     } catch (error) {
       console.log(error);

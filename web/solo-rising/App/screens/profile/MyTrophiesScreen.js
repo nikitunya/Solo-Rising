@@ -42,17 +42,13 @@ function MyTrophiesScreen() {
         Object.values(groupedTrophies).forEach((trophies) => {
           let bestTrophy = null;
           trophies.forEach((trophy) => {
-            if (trophy.unlockedBy == auth.currentUser.uid) {
-              if (!bestTrophy || trophy.type === "gold") {
+            if (trophy.unlockedBy.includes(auth.currentUser.uid)) {
+              if (!bestTrophy) {
                 bestTrophy = trophy;
               } else if (
-                trophy.type === "silver" &&
-                bestTrophy.type !== "gold"
-              ) {
-                bestTrophy = trophy;
-              } else if (
-                trophy.type === "bronze" &&
-                bestTrophy.type === "bronze"
+                (trophy.type === "gold") ||
+                (trophy.type === "silver" && bestTrophy.type !== "gold") ||
+                (trophy.type === "bronze" && bestTrophy.type === "bronze")
               ) {
                 bestTrophy = trophy;
               }
