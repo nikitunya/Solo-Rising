@@ -14,19 +14,25 @@ import { auth } from "../../../services/firebase.config";
 import { getCurrentUserData } from "../../../services/auth";
 
 const FriendsRoute = ({ friends }) => {
-  if (!friends) 
-    return <View />
+  const navigation = useNavigation();
+  if (!friends) return <View />;
   return (
     <View className="flex-1 bg-neutral-900">
       {friends.map((friend) => (
-        <View
-          key={friend.id}
-          className="flex-row justify-center items-center bg-zinc-800 py-2 px-4 rounded-3xl my-1 mx-2 mt-5"
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate(ROUTES.VIEW_OWN_FRIEND, { user: friend.id })
+          }
         >
-          <Text className="text-white text-lg font-bold">
-            username: {friend.username}
-          </Text>
-        </View>
+          <View
+            key={friend.id}
+            className="flex-row justify-center items-center bg-zinc-800 py-2 px-4 rounded-3xl my-1 mx-2 mt-5"
+          >
+            <Text className="text-white text-lg font-bold">
+              username: {friend.username}
+            </Text>
+          </View>
+        </TouchableOpacity>
       ))}
     </View>
   );
@@ -47,7 +53,6 @@ const RequestRoute = ({ friendRequests }) => {
     try {
       await acceptFriendRequest(requestId, senderId);
       navigation.navigate(ROUTES.FRIENDS);
-      //   console.log(`Accepted friend request from ${senderUsername}`);
     } catch (error) {
       console.error("Error accepting friend request:", error);
     }
@@ -85,17 +90,6 @@ function ViewFriendsScreen() {
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
   const [friendRequests, setFriendRequests] = useState([]);
-  //   const [userData, setUserData] = useState([
-  //     {
-  //       friendList: [
-  //         {
-  //           fullName: "Testinis",
-  //           id: "6p0TygTBxsY4QarDWmGsf2Qk79n2",
-  //           username: "test",
-  //         },
-  //       ],
-  //     },
-  //   ]);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 

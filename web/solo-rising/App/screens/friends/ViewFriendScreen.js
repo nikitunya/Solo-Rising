@@ -3,52 +3,49 @@ import { Dimensions, Image, View, Text, ScrollView } from "react-native";
 import ExperienceBar from "../../components/ExperienceBar";
 import Border from "../../components/Border";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { sendFriendRequest } from "../../../services/friendsService";
-import { auth } from "../../../services/firebase.config";
-import { ROUTES } from "../../constants";
 import { useNavigation } from "@react-navigation/native";
-import { getCurrentUserData } from "../../../services/auth";
 import { AntDesign } from "@expo/vector-icons";
 import {
   getThisWeekTrainings,
   getTrainingStatistics,
 } from "../../../services/trainingService";
 import MuscleGroupImage from "../api/MuscleGroupsImage";
+import { getUserData } from "../../../services/auth";
 
-function AddFriendProfile({ route }) {
+function ViewFriendScreen({ route }) {
   const navigation = useNavigation();
-  const { user } = route.params;
-  const currentUser = auth.currentUser;
+  const userId = route.params.user;
   const screenWidth = Dimensions.get("window").width;
   const [maxXp, setMaxXp] = useState(0);
   const [progress, setProgress] = useState(0);
-  const [currentUserData, setCurrentUserData] = useState(null);
   const [statistics, setStatistics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [trainings, setTrainings] = useState(null);
+  const [user, setUser] = useState(null);
 
   const primaryMuscles = [];
   const secondaryMuscles = [];
 
-  useEffect(() => {
-    const maxXpValue = user.level * 1000;
-    const progressValue = (user.xp / maxXpValue) * 100;
-    setMaxXp(maxXpValue);
-    setProgress(progressValue);
-  }, []);
+  useEffect(() => {}, []);
 
   const fetchData = async () => {
-    const userData = await getCurrentUserData();
-    setCurrentUserData(userData);
-
-    const weekStatistics = await getTrainingStatistics(user.id);
+    const weekStatistics = await getTrainingStatistics(userId);
     if (weekStatistics) {
       setStatistics(weekStatistics);
     }
 
-    const weekTrainings = await getThisWeekTrainings(user.id);
+    const weekTrainings = await getThisWeekTrainings(userId);
     if (weekTrainings) {
       setTrainings(weekTrainings);
+    }
+
+    const user = await getUserData(userId);
+    if (user) {
+      setUser(user);
+      const maxXpValue = user.level * 1000;
+      const progressValue = (user.xp / maxXpValue) * 100;
+      setMaxXp(maxXpValue);
+      setProgress(progressValue);
     }
 
     setLoading(false);
@@ -57,11 +54,6 @@ function AddFriendProfile({ route }) {
   useEffect(() => {
     fetchData();
   }, []);
-
-  const handleAddFriend = async () => {
-    await sendFriendRequest(currentUser.uid, user.id, currentUserData.username);
-    navigation.navigate(ROUTES.FRIENDS);
-  };
 
   const allMuscles = [];
 
@@ -143,7 +135,7 @@ function AddFriendProfile({ route }) {
             <Text className="text-sm text-zinc-400">Maintain</Text>
           </View>
           <View className="items-center">
-            <Text className="text-white text-lg font-bold mr-4">0</Text>
+            <Text className="text-white text-lg font-bold mr-4">{user.friendList.length}</Text>
             <Text className="text-white text-lg font-bold mr-4">Friends</Text>
           </View>
         </View>
@@ -158,11 +150,6 @@ function AddFriendProfile({ route }) {
       ) : (
         <View></View>
       )}
-      <TouchableOpacity className="mt-6" onPress={() => handleAddFriend()}>
-        <View className="flex justify-center items-center bg-blue-700 py-1 rounded-3xl ml-4">
-          <Text className="text-white py-1 px-9">Add Friend</Text>
-        </View>
-      </TouchableOpacity>
       <Border />
       <ScrollView>
         <View className="flex-1">
@@ -210,4 +197,4 @@ function AddFriendProfile({ route }) {
   );
 }
 
-export default AddFriendProfile;
+export default ViewFriendScreen;

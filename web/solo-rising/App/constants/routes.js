@@ -15,6 +15,7 @@ export default {
     ADD_FRIEND: 'Add Friend',
     ADD_FRIEND_PROFILE: 'Add Friend Profile',
     VIEW_FRIENDS: 'View Friends',
+    VIEW_OWN_FRIEND: 'View Own Friend',
     CREATE_POST: 'Create Post',
 
     TRAINING: 'Training',

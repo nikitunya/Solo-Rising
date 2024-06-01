@@ -73,25 +73,28 @@ export const deleteFriendRequest = async (requestId) => {
 
 export const acceptFriendRequest = async (requestId, senderId) => {
   try {
-    getCurrentUserData().then((currentUser) => {
-      getUserData(senderId).then((senderData) => {
-        var senderDataCopy = { ...senderData };
-        senderData = { ...senderData, id: senderId };
+    const currentUser = await getCurrentUserData();
+    const senderData = await getUserData(senderId);
 
-        const currentUserFriendList = currentUser.friendList || [];
-        const senderUserFriendList = senderData.friendList || [];
-        currentUserFriendList.push(senderData);
-        currentUser = { ...currentUser, friendList: currentUserFriendList };
-        updateUserData(currentUser).then(() => {
-          currentUser = { ...currentUser, id: auth.currentUser?.id };
-          senderUserFriendList.push(currentUser);
-          senderDataCopy = { ...senderDataCopy, friendList: senderUserFriendList }; // TODO: doesnt save to sender
-          updateUserData(senderDataCopy).then(() => {
-            deleteFriendRequest(requestId);
-          })
-        });
-      });
-    });
+    const currentUserFriendList = currentUser.friendList || [];
+    const senderUserFriendList = senderData.friendList || [];
+
+
+    if (!currentUserFriendList.some(friend => friend.id === senderId)) {
+      currentUserFriendList.push({ id: senderId, username: senderData.username });
+    }
+    currentUser.friendList = currentUserFriendList;
+    await updateUserData(currentUser);
+
+    if (!senderUserFriendList.some(friend => friend.id === auth.currentUser.uid)) {
+      senderUserFriendList.push({ id: auth.currentUser.uid, username: currentUser.username });
+    }
+    senderData.friendList = senderUserFriendList;
+    console.log(currentUser)
+    console.log(senderData)
+    await updateUserData(senderData);
+
+    // await deleteFriendRequest(requestId);
   } catch (error) {
     console.error("Error accepting friend request:", error);
     throw error;
