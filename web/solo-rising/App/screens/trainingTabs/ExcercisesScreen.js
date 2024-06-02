@@ -14,17 +14,22 @@ import {
   ROUTES,
   PRIMARY_MUCLES,
   MUCLE_GROUPS,
+  TYPES,
 } from "../../constants/index.js";
 import {
   getAllExercises,
+  getExercisesByFilters,
   getExercisesByName,
 } from "../../../services/exerciseService.js";
 import CreateExerciseModal from "../exercise/CreateExerciseModal.js";
+import { Dropdown } from "react-native-element-dropdown";
 
 function ExcercisesScreen() {
   const [exercises, setExercises] = useState([]);
-  const [searchInput, setSearchInput] = useState("");
+  const [searchInput, setSearchInput] = useState(null);
   const navigation = useNavigation();
+  const [primaryMuscle, setPrimaryMuscle] = useState(null);
+  const [type, setType] = useState(null);
   const isFocused = useIsFocused();
   const [modal, setModal] = useState(false);
 
@@ -46,19 +51,36 @@ function ExcercisesScreen() {
   useEffect(() => {
     const fetchExercisesByName = async () => {
       try {
-        const filteredExercises = await getExercisesByName(searchInput);
-        setExercises(filteredExercises);
+        if (searchInput !== null || primaryMuscle !== null || type !== null) {
+          const filteredExercises = await getExercisesByFilters(
+            searchInput,
+            primaryMuscle,
+            type
+          );
+          setExercises(filteredExercises);
+        }
       } catch (error) {
         console.error("Error fetching exercises by name:", error);
       }
     };
 
     fetchExercisesByName();
-  }, [searchInput]);
+  }, [searchInput, primaryMuscle, type]);
 
   const handleExercisePress = (selectedExercise) => {
     navigation.navigate(ROUTES.EXERCISE_VIEW, { exercise: selectedExercise });
   };
+
+  const renderDropdownItem = (item, selectedItem) => (
+    <View
+      style={[
+        styles.itemStyle,
+        item.value === selectedItem ? styles.selectedItemStyle : null,
+      ]}
+    >
+      <Text style={styles.itemTextStyle}>{item.label}</Text>
+    </View>
+  );
 
   const renderItem = ({ item }) => (
     <TouchableOpacity onPress={() => handleExercisePress(item)}>
@@ -77,6 +99,9 @@ function ExcercisesScreen() {
       </View>
     </TouchableOpacity>
   );
+
+  const primaryMusclesWithEmptyOption = [{ label: 'None', value: null }, ...PRIMARY_MUCLES];
+  const typesWithEmptyOption = [{ label: 'None', value: null }, ...TYPES];
 
   return (
     <View className="flex-1 bg-black px-4 pt-3">
@@ -101,22 +126,44 @@ function ExcercisesScreen() {
         <AntDesign name="search1" size={24} color={colors.textColor} />
       </View>
       <View className="flex-row justify-between mt-3">
-        {/* <SelectDropdown
-          data={PRIMARY_MUCLES}
-          defaultButtonText="Muscle"
-          onSelect={(selectedItem, index) => {
-            // handle selection
+        <Dropdown
+          style={styles.dropdown}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          data={primaryMusclesWithEmptyOption}
+          maxHeight={300}
+          testID="primary-muscle-dropdown"
+          labelField="label"
+          valueField="value"
+          placeholder={"Primary Muscle"}
+          searchPlaceholder="Search..."
+          value={primaryMuscle}
+          onChange={(item) => {
+            setPrimaryMuscle(item.value);
           }}
-          {...dropdownStyles}
-        /> */}
-        {/* <SelectDropdown
-          data={type}
-          defaultButtonText="Type"
-          onSelect={(selectedItem, index) => {
-            // handle selection
+          renderItem={(item) => renderDropdownItem(item, primaryMuscle)}
+        />
+        <Dropdown
+          style={styles.dropdown}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          inputSearchStyle={styles.inputSearchStyle}
+          iconStyle={styles.iconStyle}
+          data={typesWithEmptyOption}
+          maxHeight={300}
+          testID="primary-muscle-dropdown"
+          labelField="label"
+          valueField="value"
+          placeholder={"Type"}
+          searchPlaceholder="Search..."
+          value={type}
+          onChange={(item) => {
+            setType(item.value);
           }}
-          {...dropdownStyles}
-        /> */}
+          renderItem={(item) => renderDropdownItem(item, type)}
+        />
       </View>
       <View
         className="py-2"
@@ -133,7 +180,7 @@ function ExcercisesScreen() {
       )}
       <TouchableOpacity
         onPress={() => {
-          setModal(true)
+          setModal(true);
         }}
         testID="add-exercise-button"
       >
@@ -152,33 +199,46 @@ function ExcercisesScreen() {
   );
 }
 
-const dropdownStyles = {
-  buttonStyle: {
-    width: "45%",
-    borderRadius: 20,
-    backgroundColor: colors.background,
-    height: 30,
-    borderWidth: 2,
-    borderColor: colors.mainGreen,
+const styles = {
+  container: {
+    backgroundColor: "white",
+    padding: 16,
   },
-  buttonTextStyle: {
-    fontSize: 18,
-    color: colors.mainGreen,
+  dropdown: {
+    height: 50,
+    borderRadius: 15,
+    paddingHorizontal: 8,
+    backgroundColor: COLORS.primaryBackground,
+    flex: 1,
   },
-  dropdownStyle: {
-    maxHeight: 200,
-    borderRadius: 20,
-    maxWidth: 300,
-    backgroundColor: colors.background,
-    borderWidth: 2,
-    borderColor: colors.textColor,
+  icon: {
+    marginRight: 5,
   },
-  rowStyle: {
-    height: 30,
+  placeholderStyle: {
+    fontSize: 16,
+    color: "white",
   },
-  rowTextStyle: {
-    fontSize: 18,
-    color: colors.mainGreen,
+  selectedTextStyle: {
+    fontSize: 16,
+    color: "white",
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+  itemStyle: {
+    backgroundColor: COLORS.primaryBackground,
+    padding: 10,
+  },
+  selectedItemStyle: {
+    backgroundColor: COLORS.primaryBlue,
+  },
+  itemTextStyle: {
+    color: "white",
   },
 };
 

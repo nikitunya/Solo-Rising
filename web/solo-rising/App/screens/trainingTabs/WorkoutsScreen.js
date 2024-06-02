@@ -43,6 +43,7 @@ function WorkoutsScreen() {
     switch (index) {
       case 0:
         navigation.navigate(ROUTES.WORKOUT_EDIT, workout);
+        fetchWorkouts();
         break;
       case 1:
         setModal(true);

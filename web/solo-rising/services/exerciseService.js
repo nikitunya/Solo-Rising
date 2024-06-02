@@ -35,19 +35,25 @@ import { errorToast, successToast } from "../App/utils/toasts";
 //   }
 // };
 
-export const getExercisesByName = async (name) => {
+export const getExercisesByFilters = async (name, primaryMuscle, type) => {
   try {
     const exercisesCollectionRef = collection(db, "exercises");
     const querySnapshot = await getDocs(exercisesCollectionRef);
 
-    const exercises = [];
+    const exercises = new Map();
     querySnapshot.forEach((doc) => {
       const exerciseData = doc.data();
-      if (exerciseData.name.toLowerCase().includes(name.toLowerCase())) {
-        exercises.push({ id: doc.id, ...exerciseData });
+      const exerciseMatchesName = name && exerciseData.name.toLowerCase().includes(name.toLowerCase());
+      const exerciseMatchesMuscle = primaryMuscle && exerciseData.primary_muscles.toLowerCase() === primaryMuscle.toLowerCase();
+      const exerciseMatchesType = type && exerciseData.exercise_type.toLowerCase() === type.toLowerCase();
+
+      if (exerciseMatchesName || exerciseMatchesMuscle || exerciseMatchesType) {
+        if (!exercises.has(doc.id)) {
+          exercises.set(doc.id, { id: doc.id, ...exerciseData });
+        }
       }
     });
-    return exercises;
+    return Array.from(exercises.values());
   } catch (error) {
     console.error("Error getting exercises by name: ", error);
     throw error;
