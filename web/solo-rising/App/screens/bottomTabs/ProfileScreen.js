@@ -43,8 +43,6 @@ function ProfileScreen() {
     const userData = await getCurrentUserData();
     if (userData) {
       setUserData(userData);
-      setMaxXp();
-      setProgress((userData.xp / (userData.level * 1000)) * 100);
     }
 
     const weekStatistics = await getTrainingStatistics();
@@ -66,10 +64,7 @@ function ProfileScreen() {
   };
 
   useEffect(() => {
-    fetchData();
-  }, []);
-
-  useEffect(() => {
+    console.log(isFocused)
     if (isFocused) {
       fetchData();
     }
@@ -160,13 +155,13 @@ function ProfileScreen() {
               <Text className="text-sm text-zinc-400">{userData.goal ? userData.goal : 'Maintain'}</Text>
             </View>
             <View className="items-center">
-              <Text className="text-white text-lg font-bold mr-4">{userData.friends > 0 ? userData.friends.length : 0}</Text>
+              <Text className="text-white text-lg font-bold mr-4">{userData.friendList ? userData.friendList.length : 0}</Text>
               <Text className="text-white text-lg font-bold mr-4">Friends</Text>
             </View>
           </View>
         </View>
         <ExperienceBar
-          progress={progress}
+          progress={(userData.xp / (userData.level * 1000)) * 100}
           level={userData.level}
           currentXP={userData.xp}
           maxXp={userData.level * 1000}

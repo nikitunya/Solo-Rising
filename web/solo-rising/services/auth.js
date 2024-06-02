@@ -61,15 +61,19 @@ export const getCurrentUserData = async () => {
 
 export const updateUserData = async (newData, userId) => {
   try {
+    const currentUserData = await getCurrentUserData(userId);
+
+    const mergedData = { ...currentUserData, ...newData };
+
     const userDocRef = doc(db, "users", userId ? userId : auth?.currentUser?.uid);
-    await setDoc(userDocRef, newData, { merge: true });
+    await setDoc(userDocRef, mergedData);
+
     return true;
   } catch (error) {
     console.error("Error updating user data:", error);
     return false;
   }
 };
-
 export const getUserData = async (userId) => {
   try {
     const userDocRef = doc(db, "users", userId);

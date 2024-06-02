@@ -48,7 +48,7 @@ function EditProfileScreen() {
       goal,
     };
     updateUserData(updatedUserData);
-    navigation.navigate(ROUTES.PROFILE);
+    navigation.navigate(ROUTES.PROFILE, { refetch: true });
   };
 
   const handleProfilePictureChange = () => {

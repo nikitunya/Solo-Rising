@@ -36,12 +36,15 @@ function WorkoutsScreen() {
 
   const showActionSheet = (workout) => {
     setSelectedWorkout(workout);
-    actionSheetRef.current.show();
+    setTimeout(() => {
+      actionSheetRef.current.show();
+    }, 0);
   };
 
   const handleAction = (index, workout) => {
     switch (index) {
       case 0:
+        setSelectedWorkout(workout);
         navigation.navigate(ROUTES.WORKOUT_EDIT, workout);
         fetchWorkouts();
         break;

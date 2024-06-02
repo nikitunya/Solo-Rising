@@ -10,13 +10,21 @@ import {
 import { useEffect, useState } from "react";
 import AddExerciseModal from "./AddExerciseModal";
 import { useIsFocused } from "@react-navigation/native";
-import { getAllExercises, getExercisesByName } from "../../../services/exerciseService";
+import {
+  getAllExercises,
+  getExercisesByFilters,
+  getExercisesByName,
+} from "../../../services/exerciseService";
+import { COLORS, PRIMARY_MUCLES, TYPES } from "../../constants";
+import { Dropdown } from "react-native-element-dropdown";
 
 const ExerciseListModal = ({ modal, onClose, addExerciseToList }) => {
   const [exerciseList, setExerciseList] = useState([]);
   const [selectedExercise, setSelectedExercise] = useState(null);
   const isFocused = useIsFocused();
-  const [searchInput, setSearchInput] = useState("");
+  const [searchInput, setSearchInput] = useState(null);
+  const [primaryMuscle, setPrimaryMuscle] = useState(null);
+  const [type, setType] = useState(null);
 
   const fetchExercises = async () => {
     try {
@@ -30,15 +38,21 @@ const ExerciseListModal = ({ modal, onClose, addExerciseToList }) => {
   useEffect(() => {
     const fetchExercisesByName = async () => {
       try {
-        const filteredExercises = await getExercisesByName(searchInput);
-        setExerciseList(filteredExercises);
+        if (searchInput !== null || primaryMuscle !== null || type !== null) {
+          const filteredExercises = await getExercisesByFilters(
+            searchInput,
+            primaryMuscle,
+            type
+          );
+          setExerciseList(filteredExercises);
+        }
       } catch (error) {
         console.error("Error fetching exercises by name:", error);
       }
     };
 
     fetchExercisesByName();
-  }, [searchInput]);
+  }, [searchInput, primaryMuscle, type]);
 
   useEffect(() => {
     if (isFocused) {
@@ -58,6 +72,23 @@ const ExerciseListModal = ({ modal, onClose, addExerciseToList }) => {
     setSelectedExercise(item);
   };
 
+  const renderDropdownItem = (item, selectedItem) => (
+    <View
+      style={[
+        styles.itemStyle,
+        item.value === selectedItem ? styles.selectedItemStyle : null,
+      ]}
+    >
+      <Text style={styles.itemTextStyle}>{item.label}</Text>
+    </View>
+  );
+
+  const primaryMusclesWithEmptyOption = [
+    { label: "None", value: null },
+    ...PRIMARY_MUCLES,
+  ];
+  const typesWithEmptyOption = [{ label: "None", value: null }, ...TYPES];
+
   return (
     <Modal
       visible={modal}
@@ -75,6 +106,46 @@ const ExerciseListModal = ({ modal, onClose, addExerciseToList }) => {
               onChangeText={(text) => setSearchInput(text)}
             />
             <AntDesign name="search1" size={24} color="black" />
+          </View>
+          <View className="flex-row justify-between mt-3">
+            <Dropdown
+              style={styles.dropdown}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={primaryMusclesWithEmptyOption}
+              maxHeight={300}
+              testID="primary-muscle-dropdown"
+              labelField="label"
+              valueField="value"
+              placeholder={"Primary Muscle"}
+              searchPlaceholder="Search..."
+              value={primaryMuscle}
+              onChange={(item) => {
+                setPrimaryMuscle(item.value);
+              }}
+              renderItem={(item) => renderDropdownItem(item, primaryMuscle)}
+            />
+            <Dropdown
+              style={styles.dropdown}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={typesWithEmptyOption}
+              maxHeight={300}
+              testID="primary-muscle-dropdown"
+              labelField="label"
+              valueField="value"
+              placeholder={"Type"}
+              searchPlaceholder="Search..."
+              value={type}
+              onChange={(item) => {
+                setType(item.value);
+              }}
+              renderItem={(item) => renderDropdownItem(item, type)}
+            />
           </View>
         </View>
         <View
@@ -103,6 +174,49 @@ const ExerciseListModal = ({ modal, onClose, addExerciseToList }) => {
       />
     </Modal>
   );
+};
+
+const styles = {
+  container: {
+    backgroundColor: "white",
+    padding: 16,
+  },
+  dropdown: {
+    height: 50,
+    borderRadius: 15,
+    paddingHorizontal: 8,
+    backgroundColor: COLORS.primaryBackground,
+    flex: 1,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+    color: "white",
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+    color: "white",
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+  itemStyle: {
+    backgroundColor: COLORS.primaryBackground,
+    padding: 10,
+  },
+  selectedItemStyle: {
+    backgroundColor: COLORS.primaryBlue,
+  },
+  itemTextStyle: {
+    color: "white",
+  },
 };
 
 export default ExerciseListModal;
